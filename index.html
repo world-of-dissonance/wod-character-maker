@@ -103,6 +103,24 @@
   .swatch { width: 30px; height: 30px; border: 2px solid var(--line); background: var(--c); cursor: pointer; padding: 0; }
   .swatch[aria-checked="true"] { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
   .card.slim { padding: 8px 12px; }
+  .lvl { display: flex; align-items: center; gap: 14px; margin: 4px 0 14px; font-size: 16px; }
+  .lvl output { font: 600 22px var(--display); min-width: 2ch; text-align: center; }
+  .lvlsum { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 0 6px; padding: 0; color: var(--muted); font-size: 14px; }
+  .lvlsum b { color: var(--gold); font-size: 16px; }
+  .lvlstats, .lvlpicks { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 4px 0 8px; }
+  .lvlstats label, .lvlpicks label { display: flex; align-items: center; gap: 10px; font: 600 14px var(--ui); }
+  .lvlpicks select { font: inherit; color: var(--text); background: var(--ink); border: 1px solid var(--line); padding: 6px 8px; }
+  .tierrow { display: grid; grid-template-columns: minmax(6rem, auto) auto minmax(0, 1fr); align-items: center; gap: 6px 14px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .tierrow .tname { font: 600 15px var(--display); }
+  .tierrow .tpath { font-size: 13.5px; color: var(--muted); }
+  .tierrow .tpath b { color: var(--text); font-weight: 600; }
+  .lvltable { margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+  .lvltable summary { cursor: pointer; font: 600 12px/1.4 var(--ui); letter-spacing: .08em; text-transform: uppercase; }
+  .lvltable ol { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 3px; }
+  .lvltable li b { display: inline-block; min-width: 2.2ch; color: var(--muted); }
+  .lvltable li.got { color: var(--text); }
+  .lvltable li.got b { color: var(--gold); }
+  @media (max-width: 560px) { .tierrow { grid-template-columns: minmax(0, 1fr) auto; } .tierrow .tpath { grid-column: 1 / -1; } }
   .pickbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin: 24px 0 6px; }
   .pickbar h2 { margin: 0; }
   .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 8px; margin-bottom: 6px; }
@@ -273,17 +291,32 @@
 <script id="layout" type="application/json">
 {
  "_doc": "Character sheet layout in sheet units (1000x630). Shared by the in-game screen and tools/mockup.html. Shapes draw in order. A shape with a 'label' is interactive (hover/select); 'read' opens the reading card for that character key. Text 't' fills {keys} from character.json; 'empty' shows when every key is blank. Text x: absolute 'x', or 'dx' inset from the shape's left edge at that y, or omitted with align=center to centre in the shape's span at y. y is the centre of the first line. Decor 'image' draws textures/gui/sheet/<src>.png at x,y,w,h. 'tip' lists glossary.json keys for the hover tooltip ({keys} are filled from character.json). A text with 'items' gives each line/paragraph its own tooltip, looked up in character.json item_details, then glossary.json. A shape with 'roll' (core/shell/essence/initiative) rolls 1d20 + that modifier on click (server-side).",
- "size": [1000,630],
+ "size": [
+  1000,
+  630
+ ],
  "background": "background",
  "colors": {
   "ink": "#232B42",
   "tabInk": "#262F48",
   "tabText": "#E6EEF3",
   "gold": "#F2C14E",
-  "slate": ["#B4C2CF", "#A0B1C2"],
-  "slateDeep": ["#7A89A6", "#66758F"],
-  "frame": ["#5F6B8C", "#535E7C"],
-  "paper": ["#FBFCFD", "#E9EEF3"],
+  "slate": [
+   "#B4C2CF",
+   "#A0B1C2"
+  ],
+  "slateDeep": [
+   "#7A89A6",
+   "#66758F"
+  ],
+  "frame": [
+   "#5F6B8C",
+   "#535E7C"
+  ],
+  "paper": [
+   "#FBFCFD",
+   "#E9EEF3"
+  ],
   "white": "#FFFFFF",
   "muted": "#6E7A93",
   "hp": "#B02C2C",
@@ -292,16 +325,43 @@
   "mp": "#8F6203",
   "init": "#9E4A0E",
   "bonus": "#2B4FD6",
-  "attrBlue": ["#4DB8E6", "#2E9DD1"],
+  "attrBlue": [
+   "#4DB8E6",
+   "#2E9DD1"
+  ],
   "attrInk": "#A3105C",
-  "portrait": ["#2E3957", "#222A42"],
-  "inventory": ["#D9EDBE", "#C6E1A6"],
-  "arcana": ["#EEE1B8", "#E2D29F"],
-  "signature": ["#EDBDB8", "#E2AAA5"],
-  "signatureInner": ["#F4CFCB", "#EDBDB8"],
-  "charData": ["#BDEBCB", "#A6DDB9"],
-  "backstory": ["#D3BDEB", "#C1A8E1"],
-  "sky": ["#BCE1EC", "#A7D4E3"]
+  "portrait": [
+   "#2E3957",
+   "#222A42"
+  ],
+  "inventory": [
+   "#D9EDBE",
+   "#C6E1A6"
+  ],
+  "arcana": [
+   "#EEE1B8",
+   "#E2D29F"
+  ],
+  "signature": [
+   "#EDBDB8",
+   "#E2AAA5"
+  ],
+  "signatureInner": [
+   "#F4CFCB",
+   "#EDBDB8"
+  ],
+  "charData": [
+   "#BDEBCB",
+   "#A6DDB9"
+  ],
+  "backstory": [
+   "#D3BDEB",
+   "#C1A8E1"
+  ],
+  "sky": [
+   "#BCE1EC",
+   "#A7D4E3"
+  ]
  },
  "pages": [
   {
@@ -343,12 +403,20 @@
        "color": "#8C98B3"
       }
      ],
-     "tip": ["portrait"]
+     "tip": [
+      "portrait"
+     ]
     },
     {
      "decor": "banner",
-     "from": [20,250],
-     "to": [248,22],
+     "from": [
+      20,
+      250
+     ],
+     "to": [
+      248,
+      22
+     ],
      "w": 26,
      "fill": "slateDeep",
      "text": {
@@ -362,7 +430,24 @@
     {
      "id": "name",
      "label": "Name",
-     "poly": [[284,30],[940,30],[940,72],[242,72]],
+     "poly": [
+      [
+       284,
+       30
+      ],
+      [
+       940,
+       30
+      ],
+      [
+       940,
+       72
+      ],
+      [
+       242,
+       72
+      ]
+     ],
      "fill": "slate",
      "shadow": true,
      "text": [
@@ -381,14 +466,41 @@
        "font": "display",
        "size": 24,
        "color": "ink"
+      },
+      {
+       "t": "Level {level}",
+       "y": 52,
+       "x": 850,
+       "font": "caption",
+       "size": 20,
+       "color": "ink"
       }
      ],
-     "tip": ["name"]
+     "tip": [
+      "name"
+     ]
     },
     {
      "id": "species",
      "label": "Species",
-     "poly": [[346,86],[940,86],[940,126],[308,126]],
+     "poly": [
+      [
+       346,
+       86
+      ],
+      [
+       940,
+       86
+      ],
+      [
+       940,
+       126
+      ],
+      [
+       308,
+       126
+      ]
+     ],
      "fill": "slate",
      "shadow": true,
      "text": [
@@ -409,12 +521,32 @@
        "color": "ink"
       }
      ],
-     "tip": ["species", "{species}"]
+     "tip": [
+      "species",
+      "{species}"
+     ]
     },
     {
      "id": "variant",
      "label": "Variant",
-     "poly": [[430,144],[940,144],[940,174],[400,174]],
+     "poly": [
+      [
+       430,
+       144
+      ],
+      [
+       940,
+       144
+      ],
+      [
+       940,
+       174
+      ],
+      [
+       400,
+       174
+      ]
+     ],
      "fill": "slate",
      "shadow": true,
      "text": [
@@ -435,12 +567,32 @@
        "color": "ink"
       }
      ],
-     "tip": ["variant", "{variant}"]
+     "tip": [
+      "variant",
+      "{variant}"
+     ]
     },
     {
      "id": "clothes",
      "label": "Clothes",
-     "poly": [[809,184],[990,184],[990,250],[759.5,250]],
+     "poly": [
+      [
+       809,
+       184
+      ],
+      [
+       990,
+       184
+      ],
+      [
+       990,
+       250
+      ],
+      [
+       759.5,
+       250
+      ]
+     ],
      "fill": "paper",
      "shadow": true,
      "text": [
@@ -463,12 +615,31 @@
        "dx": 18
       }
      ],
-     "tip": ["clothes"]
+     "tip": [
+      "clothes"
+     ]
     },
     {
      "id": "armor",
      "label": "Armor",
-     "poly": [[756.5,254],[990,254],[990,320],[707,320]],
+     "poly": [
+      [
+       756.5,
+       254
+      ],
+      [
+       990,
+       254
+      ],
+      [
+       990,
+       320
+      ],
+      [
+       707,
+       320
+      ]
+     ],
      "fill": "paper",
      "shadow": true,
      "text": [
@@ -491,12 +662,31 @@
        "dx": 18
       }
      ],
-     "tip": ["armor"]
+     "tip": [
+      "armor"
+     ]
     },
     {
      "id": "gear",
      "label": "Gear",
-     "poly": [[704,324],[990,324],[990,398],[648.5,398]],
+     "poly": [
+      [
+       704,
+       324
+      ],
+      [
+       990,
+       324
+      ],
+      [
+       990,
+       398
+      ],
+      [
+       648.5,
+       398
+      ]
+     ],
      "fill": "paper",
      "shadow": true,
      "text": [
@@ -519,24 +709,77 @@
        "dx": 18
       }
      ],
-     "tip": ["gear"]
+     "tip": [
+      "gear"
+     ]
     },
     {
      "id": "stats_rim",
-     "poly": [[385,179],[801,179],[707,309],[291,309]],
+     "poly": [
+      [
+       385,
+       179
+      ],
+      [
+       801,
+       179
+      ],
+      [
+       707,
+       309
+      ],
+      [
+       291,
+       309
+      ]
+     ],
      "fill": "gold",
      "stroke": 2,
      "shadow": true
     },
     {
      "id": "stats_frame",
-     "poly": [[392,184],[792,184],[702,304],[302,304]],
+     "poly": [
+      [
+       392,
+       184
+      ],
+      [
+       792,
+       184
+      ],
+      [
+       702,
+       304
+      ],
+      [
+       302,
+       304
+      ]
+     ],
      "fill": "#2B3450",
      "stroke": 0
     },
     {
      "id": "stats_strip",
-     "poly": [[396,188],[436,188],[352,300],[312,300]],
+     "poly": [
+      [
+       396,
+       188
+      ],
+      [
+       436,
+       188
+      ],
+      [
+       352,
+       300
+      ],
+      [
+       312,
+       300
+      ]
+     ],
      "fill": "slateDeep",
      "stroke": 0,
      "text": [
@@ -555,7 +798,24 @@
     {
      "id": "hp",
      "label": "HP",
-     "poly": [[440,188],[560,188],[519.5,242],[399.5,242]],
+     "poly": [
+      [
+       440,
+       188
+      ],
+      [
+       560,
+       188
+      ],
+      [
+       519.5,
+       242
+      ],
+      [
+       399.5,
+       242
+      ]
+     ],
      "fill": "slate",
      "stroke": 0,
      "bar": {
@@ -582,12 +842,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["hp"]
+     "tip": [
+      "hp"
+     ]
     },
     {
      "id": "temp_hp",
      "label": "Temp HP",
-     "poly": [[564,188],[672,188],[631.5,242],[523.5,242]],
+     "poly": [
+      [
+       564,
+       188
+      ],
+      [
+       672,
+       188
+      ],
+      [
+       631.5,
+       242
+      ],
+      [
+       523.5,
+       242
+      ]
+     ],
      "fill": "slate",
      "stroke": 0,
      "text": [
@@ -609,12 +888,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["temp hp"]
+     "tip": [
+      "temp hp"
+     ]
     },
     {
      "id": "ep",
      "label": "EP",
-     "poly": [[676,188],[784,188],[743.5,242],[635.5,242]],
+     "poly": [
+      [
+       676,
+       188
+      ],
+      [
+       784,
+       188
+      ],
+      [
+       743.5,
+       242
+      ],
+      [
+       635.5,
+       242
+      ]
+     ],
      "fill": "slate",
      "stroke": 0,
      "bar": {
@@ -641,12 +939,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["ep"]
+     "tip": [
+      "ep"
+     ]
     },
     {
      "id": "ap",
      "label": "AP",
-     "poly": [[396.5,246],[486,246],[445.5,300],[356,300]],
+     "poly": [
+      [
+       396.5,
+       246
+      ],
+      [
+       486,
+       246
+      ],
+      [
+       445.5,
+       300
+      ],
+      [
+       356,
+       300
+      ]
+     ],
      "fill": "slate",
      "stroke": 0,
      "text": [
@@ -667,12 +984,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["ap"]
+     "tip": [
+      "ap"
+     ]
     },
     {
      "id": "mp",
      "label": "MP",
-     "poly": [[490,246],[576,246],[535.5,300],[449.5,300]],
+     "poly": [
+      [
+       490,
+       246
+      ],
+      [
+       576,
+       246
+      ],
+      [
+       535.5,
+       300
+      ],
+      [
+       449.5,
+       300
+      ]
+     ],
      "fill": "slate",
      "stroke": 0,
      "text": [
@@ -693,12 +1029,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["mp"]
+     "tip": [
+      "mp"
+     ]
     },
     {
      "id": "initiative",
      "label": "Initiative",
-     "poly": [[580,246],[741,246],[700.5,300],[539.5,300]],
+     "poly": [
+      [
+       580,
+       246
+      ],
+      [
+       741,
+       246
+      ],
+      [
+       700.5,
+       300
+      ],
+      [
+       539.5,
+       300
+      ]
+     ],
      "fill": "slate",
      "stroke": 0,
      "text": [
@@ -719,13 +1074,32 @@
        "color": "ink"
       }
      ],
-     "tip": ["initiative"],
+     "tip": [
+      "initiative"
+     ],
      "roll": "initiative"
     },
     {
      "id": "bonuses",
      "label": "Bonuses",
-     "poly": [[384,318],[640,318],[598,374],[342,374]],
+     "poly": [
+      [
+       384,
+       318
+      ],
+      [
+       640,
+       318
+      ],
+      [
+       598,
+       374
+      ],
+      [
+       342,
+       374
+      ]
+     ],
      "fill": "slate",
      "shadow": true,
      "text": [
@@ -749,7 +1123,9 @@
        "color": "ink"
       }
      ],
-     "tip": ["bonuses"]
+     "tip": [
+      "bonuses"
+     ]
     },
     {
      "decor": "image",
@@ -761,8 +1137,14 @@
     },
     {
      "decor": "banner",
-     "from": [168,380],
-     "to": [398,150],
+     "from": [
+      168,
+      380
+     ],
+     "to": [
+      398,
+      150
+     ],
      "w": 26,
      "fill": "slateDeep",
      "text": {
@@ -775,7 +1157,24 @@
     },
     {
      "id": "row_attribute",
-     "poly": [[40,402],[252,402],[230,440],[18,440]],
+     "poly": [
+      [
+       40,
+       402
+      ],
+      [
+       252,
+       402
+      ],
+      [
+       230,
+       440
+      ],
+      [
+       18,
+       440
+      ]
+     ],
      "fill": "attrBlue",
      "shadow": true,
      "text": [
@@ -788,11 +1187,30 @@
        "color": "ink"
       }
      ],
-     "tip": ["attribute"]
+     "tip": [
+      "attribute"
+     ]
     },
     {
      "id": "row_score",
-     "poly": [[26,456],[234,456],[238,502],[30,502]],
+     "poly": [
+      [
+       26,
+       456
+      ],
+      [
+       234,
+       456
+      ],
+      [
+       238,
+       502
+      ],
+      [
+       30,
+       502
+      ]
+     ],
      "fill": "slate",
      "shadow": true,
      "text": [
@@ -805,11 +1223,30 @@
        "color": "ink"
       }
      ],
-     "tip": ["score"]
+     "tip": [
+      "score"
+     ]
     },
     {
      "id": "row_modifier",
-     "poly": [[18,512],[236,512],[236,558],[18,558]],
+     "poly": [
+      [
+       18,
+       512
+      ],
+      [
+       236,
+       512
+      ],
+      [
+       236,
+       558
+      ],
+      [
+       18,
+       558
+      ]
+     ],
      "fill": "paper",
      "shadow": true,
      "text": [
@@ -822,11 +1259,30 @@
        "color": "ink"
       }
      ],
-     "tip": ["modifier"]
+     "tip": [
+      "modifier"
+     ]
     },
     {
      "id": "row_xp",
-     "poly": [[24,568],[238,568],[250,612],[30,612]],
+     "poly": [
+      [
+       24,
+       568
+      ],
+      [
+       238,
+       568
+      ],
+      [
+       250,
+       612
+      ],
+      [
+       30,
+       612
+      ]
+     ],
      "fill": "frame",
      "shadow": true,
      "text": [
@@ -839,11 +1295,30 @@
        "color": "white"
       }
      ],
-     "tip": ["training xp"]
+     "tip": [
+      "training xp"
+     ]
     },
     {
      "id": "core_head",
-     "poly": [[288,400],[452,400],[478,440],[262,440]],
+     "poly": [
+      [
+       288,
+       400
+      ],
+      [
+       452,
+       400
+      ],
+      [
+       478,
+       440
+      ],
+      [
+       262,
+       440
+      ]
+     ],
      "fill": "attrBlue",
      "shadow": true,
      "text": [
@@ -856,11 +1331,30 @@
        "color": "attrInk"
       }
      ],
-     "tip": ["core"]
+     "tip": [
+      "core"
+     ]
     },
     {
      "id": "core_frame",
-     "poly": [[262,440],[478,440],[478,618],[262,618]],
+     "poly": [
+      [
+       262,
+       440
+      ],
+      [
+       478,
+       440
+      ],
+      [
+       478,
+       618
+      ],
+      [
+       262,
+       618
+      ]
+     ],
      "fill": "frame",
      "shadow": true
     },
@@ -868,7 +1362,40 @@
      "id": "core_mod",
      "stroke": 2,
      "label": "Core · Modifier",
-     "poly": [[276,452],[314,500],[426,500],[464,452],[464,606],[426,560],[314,560],[276,606]],
+     "poly": [
+      [
+       276,
+       452
+      ],
+      [
+       314,
+       500
+      ],
+      [
+       426,
+       500
+      ],
+      [
+       464,
+       452
+      ],
+      [
+       464,
+       606
+      ],
+      [
+       426,
+       560
+      ],
+      [
+       314,
+       560
+      ],
+      [
+       276,
+       606
+      ]
+     ],
      "fill": "paper",
      "text": [
       {
@@ -880,14 +1407,34 @@
        "color": "ink"
       }
      ],
-     "tip": ["core", "modifier"],
+     "tip": [
+      "core",
+      "modifier"
+     ],
      "roll": "core"
     },
     {
      "id": "core_score",
      "stroke": 2,
      "label": "Core · Score",
-     "poly": [[276,452],[464,452],[426,500],[314,500]],
+     "poly": [
+      [
+       276,
+       452
+      ],
+      [
+       464,
+       452
+      ],
+      [
+       426,
+       500
+      ],
+      [
+       314,
+       500
+      ]
+     ],
      "fill": "slate",
      "text": [
       {
@@ -899,14 +1446,34 @@
        "color": "ink"
       }
      ],
-     "tip": ["core", "score"],
+     "tip": [
+      "core",
+      "score"
+     ],
      "roll": "core"
     },
     {
      "id": "core_xp",
      "stroke": 2,
      "label": "Core · Training XP",
-     "poly": [[314,560],[426,560],[464,606],[276,606]],
+     "poly": [
+      [
+       314,
+       560
+      ],
+      [
+       426,
+       560
+      ],
+      [
+       464,
+       606
+      ],
+      [
+       276,
+       606
+      ]
+     ],
      "fill": "slateDeep",
      "text": [
       {
@@ -918,12 +1485,32 @@
        "color": "white"
       }
      ],
-     "tip": ["core", "training xp"],
+     "tip": [
+      "core",
+      "training xp"
+     ],
      "roll": "core"
     },
     {
      "id": "shell_head",
-     "poly": [[538,400],[702,400],[728,440],[512,440]],
+     "poly": [
+      [
+       538,
+       400
+      ],
+      [
+       702,
+       400
+      ],
+      [
+       728,
+       440
+      ],
+      [
+       512,
+       440
+      ]
+     ],
      "fill": "attrBlue",
      "shadow": true,
      "text": [
@@ -936,11 +1523,30 @@
        "color": "attrInk"
       }
      ],
-     "tip": ["shell"]
+     "tip": [
+      "shell"
+     ]
     },
     {
      "id": "shell_frame",
-     "poly": [[512,440],[728,440],[728,618],[512,618]],
+     "poly": [
+      [
+       512,
+       440
+      ],
+      [
+       728,
+       440
+      ],
+      [
+       728,
+       618
+      ],
+      [
+       512,
+       618
+      ]
+     ],
      "fill": "frame",
      "shadow": true
     },
@@ -948,7 +1554,40 @@
      "id": "shell_mod",
      "stroke": 2,
      "label": "Shell · Modifier",
-     "poly": [[526,452],[564,500],[676,500],[714,452],[714,606],[676,560],[564,560],[526,606]],
+     "poly": [
+      [
+       526,
+       452
+      ],
+      [
+       564,
+       500
+      ],
+      [
+       676,
+       500
+      ],
+      [
+       714,
+       452
+      ],
+      [
+       714,
+       606
+      ],
+      [
+       676,
+       560
+      ],
+      [
+       564,
+       560
+      ],
+      [
+       526,
+       606
+      ]
+     ],
      "fill": "paper",
      "text": [
       {
@@ -960,14 +1599,34 @@
        "color": "ink"
       }
      ],
-     "tip": ["shell", "modifier"],
+     "tip": [
+      "shell",
+      "modifier"
+     ],
      "roll": "shell"
     },
     {
      "id": "shell_score",
      "stroke": 2,
      "label": "Shell · Score",
-     "poly": [[526,452],[714,452],[676,500],[564,500]],
+     "poly": [
+      [
+       526,
+       452
+      ],
+      [
+       714,
+       452
+      ],
+      [
+       676,
+       500
+      ],
+      [
+       564,
+       500
+      ]
+     ],
      "fill": "slate",
      "text": [
       {
@@ -979,14 +1638,34 @@
        "color": "ink"
       }
      ],
-     "tip": ["shell", "score"],
+     "tip": [
+      "shell",
+      "score"
+     ],
      "roll": "shell"
     },
     {
      "id": "shell_xp",
      "stroke": 2,
      "label": "Shell · Training XP",
-     "poly": [[564,560],[676,560],[714,606],[526,606]],
+     "poly": [
+      [
+       564,
+       560
+      ],
+      [
+       676,
+       560
+      ],
+      [
+       714,
+       606
+      ],
+      [
+       526,
+       606
+      ]
+     ],
      "fill": "slateDeep",
      "text": [
       {
@@ -998,12 +1677,32 @@
        "color": "white"
       }
      ],
-     "tip": ["shell", "training xp"],
+     "tip": [
+      "shell",
+      "training xp"
+     ],
      "roll": "shell"
     },
     {
      "id": "essence_head",
-     "poly": [[788,400],[952,400],[978,440],[762,440]],
+     "poly": [
+      [
+       788,
+       400
+      ],
+      [
+       952,
+       400
+      ],
+      [
+       978,
+       440
+      ],
+      [
+       762,
+       440
+      ]
+     ],
      "fill": "attrBlue",
      "shadow": true,
      "text": [
@@ -1016,11 +1715,30 @@
        "color": "attrInk"
       }
      ],
-     "tip": ["essence"]
+     "tip": [
+      "essence"
+     ]
     },
     {
      "id": "essence_frame",
-     "poly": [[762,440],[978,440],[978,618],[762,618]],
+     "poly": [
+      [
+       762,
+       440
+      ],
+      [
+       978,
+       440
+      ],
+      [
+       978,
+       618
+      ],
+      [
+       762,
+       618
+      ]
+     ],
      "fill": "frame",
      "shadow": true
     },
@@ -1028,7 +1746,40 @@
      "id": "essence_mod",
      "stroke": 2,
      "label": "Essence · Modifier",
-     "poly": [[776,452],[814,500],[926,500],[964,452],[964,606],[926,560],[814,560],[776,606]],
+     "poly": [
+      [
+       776,
+       452
+      ],
+      [
+       814,
+       500
+      ],
+      [
+       926,
+       500
+      ],
+      [
+       964,
+       452
+      ],
+      [
+       964,
+       606
+      ],
+      [
+       926,
+       560
+      ],
+      [
+       814,
+       560
+      ],
+      [
+       776,
+       606
+      ]
+     ],
      "fill": "paper",
      "text": [
       {
@@ -1040,14 +1791,34 @@
        "color": "ink"
       }
      ],
-     "tip": ["essence", "modifier"],
+     "tip": [
+      "essence",
+      "modifier"
+     ],
      "roll": "essence"
     },
     {
      "id": "essence_score",
      "stroke": 2,
      "label": "Essence · Score",
-     "poly": [[776,452],[964,452],[926,500],[814,500]],
+     "poly": [
+      [
+       776,
+       452
+      ],
+      [
+       964,
+       452
+      ],
+      [
+       926,
+       500
+      ],
+      [
+       814,
+       500
+      ]
+     ],
      "fill": "slate",
      "text": [
       {
@@ -1059,14 +1830,34 @@
        "color": "ink"
       }
      ],
-     "tip": ["essence", "score"],
+     "tip": [
+      "essence",
+      "score"
+     ],
      "roll": "essence"
     },
     {
      "id": "essence_xp",
      "stroke": 2,
      "label": "Essence · Training XP",
-     "poly": [[814,560],[926,560],[964,606],[776,606]],
+     "poly": [
+      [
+       814,
+       560
+      ],
+      [
+       926,
+       560
+      ],
+      [
+       964,
+       606
+      ],
+      [
+       776,
+       606
+      ]
+     ],
      "fill": "slateDeep",
      "text": [
       {
@@ -1078,7 +1869,10 @@
        "color": "white"
       }
      ],
-     "tip": ["essence", "training xp"],
+     "tip": [
+      "essence",
+      "training xp"
+     ],
      "roll": "essence"
     }
    ]
@@ -1090,7 +1884,24 @@
     {
      "id": "inventory",
      "label": "Inventory",
-     "poly": [[45,36],[338,36],[168,306],[45,306]],
+     "poly": [
+      [
+       45,
+       36
+      ],
+      [
+       338,
+       36
+      ],
+      [
+       168,
+       306
+      ],
+      [
+       45,
+       306
+      ]
+     ],
      "fill": "inventory",
      "shadow": true,
      "tab": {
@@ -1111,12 +1922,31 @@
        "items": true
       }
      ],
-     "tip": ["inventory"]
+     "tip": [
+      "inventory"
+     ]
     },
     {
      "id": "arcana",
      "label": "Arcana Trees",
-     "poly": [[349,38],[700,38],[700,164],[269,164]],
+     "poly": [
+      [
+       349,
+       38
+      ],
+      [
+       700,
+       38
+      ],
+      [
+       700,
+       164
+      ],
+      [
+       269,
+       164
+      ]
+     ],
      "fill": "arcana",
      "shadow": true,
      "tab": {
@@ -1162,12 +1992,31 @@
        "items": true
       }
      ],
-     "tip": ["arcana trees"]
+     "tip": [
+      "arcana trees"
+     ]
     },
     {
      "id": "signature",
      "label": "Signature",
-     "poly": [[262,181],[717,181],[717,433],[110,433]],
+     "poly": [
+      [
+       262,
+       181
+      ],
+      [
+       717,
+       181
+      ],
+      [
+       717,
+       433
+      ],
+      [
+       110,
+       433
+      ]
+     ],
      "fill": "signature",
      "shadow": true,
      "tab": {
@@ -1188,12 +2037,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["signature"]
+     "tip": [
+      "signature"
+     ]
     },
     {
      "id": "ability",
      "label": "Ability",
-     "poly": [[212,304],[364,304],[364,422],[140,422]],
+     "poly": [
+      [
+       212,
+       304
+      ],
+      [
+       364,
+       304
+      ],
+      [
+       364,
+       422
+      ],
+      [
+       140,
+       422
+      ]
+     ],
      "fill": "signatureInner",
      "read": "ability",
      "tab": {
@@ -1214,12 +2082,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["ability"]
+     "tip": [
+      "ability"
+     ]
     },
     {
      "id": "animus",
      "label": "Animus",
-     "poly": [[376,190],[707,190],[707,262],[376,262]],
+     "poly": [
+      [
+       376,
+       190
+      ],
+      [
+       707,
+       190
+      ],
+      [
+       707,
+       262
+      ],
+      [
+       376,
+       262
+      ]
+     ],
      "fill": "signatureInner",
      "read": "animus",
      "tab": {
@@ -1240,12 +2127,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["animus"]
+     "tip": [
+      "animus"
+     ]
     },
     {
      "id": "affix",
      "label": "Affix",
-     "poly": [[376,272],[707,272],[707,342],[376,342]],
+     "poly": [
+      [
+       376,
+       272
+      ],
+      [
+       707,
+       272
+      ],
+      [
+       707,
+       342
+      ],
+      [
+       376,
+       342
+      ]
+     ],
      "fill": "signatureInner",
      "read": "affix",
      "tab": {
@@ -1266,12 +2172,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["affix"]
+     "tip": [
+      "affix"
+     ]
     },
     {
      "id": "afflatus",
      "label": "Afflatus",
-     "poly": [[376,352],[707,352],[707,422],[376,422]],
+     "poly": [
+      [
+       376,
+       352
+      ],
+      [
+       707,
+       352
+      ],
+      [
+       707,
+       422
+      ],
+      [
+       376,
+       422
+      ]
+     ],
      "fill": "signatureInner",
      "read": "afflatus",
      "tab": {
@@ -1292,12 +2217,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["afflatus"]
+     "tip": [
+      "afflatus"
+     ]
     },
     {
      "id": "char_data",
      "label": "Character Data",
-     "poly": [[13,318],[174,318],[68,490],[10,490]],
+     "poly": [
+      [
+       13,
+       318
+      ],
+      [
+       174,
+       318
+      ],
+      [
+       68,
+       490
+      ],
+      [
+       10,
+       490
+      ]
+     ],
      "fill": "charData",
      "shadow": true,
      "tab": {
@@ -1372,12 +2316,39 @@
        "color": "ink"
       }
      ],
-     "tip": ["character data"]
+     "tip": [
+      "character data"
+     ]
     },
     {
      "id": "backstory",
      "label": "Backstory",
-     "poly": [[105,458],[698,458],[718,530],[692,602],[94,602],[70,530]],
+     "poly": [
+      [
+       105,
+       458
+      ],
+      [
+       698,
+       458
+      ],
+      [
+       718,
+       530
+      ],
+      [
+       692,
+       602
+      ],
+      [
+       94,
+       602
+      ],
+      [
+       70,
+       530
+      ]
+     ],
      "fill": "backstory",
      "shadow": true,
      "read": "backstory",
@@ -1398,12 +2369,31 @@
        "color": "ink"
       }
      ],
-     "tip": ["backstory"]
+     "tip": [
+      "backstory"
+     ]
     },
     {
      "id": "skill_slots",
      "label": "Skill Slots",
-     "poly": [[739,36],[981,36],[981,378],[739,378]],
+     "poly": [
+      [
+       739,
+       36
+      ],
+      [
+       981,
+       36
+      ],
+      [
+       981,
+       378
+      ],
+      [
+       739,
+       378
+      ]
+     ],
      "fill": "sky",
      "shadow": true,
      "tab": {
@@ -1414,22 +2404,41 @@
      "text": [
       {
        "t": "{skills}",
-       "y": 90,
+       "y": 86,
        "x": 756,
        "wrap": 210,
-       "maxH": 270,
+       "maxH": 285,
        "font": "body",
-       "size": 15,
+       "size": 13,
        "color": "ink",
        "items": true
       }
      ],
-     "tip": ["skill slots"]
+     "tip": [
+      "skill slots"
+     ]
     },
     {
      "id": "unlocked_trees",
      "label": "Unlocked Trees",
-     "poly": [[739,388],[981,388],[981,606],[739,606]],
+     "poly": [
+      [
+       739,
+       388
+      ],
+      [
+       981,
+       388
+      ],
+      [
+       981,
+       606
+      ],
+      [
+       739,
+       606
+      ]
+     ],
      "fill": "sky",
      "shadow": true,
      "tab": {
@@ -1450,7 +2459,9 @@
        "items": true
       }
      ],
-     "tip": ["unlocked trees"]
+     "tip": [
+      "unlocked trees"
+     ]
     }
    ]
   }
@@ -1500,7 +2511,8 @@
   "unlocked": "BALANCE:\nOrder → Pure → Vital"
 }
 </script>
-<script id="wikiskills" type="application/json">[{"name":"Connective Mind","tree":"mind","path":"Main Path","tier":1,"ep":0,"effect":"Accessing the mind of a sentient being who is not [Will Locked] the user of this Arcana may use telepathy to speak into their mind. The voice spoken with is chosen by the caster, but the words are always translated into the language the receiver is most proficient with regardless of the caster’s own capability of speaking such. This effect remains until their next long rest and may be willingly activated at any time during its total effectiveness time. Targets chosen by the caster for this skill are unable to respond unless [Connective Net] is additionally active upon use of this skill.","cast":"Instant","lasts":"Until next Long Rest","range":"60 Foot Radius Self","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-connective-mind"},{"name":"Connective Net","tree":"mind","path":"Main Path","tier":1,"ep":2,"effect":"This skill may be additionally activated by a caster using the [Connective Mind] ability. Allowing them to choose four active targets maximum besides themself when using this skill. These targets and the caster become a part of a telepathic web within a thirty foot radius allowing them to freely converse between singular, multiple, or all targets affected by [Connective Net] . The caster may recast this skill to choose new targets to replace others already in their net. All words are individually translated similar to [Connective Mind] into the languages the receiver is most proficient with allowing free speaking.","cast":"Reaction","lasts":"Until out of Range","range":"30 Foot Radius Centered on the Caster.","cooldown":"1 Round","url":"skills-skills-and-more-skills.html#skill-connective-net"},{"name":"Practical Hit!","tree":"trait","path":"Main Path","tier":1,"ep":0,"effect":"Focusing yourself you go in for a strike! Using a Shell Roll vs your target’s AP, you may use any form of physical or ranged weaponry you have equipped in place of the damage or effects.","cast":"Instant","lasts":"1 Round","range":"Depends","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-enhance"},{"name":"Assured Strike!","tree":"trait","path":"Main Path","tier":1,"ep":3,"effect":"You don’t take it lightly when someone damages you, upon successfully being hit with a skill that does damage. You may use your reaction to gain a +2 to your next physical or ranged attack against them. This is only effective for the following round. If not used, cooldown still remains until usable again.","cast":"Reaction","lasts":"1 Round","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-assured-strike"},{"name":"Parry!","tree":"trait","path":"Main Path","tier":1,"ep":5,"effect":"Letting your guard down can cost you your life, you get ready to defend any incoming physical or ranged attacks. Granting you a +2 to your AP until the end of this skill’s effectiveness.","cast":"1 Round","lasts":"2 Rounds","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-parry"},{"name":"Unyielding Force!","tree":"trait","path":"Main Path","tier":1,"ep":3,"effect":"It takes a lot more than normal to knock you down. Life force and strength easily flows through your veins even if temporary. When used this ability grants an immediate 10 Temp Health. That lasts until the end of the spell’s duration.","cast":"1 round","lasts":"2 Rounds","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-unyielding-force"},{"name":"Reckless Attack!","tree":"trait","path":"Main Path","tier":1,"ep":8,"effect":"Using all of your might you charge forth with a reckless physical or ranged attack. You concentrate it into your weapon to gain a 2 bonus damage dice of the weapon’s type.Target foe needs to do a Shell vs Shell roll against you to avoid taking full damage, taking half on a success, and none on a crit success.","cast":"1 round","lasts":"1 round","range":"Depends","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-reckless-attack"},{"name":"Logic and Order","tree":"balance","path":"Main Path","tier":1,"ep":0,"effect":"Assert order on the field, mitigate chaos by turning it against itself doing 1d6 damage on a successful essence roll vs the target’s AP.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-order"},{"name":"Balancing Act","tree":"balance","path":"Main Path","tier":1,"ep":3,"effect":"The flow of energy surrounding the user is capable of quickly applying stabilization to a target. Granting +3 AP until the end of their next turn.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"1 Round","url":"skills-skills-and-more-skills.html#skill-balancing-act"},{"name":"Objection!","tree":"balance","path":"Main Path","tier":1,"ep":5,"effect":"Lies do not easily pass you, as a reaction when a target attempts to deceive you; both you and the target do an essence roll against each other. Upon a success, you become aware of the fact they are lying, even if you continue to lack the knowledge about the specifics.","cast":"Reaction","lasts":"1 Round","range":"60 Feet","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-objection"},{"name":"Mediate","tree":"balance","path":"Main Path","tier":1,"ep":2,"effect":"Chaos is dismissed at your whim, applying a target with your persuasion of Order. You relieve them of harmful effects. For the next three rounds one negative effect chosen by them; such as [Bleeding] or [Burning] has its length reduced by 1 round.","cast":"1 Round","lasts":"3 Rounds","range":"Touch","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-mediate"},{"name":"The Judge","tree":"balance","path":"Main Path","tier":1,"ep":8,"effect":"You decide the final verdict, when you or an ally within range are successfully hit by an Essence based attack, you can use your reaction to counter it with a successful essence roll vs the target.","cast":"Reaction","lasts":"1 Round","range":"100 Feet","cooldown":"5 rounds","url":"skills-skills-and-more-skills.html#skill-the-judge"},{"name":"Variable Violence","tree":"balance","path":"Main Path","tier":2,"ep":0,"effect":"Overwhelming power comes with many unknowns, despite this you take your chances. Wielding this metaphysical chaos against your enemies. After rolling a successful Essence roll against your opponent’s AP roll a 1d6 to decide the effect of the attack. [1-2 \\= 1d6 Damage] [3-4 \\= -2 EP] [5-6=1d8 Damage]","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-variable-violence"},{"name":"Tampering Tricks","tree":"balance","path":"Main Path","tier":2,"ep":4,"effect":"Inflicting your chaos upon a chosen target, you attempt to change their luck until the end of this spell’s effectiveness. Roll a 1d10 for the effect. This effect is automatic upon being casted. [1-2 -2 AP] [3-4 -4 AP] [5-6 -2 EP] [7-8 -4 EP] [9-10 1d10 Dmg]","cast":"1 round","lasts":"2 Rounds","range":"100 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-tampering-tricks"},{"name":"Always a Chance","tree":"balance","path":"Main Path","tier":2,"ep":5,"effect":"Things don’t always go to plan when chaos ensues, upon being hit or seeing an ally hit successfully with an attack within range immediately use your reaction to impose a -4 to the attacker’s total attack roll to attempt to cancel it entirely if the new roll is lower than the protected person’s total AP score.","cast":"Reaction","lasts":"1 Round","range":"60 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-always-a-chance"},{"name":"Expand the Nonsense","tree":"balance","path":"Main Path","tier":2,"ep":5,"effect":"Order? Respecting reality? These rules do not apply when you’re around. Upon activation afflicts every foe within a 30 foot radius centered on the self with one of these random effects individually decided by a 1d6 roll each. [1-2 -10 MP] [3-4 2d8 DMG] [5-6 Knocked Prone] [7-8 Knocked backwards 10 Feet] [9-10 Dazed]. These effects last for as long as the spell is active.","cast":"1 Rounds","lasts":"3 Rounds","range":"Self 30 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-expand-the-nonsense"},{"name":"The Executioner","tree":"balance","path":"Main Path","tier":2,"ep":10,"effect":"It is easy to take advantage of suffering and misfortune you sow with extreme ease. When any enemy within range falls below half of their total non-temp HP. You can strike out to kick them while they’re down. Upon a successful Essence strike against the target, you deal 2d12 damage directly to their health. (Bypassing Temp HP)","cast":"Reaction","lasts":"1 Round","range":"30 Feet","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-the-executioner"},{"name":"Between the Worlds","tree":"balance","path":"Main Path","tier":3,"ep":0,"effect":"With balance, all things become clear. With an understanding comes true sight. Upon activation gain the ability to see [Invisible] [Incorporeal] or creatures within a 100 foot radius centered on the caster. You peak past the physical veil to see the realms of energy and soul, while anchoring yourself in your realm.","cast":"Instant","lasts":"5 Rounds","range":"Self 100 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-between-the-worlds"},{"name":"Neutrality in all Things","tree":"balance","path":"Main Path","tier":3,"ep":6,"effect":"Chaos and Order are far too simple of concepts; to bend reality under truly neutrality is far superior. Enforcing true neutrality by binding an environment centered on a point within sight of the caster. Three chosen targets make a D15 Essence roll or become [Restrained] and [Dazed] until the end of this spell’s effectiveness.","cast":"2 Round","lasts":"3 Rounds","range":"30 Feet Radius","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-neutrality-in-all-things"},{"name":"Universal Tongues","tree":"balance","path":"Main Path","tier":3,"ep":4,"effect":"The bridge between relations is often hindered by a lack of understanding. To elevate this struggle you have attuned your Median energy to act as a universal translator. Allowing you to speak to sentient entities that you can perceive and that choose to perceive you back. Their spoken words sound like any language your character is most proficient in, and the same in verse for anything you speak to them. (This does not work for written text, as the audible spoken words are required. This does not give you the ability to innately know a language you don’t; it only translates whatever is heard into one that you do.)","cast":"1 Round","lasts":"5 Rounds","range":"Self","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-universal-tongues"},{"name":"Tangible Balance","tree":"balance","path":"Main Path","tier":3,"ep":8,"effect":"Light and Dark are only as prevalent as the one who perceives their change. You decide the Balance in any conflict. Aiming at two targets you choose to [Balance] or [Tip the Scale]. You may target yourself as one of the people on the scale. [Balance:] Equalize the primary health of both targets, any extra health is forfeit. [Tip the Scale:] Deduct one third of chosen target health, and give it to the other person being weighed on the scale.","cast":"3 Rounds","lasts":"1 Round.","range":"Self 100 Feet","cooldown":"8 Rounds","url":"skills-skills-and-more-skills.html#skill-tangible-balance"},{"name":"The Jury","tree":"balance","path":"Main Path","tier":3,"ep":8,"effect":"You decide the final outcome when a person’s life is on trial. Choose one target within range. Deem them as [Guilty] or [Not Guilty] to determine the effects. This lasts for as long as the spell’s effectiveness remains. You may target yourself as well. [Guilty:] -2 AP +2 Damage per Damage Dice against target. [Not Guilty:] +10 Temp Health, +2 AP, +4 EP","cast":"2 Rounds","lasts":"4 Rounds","range":"60 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-the-jury"},{"name":"Help is on the way!","tree":"balance","path":"Pure","tier":1,"ep":0,"effect":"Pure essence flows through you with ease, being shaped by your will it is capable of mending injuries. By touching a chosen target you may choose to either heal 1d6 HP, or 1d4 EP directly into their system. [You may target yourself[","cast":"Instant","lasts":"1 Round","range":"Touch","cooldown":"1 Rounds","url":"skills-skills-and-more-skills.html#skill-help-is-on-the-way"},{"name":"Stabilize Health","tree":"balance","path":"Pure","tier":1,"ep":5,"effect":"The dying do not meet death unless you say so, when an ally within range is inflicted with the [Dying] condition you can use your reaction to roll a D10 essence roll to stabilize them to be [Unconscious] instead sparing their lives.","cast":"Reaction.","lasts":"1 Round","range":"60 feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-stabilize-health"},{"name":"Booster Shot!","tree":"balance","path":"Pure","tier":1,"ep":3,"effect":"There is seemingly nothing restorative energy can’t mend or in this case prevent. Assuring that your chosen target within range can survive the fight you give them 1d10 Temp Health that disperses after the spell is finished.","cast":"1 Round","lasts":"4 Rounds","range":"30 Feet","cooldown":"2 Round","url":"skills-skills-and-more-skills.html#skill-booster-shot"},{"name":"Field Medic","tree":"balance","path":"Pure","tier":1,"ep":6,"effect":"Always prepared when times get rough, you rely on an extra store of Pure Energy in which you draw from when needed. When activated you draw upon a total pool of 20 HP points in which you can divide as you choose among any targets within range including yourself.","cast":"1 Round","lasts":"1 round","range":"30 feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-field-medic"},{"name":"Emergency!","tree":"balance","path":"Pure","tier":1,"ep":8,"effect":"When all seems lost, you know that just isn’t the case. Alert as ever you call upon a massive well of Pure energy to attempt saving a recently killed person’s life. If they have died within the last 10 rounds you may attempt a D15 Essence check to revivify them and stop death in its tracks entirely. This still leaves them [Unconscious] .","cast":"2 Round","lasts":"1 Round","range":"Touch","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-emergency"},{"name":"Freedom Flows","tree":"balance","path":"Pure","tier":2,"ep":0,"effect":"Just like emotions, the freedom of movement and life should be shared! Focusing on yourself, or a target you can touch. You grant them true freedom for a short time while also mending their wounds. The target receives a flat 15 HP back, alongside a +10 MP bonus that lasts until the end of their next turn. If the target is suffering from the [Grappled] or [Restrained] conditions they are immediately removed once the spell takes effect.","cast":"Instant","lasts":"1 Round","range":"Self Touch","cooldown":"1 Rounds","url":"skills-skills-and-more-skills.html#t2-flow"},{"name":"Defibrillator Dynamo","tree":"balance","path":"Pure","tier":2,"ep":6,"effect":"Rapidly begin charging up restorative energy while preparing to dose it into a single ally within range you can touch. Dashing forward to them within a limit of 30 feet. Every 5 feet covered before touching them adds an additional 1d4 at a base of 1d10.","cast":"1 Round","lasts":"1 Round","range":"Touch 30 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-defibrillator-dynamo"},{"name":"Dance with Death","tree":"balance","path":"Pure","tier":2,"ep":10,"effect":"Life and Death have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Pure] and [Null] energy allowing you the ability to cast 1 skill from the [Null | Block] branch free of charge/slots as an [Instant] . This requires either another consenting player with the opposite paired skill [Dance with Life] to activate together or a caster who has both [Dance with Death] and [Dance with Life] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills.","cast":"2 Rounds","lasts":"1 Round","range":"Self","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-dance-with-death"},{"name":"Harness Harmony","tree":"balance","path":"Pure","tier":2,"ep":4,"effect":"[Harmony] is a tool that can mend just as it can destroy to keep its balance. Choose two targets to give a stack of [Harmony] which lasts until the end of this spell’s effectiveness. You can target yourself as one of these people. You must choose if it is [Positive] or [Negative] upon deciding the targets for this spell. [Positive]: Target receives either +3 Temp AP or 1d10 HP per-round. [Negative]: Target takes either -3 EP or 1d8+2 damage per round.","cast":"1 round","lasts":"2 rounds","range":"Self 30 Foot Radius","cooldown":"2 rounds","url":"skills-skills-and-more-skills.html#skill-harness-harmony"},{"name":"Tap into the True Flow","tree":"balance","path":"Pure","tier":2,"ep":8,"effect":"A surge of extremely overclocked [Pure] energy immediately connects to 4 targets within a sixty foot radius centered on the caster. For the duration of the spell’s effectiveness these chosen targets receive 2d8 per round.","cast":"3 rounds","lasts":"5 Rounds","range":"Self 60 Foot Radius","cooldown":"5 rounds","url":"skills-skills-and-more-skills.html#skill-tap-into-the-true-flow"},{"name":"Positive Thinking!","tree":"balance","path":"Pure","tier":3,"ep":0,"effect":"This cruel world never seems to get you down, that joy is easy to share with your companions! Directly your positivity towards an ally you lessen a condition such as [Confused, Frightened, Panicked, or Sorrowful] by one round.","cast":"1 round.","lasts":"1 round","range":"30 feet","cooldown":"1 round.","url":"skills-skills-and-more-skills.html#t3-rejoice"},{"name":"Dance with Life","tree":"balance","path":"Null","tier":2,"ep":10,"effect":"Death and Life have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Null] and [Pure] energy allowing you the ability to cast 1 skill from the [Pure | Flow] branch free of charge/slots as an [Instant] . This requires either another consenting player with the opposite paired skill [Dance with Death] to activate together or a caster who has both [Dance with Life] and [Dance with Death] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills.","cast":"2 Rounds","lasts":"1 Round","range":"Self","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-dance-with-life"},{"name":"Elmental Missile","tree":"element","path":"Main Path","tier":1,"ep":0,"effect":"Collecting a mass of your [Primary Element], you hurl it forward towards a foe attempting an Essence roll against their AP. Upon a normal success do 1d6 damage. Crit successes add +1 [Elemental Effect] to the afflicted person being targeted.","cast":"Instant","lasts":"1 Round","range":"30 feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-temper"},{"name":"Super Lob","tree":"element","path":"Main Path","tier":1,"ep":4,"effect":"Summoning forth a large amount of your [Primary Element] you hurl it to a location within range. Everything within a 15 foot range of the center must do a successful d15 Shell roll to avoid taking damage. Failures result in them taking 1d10 damage and +1 [Elemental Effect]. Crits add an addition +1 [Elemental Effect]","cast":"1 Round","lasts":"1 Round","range":"60 Feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-super-lob"},{"name":"Focused Assault","tree":"element","path":"Main Path","tier":1,"ep":5,"effect":"When a specific foe has caught your ire, you know just how to handle them. You form a precise amount of your [Primary Element] before directly at one chosen target within range. Upon a successful Essence roll against their AP you deal 2d8 Damage and apply +2 [Elemental Effect]","cast":"1 Round","lasts":"1 Round","range":"60 Feet","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-focused-assault"},{"name":"Primary Absorption","tree":"element","path":"Main Path","tier":1,"ep":3,"effect":"When a foe attempts to attack you with an element matching an element unlocked within your roster; you may choose to simply absorb a portion of the element itself, cutting the damage in half and lowering an [Elemental Effects] by one round.","cast":"Reaction","lasts":"1 Round","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-primary-absorption"},{"name":"Roaring Release","tree":"element","path":"Main Path","tier":1,"ep":8,"effect":"Considering your options carefully you bring forth Three charges of your [Primary Element]. These charges can be divided as you choose among 1-3 targets. Upon a successful Essence roll against the chosen target’s AP do 1d6 Damage and apply +1 [Elemental Effects]. Criticals do double damage and add an additional +1 [Elemental Effect] against them as well.","cast":"1 Round","lasts":"1 Round","range":"30 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-roaring-release"},{"name":"Logic and Order","tree":"infuse","path":"Main Path","tier":1,"ep":0,"effect":"Assert order on the field, mitigate chaos by turning it against itself doing 1d4 damage on a successful essence roll vs the target’s AP.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-order_1"}]</script>
+<script id="wikiskills" type="application/json">[{"name":"Connective Mind","tree":"mind","path":"Main Path","tier":1,"ep":0,"effect":"Accessing the mind of a sentient being who is not [Will Locked] the user of this Arcana may use telepathy to speak into their mind. The voice spoken with is chosen by the caster, but the words are always translated into the language the receiver is most proficient with regardless of the caster’s own capability of speaking such. This effect remains until their next long rest and may be willingly activated at any time during its total effectiveness time. Targets chosen by the caster for this skill are unable to respond unless [Connective Net] is additionally active upon use of this skill.","cast":"Instant","lasts":"Until next Long Rest","range":"60 Foot Radius Self","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-connective-mind"},{"name":"Connective Net","tree":"mind","path":"Main Path","tier":1,"ep":2,"effect":"This skill may be additionally activated by a caster using the [Connective Mind] ability. Allowing them to choose four active targets maximum besides themself when using this skill. These targets and the caster become a part of a telepathic web within a thirty foot radius allowing them to freely converse between singular, multiple, or all targets affected by [Connective Net] . The caster may recast this skill to choose new targets to replace others already in their net. All words are individually translated similar to [Connective Mind] into the languages the receiver is most proficient with allowing free speaking.","cast":"Reaction","lasts":"Until out of Range","range":"30 Foot Radius Centered on the Caster.","cooldown":"1 Round","url":"skills-skills-and-more-skills.html#skill-connective-net"},{"name":"Practical Hit!","tree":"trait","path":"Main Path","tier":1,"ep":0,"effect":"Focusing yourself you go in for a strike! Using a Shell Roll vs your target’s AP, you may use any form of physical or ranged weaponry you have equipped in place of the damage or effects.","cast":"Instant","lasts":"1 Round","range":"Depends","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-enhance"},{"name":"Assured Strike!","tree":"trait","path":"Main Path","tier":1,"ep":3,"effect":"You don’t take it lightly when someone damages you, upon successfully being hit with a skill that does damage. You may use your reaction to gain a +2 to your next physical or ranged attack against them. This is only effective for the following round. If not used, cooldown still remains until usable again.","cast":"Reaction","lasts":"1 Round","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-assured-strike"},{"name":"Parry!","tree":"trait","path":"Main Path","tier":1,"ep":5,"effect":"Letting your guard down can cost you your life, you get ready to defend any incoming physical or ranged attacks. Granting you a +2 to your AP until the end of this skill’s effectiveness.","cast":"1 Round","lasts":"2 Rounds","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-parry"},{"name":"Unyielding Force!","tree":"trait","path":"Main Path","tier":1,"ep":3,"effect":"It takes a lot more than normal to knock you down. Life force and strength easily flows through your veins even if temporary. When used this ability grants an immediate 10 Temp Health. That lasts until the end of the spell’s duration.","cast":"1 round","lasts":"2 Rounds","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-unyielding-force"},{"name":"Reckless Attack!","tree":"trait","path":"Main Path","tier":1,"ep":8,"effect":"Using all of your might you charge forth with a reckless physical or ranged attack. You concentrate it into your weapon to gain a 2 bonus damage dice of the weapon’s type.Target foe needs to do a Shell vs Shell roll against you to avoid taking full damage, taking half on a success, and none on a crit success.","cast":"1 round","lasts":"1 round","range":"Depends","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-reckless-attack"},{"name":"Logic and Order","tree":"balance","path":"Main Path","tier":1,"ep":0,"effect":"Assert order on the field, mitigate chaos by turning it against itself doing 1d6 damage on a successful essence roll vs the target’s AP.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-order"},{"name":"Balancing Act","tree":"balance","path":"Main Path","tier":1,"ep":3,"effect":"The flow of energy surrounding the user is capable of quickly applying stabilization to a target. Granting +3 AP until the end of their next turn.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"1 Round","url":"skills-skills-and-more-skills.html#skill-balancing-act"},{"name":"Objection!","tree":"balance","path":"Main Path","tier":1,"ep":5,"effect":"Lies do not easily pass you, as a reaction when a target attempts to deceive you; both you and the target do an essence roll against each other. Upon a success, you become aware of the fact they are lying, even if you continue to lack the knowledge about the specifics.","cast":"Reaction","lasts":"1 Round","range":"60 Feet","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-objection"},{"name":"Mediate","tree":"balance","path":"Main Path","tier":1,"ep":2,"effect":"Chaos is dismissed at your whim, applying a target with your persuasion of Order. You relieve them of harmful effects. For the next three rounds one negative effect chosen by them; such as [Bleeding] or [Burning] has its length reduced by 1 round.","cast":"1 Round","lasts":"3 Rounds","range":"Touch","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-mediate"},{"name":"The Judge","tree":"balance","path":"Main Path","tier":1,"ep":8,"effect":"You decide the final verdict, when you or an ally within range are successfully hit by an Essence based attack, you can use your reaction to counter it with a successful essence roll vs the target.","cast":"Reaction","lasts":"1 Round","range":"100 Feet","cooldown":"5 rounds","url":"skills-skills-and-more-skills.html#skill-the-judge"},{"name":"Variable Violence","tree":"balance","path":"Main Path","tier":2,"ep":0,"effect":"Overwhelming power comes with many unknowns, despite this you take your chances. Wielding this metaphysical chaos against your enemies. After rolling a successful Essence roll against your opponent’s AP roll a 1d6 to decide the effect of the attack. [1-2 \\= 1d6 Damage] [3-4 \\= -2 EP] [5-6=1d8 Damage]","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-variable-violence"},{"name":"Tampering Tricks","tree":"balance","path":"Main Path","tier":2,"ep":4,"effect":"Inflicting your chaos upon a chosen target, you attempt to change their luck until the end of this spell’s effectiveness. Roll a 1d10 for the effect. This effect is automatic upon being casted. [1-2 -2 AP] [3-4 -4 AP] [5-6 -2 EP] [7-8 -4 EP] [9-10 1d10 Dmg]","cast":"1 round","lasts":"2 Rounds","range":"100 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-tampering-tricks"},{"name":"Always a Chance","tree":"balance","path":"Main Path","tier":2,"ep":5,"effect":"Things don’t always go to plan when chaos ensues, upon being hit or seeing an ally hit successfully with an attack within range immediately use your reaction to impose a -4 to the attacker’s total attack roll to attempt to cancel it entirely if the new roll is lower than the protected person’s total AP score.","cast":"Reaction","lasts":"1 Round","range":"60 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-always-a-chance"},{"name":"Expand the Nonsense","tree":"balance","path":"Main Path","tier":2,"ep":5,"effect":"Order? Respecting reality? These rules do not apply when you’re around. Upon activation afflicts every foe within a 30 foot radius centered on the self with one of these random effects individually decided by a 1d6 roll each. [1-2 -10 MP] [3-4 2d8 DMG] [5-6 Knocked Prone] [7-8 Knocked backwards 10 Feet] [9-10 Dazed]. These effects last for as long as the spell is active.","cast":"1 Rounds","lasts":"3 Rounds","range":"Self 30 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-expand-the-nonsense"},{"name":"The Executioner","tree":"balance","path":"Main Path","tier":2,"ep":10,"effect":"It is easy to take advantage of suffering and misfortune you sow with extreme ease. When any enemy within range falls below half of their total non-temp HP. You can strike out to kick them while they’re down. Upon a successful Essence strike against the target, you deal 2d12 damage directly to their health. (Bypassing Temp HP)","cast":"Reaction","lasts":"1 Round","range":"30 Feet","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-the-executioner"},{"name":"Between the Worlds","tree":"balance","path":"Main Path","tier":3,"ep":0,"effect":"With balance, all things become clear. With an understanding comes true sight. Upon activation gain the ability to see [Invisible] [Incorporeal] or creatures within a 100 foot radius centered on the caster. You peak past the physical veil to see the realms of energy and soul, while anchoring yourself in your realm.","cast":"Instant","lasts":"5 Rounds","range":"Self 100 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-between-the-worlds"},{"name":"Neutrality in all Things","tree":"balance","path":"Main Path","tier":3,"ep":6,"effect":"Chaos and Order are far too simple of concepts; to bend reality under truly neutrality is far superior. Enforcing true neutrality by binding an environment centered on a point within sight of the caster. Three chosen targets make a D15 Essence roll or become [Restrained] and [Dazed] until the end of this spell’s effectiveness.","cast":"2 Round","lasts":"3 Rounds","range":"30 Feet Radius","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-neutrality-in-all-things"},{"name":"Universal Tongues","tree":"balance","path":"Main Path","tier":3,"ep":4,"effect":"The bridge between relations is often hindered by a lack of understanding. To elevate this struggle you have attuned your Median energy to act as a universal translator. Allowing you to speak to sentient entities that you can perceive and that choose to perceive you back. Their spoken words sound like any language your character is most proficient in, and the same in verse for anything you speak to them. (This does not work for written text, as the audible spoken words are required. This does not give you the ability to innately know a language you don’t; it only translates whatever is heard into one that you do.)","cast":"1 Round","lasts":"5 Rounds","range":"Self","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-universal-tongues"},{"name":"Tangible Balance","tree":"balance","path":"Main Path","tier":3,"ep":8,"effect":"Light and Dark are only as prevalent as the one who perceives their change. You decide the Balance in any conflict. Aiming at two targets you choose to [Balance] or [Tip the Scale]. You may target yourself as one of the people on the scale. [Balance:] Equalize the primary health of both targets, any extra health is forfeit. [Tip the Scale:] Deduct one third of chosen target health, and give it to the other person being weighed on the scale.","cast":"3 Rounds","lasts":"1 Round.","range":"Self 100 Feet","cooldown":"8 Rounds","url":"skills-skills-and-more-skills.html#skill-tangible-balance"},{"name":"The Jury","tree":"balance","path":"Main Path","tier":3,"ep":8,"effect":"You decide the final outcome when a person’s life is on trial. Choose one target within range. Deem them as [Guilty] or [Not Guilty] to determine the effects. This lasts for as long as the spell’s effectiveness remains. You may target yourself as well. [Guilty:] -2 AP +2 Damage per Damage Dice against target. [Not Guilty:] +10 Temp Health, +2 AP, +4 EP","cast":"2 Rounds","lasts":"4 Rounds","range":"60 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-the-jury"},{"name":"Help is on the way!","tree":"balance","path":"Pure","tier":1,"ep":0,"effect":"Pure essence flows through you with ease, being shaped by your will it is capable of mending injuries. By touching a chosen target you may choose to either heal 1d6 HP, or 1d4 EP directly into their system. [You may target yourself[","cast":"Instant","lasts":"1 Round","range":"Touch","cooldown":"1 Rounds","url":"skills-skills-and-more-skills.html#skill-help-is-on-the-way"},{"name":"Stabilize Health","tree":"balance","path":"Pure","tier":1,"ep":5,"effect":"The dying do not meet death unless you say so, when an ally within range is inflicted with the [Dying] condition you can use your reaction to roll a D10 essence roll to stabilize them to be [Unconscious] instead sparing their lives.","cast":"Reaction.","lasts":"1 Round","range":"60 feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-stabilize-health"},{"name":"Booster Shot!","tree":"balance","path":"Pure","tier":1,"ep":3,"effect":"There is seemingly nothing restorative energy can’t mend or in this case prevent. Assuring that your chosen target within range can survive the fight you give them 1d10 Temp Health that disperses after the spell is finished.","cast":"1 Round","lasts":"4 Rounds","range":"30 Feet","cooldown":"2 Round","url":"skills-skills-and-more-skills.html#skill-booster-shot"},{"name":"Field Medic","tree":"balance","path":"Pure","tier":1,"ep":6,"effect":"Always prepared when times get rough, you rely on an extra store of Pure Energy in which you draw from when needed. When activated you draw upon a total pool of 20 HP points in which you can divide as you choose among any targets within range including yourself.","cast":"1 Round","lasts":"1 round","range":"30 feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-field-medic"},{"name":"Emergency!","tree":"balance","path":"Pure","tier":1,"ep":8,"effect":"When all seems lost, you know that just isn’t the case. Alert as ever you call upon a massive well of Pure energy to attempt saving a recently killed person’s life. If they have died within the last 10 rounds you may attempt a D15 Essence check to revivify them and stop death in its tracks entirely. This still leaves them [Unconscious] .","cast":"2 Round","lasts":"1 Round","range":"Touch","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-emergency"},{"name":"Freedom Flows","tree":"balance","path":"Pure","tier":2,"ep":0,"effect":"Just like emotions, the freedom of movement and life should be shared! Focusing on yourself, or a target you can touch. You grant them true freedom for a short time while also mending their wounds. The target receives a flat 15 HP back, alongside a +10 MP bonus that lasts until the end of their next turn. If the target is suffering from the [Grappled] or [Restrained] conditions they are immediately removed once the spell takes effect.","cast":"Instant","lasts":"1 Round","range":"Self Touch","cooldown":"1 Rounds","url":"skills-skills-and-more-skills.html#t2-flow"},{"name":"Defibrillator Dynamo","tree":"balance","path":"Pure","tier":2,"ep":6,"effect":"Rapidly begin charging up restorative energy while preparing to dose it into a single ally within range you can touch. Dashing forward to them within a limit of 30 feet. Every 5 feet covered before touching them adds an additional 1d4 at a base of 1d10.","cast":"1 Round","lasts":"1 Round","range":"Touch 30 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-defibrillator-dynamo"},{"name":"Dance with Death","tree":"balance","path":"Pure","tier":2,"ep":10,"effect":"Life and Death have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Pure] and [Null] energy allowing you the ability to cast 1 skill from the [Null | Block] branch free of charge/slots as an [Instant] . This requires either another consenting player with the opposite paired skill [Dance with Life] to activate together or a caster who has both [Dance with Death] and [Dance with Life] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills.","cast":"2 Rounds","lasts":"1 Round","range":"Self","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-dance-with-death"},{"name":"Harness Harmony","tree":"balance","path":"Pure","tier":2,"ep":4,"effect":"[Harmony] is a tool that can mend just as it can destroy to keep its balance. Choose two targets to give a stack of [Harmony] which lasts until the end of this spell’s effectiveness. You can target yourself as one of these people. You must choose if it is [Positive] or [Negative] upon deciding the targets for this spell. [Positive]: Target receives either +3 Temp AP or 1d10 HP per-round. [Negative]: Target takes either -3 EP or 1d8+2 damage per round.","cast":"1 round","lasts":"2 rounds","range":"Self 30 Foot Radius","cooldown":"2 rounds","url":"skills-skills-and-more-skills.html#skill-harness-harmony"},{"name":"Tap into the True Flow","tree":"balance","path":"Pure","tier":2,"ep":8,"effect":"A surge of extremely overclocked [Pure] energy immediately connects to 4 targets within a sixty foot radius centered on the caster. For the duration of the spell’s effectiveness these chosen targets receive 2d8 per round.","cast":"3 rounds","lasts":"5 Rounds","range":"Self 60 Foot Radius","cooldown":"5 rounds","url":"skills-skills-and-more-skills.html#skill-tap-into-the-true-flow"},{"name":"Positive Thinking!","tree":"balance","path":"Pure","tier":3,"ep":0,"effect":"This cruel world never seems to get you down, that joy is easy to share with your companions! Directly your positivity towards an ally you lessen a condition such as [Confused, Frightened, Panicked, or Sorrowful] by one round.","cast":"1 round.","lasts":"1 round","range":"30 feet","cooldown":"1 round.","url":"skills-skills-and-more-skills.html#t3-rejoice"},{"name":"Dance with Life","tree":"balance","path":"Null","tier":2,"ep":10,"effect":"Death and Life have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Null] and [Pure] energy allowing you the ability to cast 1 skill from the [Pure | Flow] branch free of charge/slots as an [Instant] . This requires either another consenting player with the opposite paired skill [Dance with Death] to activate together or a caster who has both [Dance with Life] and [Dance with Death] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills.","cast":"2 Rounds","lasts":"1 Round","range":"Self","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-dance-with-life"},{"name":"Elmental Missile","tree":"element","path":"Main Path","tier":1,"ep":0,"effect":"Collecting a mass of your [Primary Element], you hurl it forward towards a foe attempting an Essence roll against their AP. Upon a normal success do 1d6 damage. Crit successes add +1 [Elemental Effect] to the afflicted person being targeted.","cast":"Instant","lasts":"1 Round","range":"30 feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-temper"},{"name":"Super Lob","tree":"element","path":"Main Path","tier":1,"ep":4,"effect":"Summoning forth a large amount of your [Primary Element] you hurl it to a location within range. Everything within a 15 foot range of the center must do a successful d15 Shell roll to avoid taking damage. Failures result in them taking 1d10 damage and +1 [Elemental Effect]. Crits add an addition +1 [Elemental Effect]","cast":"1 Round","lasts":"1 Round","range":"60 Feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-super-lob"},{"name":"Focused Assault","tree":"element","path":"Main Path","tier":1,"ep":5,"effect":"When a specific foe has caught your ire, you know just how to handle them. You form a precise amount of your [Primary Element] before directly at one chosen target within range. Upon a successful Essence roll against their AP you deal 2d8 Damage and apply +2 [Elemental Effect]","cast":"1 Round","lasts":"1 Round","range":"60 Feet","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-focused-assault"},{"name":"Primary Absorption","tree":"element","path":"Main Path","tier":1,"ep":3,"effect":"When a foe attempts to attack you with an element matching an element unlocked within your roster; you may choose to simply absorb a portion of the element itself, cutting the damage in half and lowering an [Elemental Effects] by one round.","cast":"Reaction","lasts":"1 Round","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-primary-absorption"},{"name":"Roaring Release","tree":"element","path":"Main Path","tier":1,"ep":8,"effect":"Considering your options carefully you bring forth Three charges of your [Primary Element]. These charges can be divided as you choose among 1-3 targets. Upon a successful Essence roll against the chosen target’s AP do 1d6 Damage and apply +1 [Elemental Effects]. Criticals do double damage and add an additional +1 [Elemental Effect] against them as well.","cast":"1 Round","lasts":"1 Round","range":"30 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-roaring-release"}]</script>
+<script id="wikilevels" type="application/json">{"levels":[{"level":0,"skillSlots":5,"statPoints":3,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":2,"text":"+5 Skill Slot +3 Stat Point +Signature +Two Base Arcana"},{"level":1,"skillSlots":1,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Skill Slot +1 Stat Point"},{"level":2,"skillSlots":1,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Skill Slot +1 Stat Point"},{"level":3,"skillSlots":1,"statPoints":1,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Skill Slot +1 Stat Point. +Arcana Advance. Skill Reslotting"},{"level":4,"skillSlots":1,"statPoints":0,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Skill Slot"},{"level":5,"skillSlots":1,"statPoints":2,"arcanaAdvance":false,"newTreeOrAdvance":true,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Skill Slot +2 Stat Point +1 New Arcana Tree or Advancement"},{"level":6,"skillSlots":0,"statPoints":1,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Stat Point +Arcana Advance Skill Reslotting"},{"level":7,"skillSlots":1,"statPoints":0,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Skill Slot"},{"level":8,"skillSlots":0,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Stat Point"},{"level":9,"skillSlots":1,"statPoints":0,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":true,"reslot":true,"baseTrees":0,"text":"+1 Skill Slot +Signature Advance +Arcana Advance Skill Reslotting"},{"level":10,"skillSlots":0,"statPoints":2,"arcanaAdvance":false,"newTreeOrAdvance":true,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+2 Stat Point +1 New Arcana Tree or Advancement"},{"level":11,"skillSlots":1,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Skill Slot +1 Stat Point"},{"level":12,"skillSlots":0,"statPoints":1,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Stat Point +Arcana Advance Skill Reslotting"},{"level":13,"skillSlots":1,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Skill Slot +1 Stat Point"},{"level":14,"skillSlots":0,"statPoints":0,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":true,"reslot":false,"baseTrees":0,"text":"+Signature Advance"},{"level":15,"skillSlots":1,"statPoints":2,"arcanaAdvance":true,"newTreeOrAdvance":true,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Skill Slot +2 Stat Point +Arcana Advance +1 New Arcana Tree or Advancement Skill Reslotting"},{"level":16,"skillSlots":0,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Stat Point"},{"level":17,"skillSlots":0,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Stat Point"},{"level":18,"skillSlots":1,"statPoints":0,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Skill Slot +Arcana AdvanceSkill Reslotting"},{"level":19,"skillSlots":0,"statPoints":0,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":true,"reslot":false,"baseTrees":0,"text":"+Signature Advance"},{"level":20,"skillSlots":0,"statPoints":2,"arcanaAdvance":false,"newTreeOrAdvance":true,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+2 Stat Point +1 New Arcana Tree or Advancement"},{"level":21,"skillSlots":1,"statPoints":0,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Skill Slot +Arcana AdvanceSkill Reslotting"},{"level":22,"skillSlots":0,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Stat Point"},{"level":23,"skillSlots":0,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Stat Point"},{"level":24,"skillSlots":0,"statPoints":0,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":true,"reslot":true,"baseTrees":0,"text":"+Signature Advance +Arcana Advance Skill Reslotting"},{"level":25,"skillSlots":0,"statPoints":2,"arcanaAdvance":false,"newTreeOrAdvance":true,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+2 Stat Point +1 New Arcana Tree or Advancement"},{"level":26,"skillSlots":0,"statPoints":1,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+1 Stat Point"},{"level":27,"skillSlots":1,"statPoints":0,"arcanaAdvance":true,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Skill Slot +Arcana AdvanceSkill Reslotting"},{"level":28,"skillSlots":0,"statPoints":2,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":false,"reslot":false,"baseTrees":0,"text":"+2 Stat Point"},{"level":29,"skillSlots":0,"statPoints":0,"arcanaAdvance":false,"newTreeOrAdvance":false,"signatureAdvance":true,"reslot":false,"baseTrees":0,"text":"+Signature Advance"},{"level":30,"skillSlots":1,"statPoints":5,"arcanaAdvance":true,"newTreeOrAdvance":true,"signatureAdvance":false,"reslot":true,"baseTrees":0,"text":"+1 Skill Slot +5 Stat Points +Arcana Advance +1 New Arcana Tree or Advancement Skill Reslotting"}],"maxSkillSlots":15,"maxTrees":7,"maxStatPoints":30}</script>
 <script id="rules" type="application/json">
 {
   "_doc": "Character creation rules, condensed from the World of Dissonance worldbuilding doc. Shared by web/creator.html (character maker) and the mod (race/variant tooltips). 'bonus' is the racial +3 spread; 'any' points go wherever the player picks. Formulas live in creator.html (stats()) and match the doc: HP 6 +4/Essence after the first, EP 4 +2/Essence after the first, AP 10 +1 per 2 Shell, MP 30 ft +5 per 4 Shell, Initiative +1 per 2 Core.",
@@ -2161,6 +3173,7 @@ const blank = () => ({
   any: { core: 0, shell: 0, essence: 0 }, free: { core: 0, shell: 0, essence: 0 },
   sigTitle: '', ability: '', animus: '', affix: '', afflatus: '',
   trees: [], skills: ['', '', '', '', ''],
+  level: 0, levelStats: { core: 0, shell: 0, essence: 0 }, tierUp: {}, levelTrees: {},
   items: [], clothes: '', armor: '', gear: '', bonuses: '', backstory: '',
   look: { skin: '', accent: '', style: 0, outfit: 'wraps', dye: '', weapon: 'none' },
 });
@@ -2179,6 +3192,7 @@ const upgrade = s => {
   const out = Object.assign(blank(), s);
   if (!Array.isArray(out.items)) out.items = [];
   out.look = Object.assign(blank().look, s.look || {});
+  out.levelStats = Object.assign(blank().levelStats, s.levelStats || {});
   if (typeof s.inventory === 'string' && !out.items.length) out.items = s.inventory.split('\n').map(x => x.trim()).filter(Boolean).map(name => ({ name, desc: '' }));
   delete out.inventory;
   return out;
@@ -2194,22 +3208,94 @@ let stepIndex = 0, sheetPage = 0;
 let WSKILLS = (() => { try { return JSON.parse(document.getElementById('wikiskills').textContent) || []; } catch { return []; } })();
 let allSkills = false;
 if (/github\.io$/.test(location.hostname)) fetch('/wiki/skills.json').then(r => (r.ok ? r.json() : null)).then(d => {
-  if (Array.isArray(d) && d.length) { WSKILLS = d; if (STEPS[stepIndex]?.id === 'arcana') renderStep(); }
+  if (Array.isArray(d) && d.length) { WSKILLS = d; if (STEPS[stepIndex]?.id === 'skills') renderStep(); }
 }).catch(() => {});
+// the doc's level table (the wiki's levels.json): filled in at publish time, refreshed from the live wiki like the skills
+let WLEVELS = (() => { try { const d = JSON.parse(document.getElementById('wikilevels').textContent); return d && d.levels ? d : null; } catch { return null; } })();
+if (/github\.io$/.test(location.hostname)) fetch('/wiki/levels.json').then(r => (r.ok ? r.json() : null)).then(d => {
+  if (d?.levels?.length) { WLEVELS = d; fitLevel(); if (['level', 'skills'].includes(STEPS[stepIndex]?.id)) renderStep(); }
+}).catch(() => {});
+const maxLevel = () => (WLEVELS ? WLEVELS.levels[WLEVELS.levels.length - 1].level : 0);
+const gained = () => (WLEVELS ? WLEVELS.levels.filter(l => l.level >= 1 && l.level <= S.level) : []);
+// the doc's rows add up to more slots and trees than its stated totals; the totals are the caps
+const slotCount = () => Math.min(WLEVELS?.maxSkillSlots || 15, R.skillSlots + gained().reduce((n, l) => n + l.skillSlots, 0));
+const statPool = () => Math.min(WLEVELS?.maxStatPoints || Infinity, gained().reduce((n, l) => n + l.statPoints, 0));
+const choiceLevels = () => gained().filter(l => l.newTreeOrAdvance).map(l => l.level);
+const extraTrees = () => choiceLevels().map(n => S.levelTrees[n]).filter(id => id && id !== 'advance' && R.trees.some(t => t.id === id));
+const myTrees = () => [...S.trees, ...extraTrees()].slice(0, WLEVELS?.maxTrees || 7);
+/** Arcana advances: one per "Arcana Advance" level, plus each "new tree or advancement" taken as an advance. */
+const advances = () => gained().filter(l => l.arcanaAdvance).length + choiceLevels().filter(n => S.levelTrees[n] === 'advance').length;
+const tierOf = id => 1 + Math.min(2, S.tierUp[id] || 0); // a main path has three tiers
+const advancesUsed = () => myTrees().reduce((n, id) => n + Math.min(2, S.tierUp[id] || 0), 0);
+const levelDone = () => !WLEVELS || !S.level || (sum(S.levelStats) === statPool() && choiceLevels().every(n => S.levelTrees[n])
+  && advancesUsed() === Math.min(advances(), myTrees().length * 2));
+/** Keep the level's choices consistent after the level, the trees or the table change; extra slots appear, surplus ones go. */
+function fitLevel() {
+  S.level = Math.max(0, Math.min(maxLevel(), S.level | 0));
+  const seen = new Set(S.trees);
+  for (const n of Object.keys(S.levelTrees).sort((a, b) => a - b)) {
+    const id = S.levelTrees[n];
+    if (+n > S.level || (id !== 'advance' && seen.has(id))) delete S.levelTrees[n];
+    else if (id !== 'advance') seen.add(id);
+  }
+  let over = sum(S.levelStats) - statPool();
+  for (const a of [...ASPECTS].reverse()) { const cut = Math.max(0, Math.min(over, S.levelStats[a])); S.levelStats[a] -= cut; over -= cut; }
+  for (const id of Object.keys(S.tierUp)) if (!myTrees().includes(id) || !S.tierUp[id]) delete S.tierUp[id];
+  let extra = advancesUsed() - advances();
+  for (const id of [...myTrees()].reverse()) while (extra > 0 && S.tierUp[id] > 0) { S.tierUp[id]--; extra--; }
+  const n = slotCount();
+  S.skills = S.skills.slice(0, n).concat(Array(Math.max(0, n - S.skills.length)).fill(''));
+}
+function levelStep() {
+  const head = `<h2>Level</h2><p class="lede">New characters start at level 0. If your DM starts you higher, or you're planning ahead, set the level here and spend what each level gives you.</p>`;
+  if (!WLEVELS) return head + '<p class="pool">The level table loads with the published maker.</p>';
+  const pool = statPool(), left = pool - sum(S.levelStats), adv = advances(), used = advancesUsed(), trees = myTrees(), rows = gained();
+  const sig = rows.filter(l => l.signatureAdvance).map(l => l.level), reslot = rows.filter(l => l.reslot).map(l => l.level);
+  const step = (a) => `<span class="stepper"><button type="button" data-pool="levelStats" data-a="${a}" data-d="-1" aria-label="Remove a level point from ${ASPECT_NAME[a]}" ${S.levelStats[a] ? '' : 'disabled'}>&minus;</button>
+    <output>${S.levelStats[a]}</output><button type="button" data-pool="levelStats" data-a="${a}" data-d="1" aria-label="Add a level point to ${ASPECT_NAME[a]}" ${left > 0 ? '' : 'disabled'}>+</button></span>`;
+  const table = `<details class="lvltable"><summary>What each level gives (from the doc)</summary><ol>${WLEVELS.levels.map(l => `<li class="${l.level <= S.level ? 'got' : ''}"><b>${l.level}</b> ${esc(l.text)}</li>`).join('')}</ol></details>`;
+  let out = head + `<div class="lvl"><span class="stepper"><button type="button" data-lvl="-1" aria-label="One level lower" ${S.level ? '' : 'disabled'}>&minus;</button>
+    <output>${S.level}</output><button type="button" data-lvl="1" aria-label="One level higher" ${S.level < maxLevel() ? '' : 'disabled'}>+</button></span><span>Level ${S.level} of ${maxLevel()}</span></div>`;
+  if (!S.level) return out + `<p class="pool">At level 0 you have ${R.skillSlots} skill slots, your signature and ${R.baseTrees} base Arcana trees, each open at its first tier.</p>` + table;
+  out += `<ul class="lvlsum"><li><b>${slotCount()}</b> skill slots</li><li><b>${pool}</b> stat points</li><li><b>${adv}</b> Arcana advance${adv === 1 ? '' : 's'}</li><li><b>${trees.length}</b> trees</li>${sig.length ? `<li><b>${sig.length}</b> signature advance${sig.length === 1 ? '' : 's'}</li>` : ''}</ul>`;
+  out += `<h3>Stat points from levels</h3><p class="pool"><b>${left} of ${pool}</b> left.</p><div class="lvlstats">${ASPECTS.map(a => `<label>${ASPECT_NAME[a]} ${step(a)}</label>`).join('')}</div>`;
+  const choices = choiceLevels();
+  if (choices.length) {
+    const full = trees.length >= (WLEVELS.maxTrees || 7);
+    out += `<h3>New tree or advance</h3><p class="pool">At these levels you take a new Arcana tree or one more advance.</p><div class="lvlpicks">${choices.map(n => {
+      const mine = S.levelTrees[n] || '';
+      const open = R.trees.filter(t => !S.trees.includes(t.id) && (mine === t.id || !extraTrees().includes(t.id)));
+      return `<label for="f-ltree-${n}">Level ${n}<select id="f-ltree-${n}" data-ltree="${n}"><option value="">Choose&hellip;</option>
+        <option value="advance" ${mine === 'advance' ? 'selected' : ''}>One more Arcana advance</option>
+        ${open.map(t => `<option value="${t.id}" ${mine === t.id ? 'selected' : ''} ${full && mine !== t.id ? 'disabled' : ''}>New tree: ${esc(t.name)}</option>`).join('')}</select></label>`;
+    }).join('')}</div>`;
+  }
+  out += `<h3>Arcana advances</h3><p class="pool"><b>${adv - used} of ${adv}</b> left. Each advance opens the next tier of one tree's main path.</p>`;
+  out += trees.map(id => { const t = R.trees.find(x => x.id === id), tier = tierOf(id), up = S.tierUp[id] || 0;
+    return `<div class="tierrow"><span class="tname">${esc(t.name)}</span><span class="stepper">
+      <button type="button" data-tier="${id}" data-d="-1" aria-label="Lower ${esc(t.name)} a tier" ${up ? '' : 'disabled'}>&minus;</button><output>T${tier}</output>
+      <button type="button" data-tier="${id}" data-d="1" aria-label="Raise ${esc(t.name)} a tier" ${tier < 3 && used < adv ? '' : 'disabled'}>+</button></span>
+      <span class="tpath">${t.path.map((x, i) => i < tier ? `<b>${esc(x)}</b>` : esc(x)).join(' &rarr; ')}</span></div>`; }).join('');
+  if (adv > used && trees.every(id => tierOf(id) === 3)) out += `<p class="pool">Every main path is fully open. The doc doesn't say where the ${adv - used} spare advance${adv - used === 1 ? ' goes' : 's go'} (branches, perhaps), so ask your DM.</p>`;
+  if (sig.length) out += `<p class="pool">Signature advances at level ${sig.join(', ')}. The doc doesn't say what they unlock yet, so your DM decides.</p>`;
+  if (reslot.length) out += `<p class="pool">You may swap any slotted skill at level ${reslot.join(', ')}.</p>`;
+  return out + table;
+}
 const sameSkill = (a, b) => a.trim().toLowerCase() === b.trim().toLowerCase();
 function skillPicker() {
   if (!WSKILLS.length) return '';
-  const trees = S.trees.map(id => R.trees.find(t => t.id === id)).filter(Boolean);
+  const trees = myTrees().map(id => R.trees.find(t => t.id === id)).filter(Boolean);
   const head = `<div class="pickbar"><h2>Pick skills</h2><button type="button" class="card slim" id="allskills" aria-pressed="${allSkills}">${allSkills ? 'Show first tier only' : 'Show every written skill'}</button></div>`;
-  if (!trees.length) return head + '<p class="pool">Choose your trees above to see their skills here.</p>';
+  if (!trees.length) return head + '<p class="pool">Choose your trees on the Arcana step to see their skills here.</p>';
   const lede = allSkills ? 'Every written skill in your trees. Check with your DM before taking one past the first tier.'
-    : 'The written skills on the first tier of your trees\' main paths. Click one to put it in the next empty slot; click it again to take it out.';
+    : 'The written skills your trees have opened: each main path up to the tier your level allows. Click one to put it in the next empty slot; click it again to take it out.';
   return head + `<p class="lede">${lede}</p><p class="pool" id="picknote" role="status"></p>` + trees.map(t => {
-    const list = WSKILLS.filter(k => k.tree === t.id && (allSkills || (k.tier === 1 && /^main path$/i.test(k.path))));
-    if (!list.length) return `<h3>${esc(t.name)}</h3><p class="pool">No ${allSkills ? '' : 'first-tier '}skills written for ${esc(t.name)} yet. If your DM gives you one, type it into a slot.</p>`;
-    return `<h3>${esc(t.name)}</h3><div class="picks" role="group" aria-label="${esc(t.name)} skills">${list.map(k => `<button type="button" class="card pick" role="checkbox" data-pick="${esc(k.name)}" aria-checked="${S.skills.some(x => sameSkill(x, k.name))}">
+    const list = WSKILLS.filter(k => k.tree === t.id && (allSkills || (k.tier <= tierOf(t.id) && /^main path$/i.test(k.path))));
+    const title = `<h3>${esc(t.name)}${allSkills ? '' : ` · tier ${tierOf(t.id) === 1 ? '1' : '1–' + tierOf(t.id)}`}</h3>`;
+    if (!list.length) return `${title}<p class="pool">No skills written for ${esc(t.name)} ${allSkills ? '' : 'at these tiers '}yet. If your DM gives you one, type it into a slot.</p>`;
+    return `${title}<div class="picks" role="group" aria-label="${esc(t.name)} skills">${list.map(k => `<button type="button" class="card pick" role="checkbox" data-pick="${esc(k.name)}" aria-checked="${S.skills.some(x => sameSkill(x, k.name))}">
       <span class="top"><span class="name">${esc(k.name)}</span>${k.ep != null ? `<span class="chip">EP ${k.ep}</span>` : ''}</span>
-      <span class="meta">${esc([allSkills ? `T${k.tier} ${k.path}` : '', k.cast, k.range].filter(Boolean).join(' · '))}</span>
+      <span class="meta">${esc([allSkills || tierOf(t.id) > 1 ? `T${k.tier} ${k.path}` : '', k.cast, k.range].filter(Boolean).join(' · '))}</span>
       <span class="about">${esc(k.effect)}</span></button>`).join('')}</div>`;
   }).join('');
 }
@@ -2220,9 +3306,10 @@ const race = () => R.races.find(r => r.id === S.race);
 const variant = () => { const r = race(); return r ? (r.variants.find(v => v.id === S.variant) || r.variants[0]) : null; };
 const sum = o => ASPECTS.reduce((a, k) => a + (o[k] || 0), 0);
 const anyPoints = () => (variant()?.any || 0);
+fitLevel();
 function scores() {
   const v = variant(), out = {};
-  for (const a of ASPECTS) out[a] = R.base + (v?.bonus[a] || 0) + (S.any[a] || 0) + (S.free[a] || 0);
+  for (const a of ASPECTS) out[a] = R.base + (v?.bonus[a] || 0) + (S.any[a] || 0) + (S.free[a] || 0) + (S.levelStats?.[a] || 0);
   return out;
 }
 /** Derived stats, straight from the rules doc (they reproduce S-13's printed sheet exactly). */
@@ -2260,7 +3347,9 @@ function character() {
     gender: S.gender.trim(), height: S.height.trim(), weight: S.weight.trim(), age: S.age.trim(),
     backstory: S.backstory.trim(),
     skills: S.skills.map((s, i) => `${i + 1}. ${s.trim() || 'TBD'}`).join('\n'),
-    unlocked: trees.map(t => `${t.name.toUpperCase()}:\n${t.path[0]}`).join('\n'),
+    unlocked: myTrees().map(id => R.trees.find(t => t.id === id)).filter(Boolean).map(t => `${t.name.toUpperCase()}:\n${t.path.slice(0, tierOf(t.id)).join(' → ')}`).join('\n'),
+    level: String(S.level), tiers: myTrees().map(id => `${id}=${tierOf(id)}`).join(';'),
+    level_stats: ASPECTS.map(a => `${a}=${S.levelStats[a] || 0}`).join(';'),
   };
   for (const a of ASPECTS) {
     c[a + '_score'] = String(st.s[a]);
@@ -2542,8 +3631,11 @@ const STEPS = [
     <div class="cards" role="group" aria-label="Arcana trees">${R.trees.map(t => `<button type="button" class="card" role="checkbox" data-tree="${t.id}" aria-checked="${S.trees.includes(t.id)}">
       <span class="name">${esc(t.name)}</span>${t.aspect ? `<span class="chips"><span class="chip">${esc(t.aspect)}</span></span>` : ''}
       <span class="path">${t.path.map(esc).join(' &rarr; ')}</span><span class="about">${esc(t.branches)}</span></button>`).join('')}</div>
-    <h2 style="margin-top: 22px">Skill slots</h2>
-    <p class="lede">You start with ${R.skillSlots}. Leave a slot blank to show it as TBD.</p>
+` },
+  { id: 'level', label: 'Level', done: () => levelDone(), render: () => levelStep() },
+  { id: 'skills', label: 'Skills', done: () => S.skills.some(x => x.trim()), render: () => `
+    <h2>Skill slots</h2>
+    <p class="lede">${S.level ? `At level ${S.level} you have` : 'You start with'} ${slotCount()}. Leave a slot blank to show it as TBD.</p>
     <div class="slots">${S.skills.map((s, i) => `<label for="f-skill-${i}">${i + 1}.<input type="text" id="f-skill-${i}" data-skill="${i}" value="${esc(s)}" maxlength="${LIMITS.skill}" placeholder="TBD" autocomplete="off"></label>`).join('')}</div>${skillPicker()}` },
   { id: 'story', label: 'Kit & story', done: () => !!S.backstory.trim(), render: () => `
     <h2>Kit and story</h2>
@@ -2570,6 +3662,7 @@ const STEPS = [
       [!!S.name.trim(), 'Name filled in', 'identity'], [!!race(), 'Race chosen', 'race'],
       [sum(S.free) === R.free, `All ${R.free} free points spent`, 'aspects'], [sum(S.any) === anyPoints(), 'Racial points placed', 'aspects'],
       [S.trees.length === R.baseTrees, `${R.baseTrees} Arcana trees chosen`, 'arcana'],
+      ...(S.level ? [[levelDone(), `Level ${S.level} choices made`, 'level']] : []),
     ];
     const named = !!S.name.trim();
     return `
@@ -2629,6 +3722,7 @@ function go(i) {
 let previewTimer;
 function changed(rerender) {
   if (S.isExample) { S.isExample = false; }
+  fitLevel();
   save();
   if (rerender) renderStep(); else renderSteps();
   clearTimeout(previewTimer);
@@ -2638,7 +3732,8 @@ function changed(rerender) {
 function rerenderKeepingFocus() {
   const a = document.activeElement, sel = a?.id ? '#' + CSS.escape(a.id) : a?.dataset.race ? `[data-race="${a.dataset.race}"]` : a?.dataset.variant ? `[data-variant="${a.dataset.variant}"]`
     : a?.dataset.look ? `[data-look="${a.dataset.look}"][data-v="${a.dataset.v}"]`
-    : a?.dataset.tree ? `[data-tree="${a.dataset.tree}"]` : a?.dataset.pick ? `[data-pick="${CSS.escape(a.dataset.pick)}"]` : a?.dataset.pool ? `[data-pool="${a.dataset.pool}"][data-a="${a.dataset.a}"][data-d="${a.dataset.d}"]` : null;
+    : a?.dataset.tree ? `[data-tree="${a.dataset.tree}"]` : a?.dataset.lvl ? `[data-lvl="${a.dataset.lvl}"]`
+    : a?.dataset.tier ? `[data-tier="${a.dataset.tier}"][data-d="${a.dataset.d}"]` : a?.dataset.pick ? `[data-pick="${CSS.escape(a.dataset.pick)}"]` : a?.dataset.pool ? `[data-pool="${a.dataset.pool}"][data-a="${a.dataset.a}"][data-d="${a.dataset.d}"]` : null;
   changed(true);
   const el = sel && stepEl.querySelector(sel);
   (el && !el.disabled ? el : stepEl.querySelector(sel?.replace(/\[data-d="[^"]*"\]/, '') || '#none'))?.focus({ preventScroll: true });
@@ -2664,6 +3759,11 @@ stepEl.addEventListener('input', e => {
     S.skills[+t.dataset.skill] = t.value; changed(false);
     stepEl.querySelectorAll('[data-pick]').forEach(c => c.setAttribute('aria-checked', S.skills.some(x => sameSkill(x, c.dataset.pick))));
   }
+  if (t.dataset.ltree) {
+    if (t.value) S.levelTrees[t.dataset.ltree] = t.value; else delete S.levelTrees[t.dataset.ltree];
+    rerenderKeepingFocus();
+    return;
+  }
   if (t.dataset.item) { S.items[+t.dataset.item][t.dataset.f] = t.value; changed(false); }
 });
 stepEl.addEventListener('keydown', e => { // arrow keys move through a radio group, like native radios
@@ -2687,6 +3787,13 @@ stepEl.addEventListener('click', e => {
   if (b.dataset.remove) {
     S.items.splice(+b.dataset.remove, 1); changed(true);
     (stepEl.querySelector(`[data-remove="${Math.min(+b.dataset.remove, S.items.length - 1)}"]`) || document.getElementById('additem'))?.focus();
+    return;
+  }
+  if (b.dataset.lvl) { S.level += +b.dataset.lvl; fitLevel(); rerenderKeepingFocus(); return; }
+  if (b.dataset.tier) {
+    const id = b.dataset.tier, d = +b.dataset.d, up = S.tierUp[id] || 0;
+    if (d > 0 ? up < 2 && advancesUsed() < advances() : up > 0) S.tierUp[id] = up + d;
+    rerenderKeepingFocus();
     return;
   }
   if (b.id === 'allskills') { allSkills = !allSkills; rerenderKeepingFocus(); return; }
@@ -2715,7 +3822,7 @@ stepEl.addEventListener('click', e => {
   } else if (b.dataset.variant) {
     S.variant = b.dataset.variant; S.any = { core: 0, shell: 0, essence: 0 }; rerenderKeepingFocus();
   } else if (b.dataset.pool) {
-    const pool = b.dataset.pool, a = b.dataset.a, d = +b.dataset.d, cap = pool === 'free' ? R.free : anyPoints();
+    const pool = b.dataset.pool, a = b.dataset.a, d = +b.dataset.d, cap = pool === 'free' ? R.free : pool === 'levelStats' ? statPool() : anyPoints();
     if (d < 0 ? S[pool][a] > 0 : sum(S[pool]) < cap) { S[pool][a] += d; rerenderKeepingFocus(); }
   } else if (b.dataset.tree) {
     const id = b.dataset.tree;
@@ -2765,6 +3872,7 @@ async function loadCode() {
     const c = await decode(document.getElementById('loadcode').value);
     if (!c._creator) throw new Error('This code was made elsewhere and can’t be edited here.');
     S = Object.assign(upgrade(c._creator), { isExample: false });
+    fitLevel();
     save(); go(0); renderPreview();
   } catch (e) { say(e.message || 'That code couldn’t be read. Check it was copied in full.', true); }
 }
