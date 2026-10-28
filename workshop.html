@@ -1,0 +1,1647 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Make a World of Dissonance character: pick a race and variant, spend aspect points, then download a fillable PDF or import it into the game.">
+<meta name="theme-color" content="#121826">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="World of Dissonance DM Workshop">
+<meta property="og:description" content="Make a World of Dissonance character: pick a race and variant, spend aspect points, then download a fillable PDF or import it into the game.">
+<meta property="og:url" content="https://world-of-dissonance.github.io/wod-character-maker/">
+<meta property="og:image" content="https://world-of-dissonance.github.io/wod-character-maker/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<title>Dissonance DM Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=EB+Garamond:ital@1&family=Fira+Mono:wght@700&family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* The DM's workbench, in the character maker's night-sky palette: lists on the left, the piece being made on the right. */
+  :root {
+    --ground: #121826; --panel: #1C2336; --ink: #262F48; --line: #3C4766; --text: #E6EEF3; --muted: #9AA6BF;
+    --gold: #F2C14E; --teal: #5DC4B7; --error: #F08A7E; --paper: #F4EFE2; --paper-ink: #3A2A1A; --rule: #8E2B22;
+    --display: "Cinzel", Georgia, serif; --caption: "EB Garamond", Georgia, serif; --ui: "Fira Sans", system-ui, sans-serif; --mono: "Fira Mono", ui-monospace, monospace;
+    --chamfer: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--text); font: 15px/1.5 var(--ui); padding: 20px max(16px, env(safe-area-inset-left, 0px)) 40px; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .top { max-width: 1300px; margin: 0 auto 16px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px; }
+  .wordmark { font: 700 12px/1 var(--mono); letter-spacing: .28em; color: var(--muted); text-transform: uppercase; }
+  h1 { margin: 6px 0 0; font: 600 clamp(26px, 4vw, 36px)/1.1 var(--display); }
+  h2 { font: 600 20px/1.2 var(--display); margin: 0 0 4px; }
+  h3 { font: 700 11.5px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
+  .lede { color: var(--muted); margin: 0 0 12px; }
+  .tabs { max-width: 1300px; margin: 0 auto 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tabs button { font: 700 11.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--ink); border: 0; padding: 10px 14px; cursor: pointer; clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+  .tabs button[aria-selected="true"] { background: var(--gold); color: var(--ground); }
+  .tabs .count { opacity: .7; margin-left: 4px; }
+  .bench { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 17rem) minmax(0, 1fr); gap: 20px; align-items: start; }
+  @media (max-width: 860px) { .bench { grid-template-columns: 1fr; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); padding: 16px; clip-path: var(--chamfer); }
+  .list { display: grid; gap: 6px; }
+  .list button.entry { text-align: left; background: var(--ink); color: var(--text); border: 1px solid var(--line); padding: 8px 12px; cursor: pointer; font: 15px/1.3 var(--ui); }
+  .list button.entry small { display: block; color: var(--muted); font: 700 10.5px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+  .list button.entry[aria-current="true"] { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+  .btn { font: 600 14px/1 var(--ui); color: var(--text); background: var(--ink); border: 1px solid var(--line); padding: 10px 14px; cursor: pointer; }
+  .btn.primary { background: var(--gold); color: var(--ground); border-color: var(--gold); }
+  .btn.danger { color: var(--error); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); gap: 10px 12px; }
+  .fields .wide { grid-column: 1 / -1; }
+  label { display: grid; gap: 4px; font: 700 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  label small { font: 13px/1.3 var(--ui); letter-spacing: 0; text-transform: none; }
+  input, select, textarea { width: 100%; font: 15px/1.4 var(--ui); color: var(--text); background: var(--ink); border: 1px solid var(--line); padding: 8px 10px; }
+  textarea { resize: vertical; min-height: 5rem; }
+  input[type=range] { padding: 0; accent-color: var(--gold); }
+  .attack { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 6px; margin-bottom: 6px; }
+  @media (max-width: 560px) { .attack { grid-template-columns: 1fr 1fr; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); gap: 18px; align-items: start; }
+  @media (max-width: 1100px) { .split { grid-template-columns: 1fr; } }
+  /* the stat block, printed like the in-game bestiary page */
+  .block { background: var(--paper); color: var(--paper-ink); padding: 16px; border: 2px solid #B89A64; font: 15px/1.4 var(--caption); }
+  .block h4 { font: 600 22px/1.1 var(--display); color: var(--rule); margin: 0; }
+  .block .sub { font-style: italic; margin: 2px 0 8px; }
+  .block hr { border: 0; border-top: 2px solid var(--rule); margin: 8px 0; }
+  .block dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font-family: var(--ui); font-size: 14px; }
+  .block dt { font-weight: 600; color: var(--rule); }
+  .block dd { margin: 0; }
+  .aspects { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; font: 14px/1.3 var(--ui); }
+  .aspects b { display: block; font: 700 10px/1.4 var(--mono); color: var(--rule); letter-spacing: .1em; }
+  .diff { font: 600 15px/1.3 var(--ui); }
+  .diff b { color: var(--gold); }
+  .code { font: 12px/1.4 var(--mono); word-break: break-all; min-height: 6rem; }
+  .note { color: var(--muted); font-size: 14px; }
+  .note.ok { color: var(--teal); }
+  .note.warn { color: var(--error); }
+  .roll { font: 600 15px/1.4 var(--ui); color: var(--gold); min-height: 1.4em; }
+
+/* shared navigation across the World of Dissonance pages (same block in the wiki, maker and workshop) */
+.sitebar {
+  display: flex; align-items: center; gap: 2px; min-height: 38px; overflow-x: auto; scrollbar-width: none;
+  padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+  background: #0d1f24; border-bottom: 1px solid #24464d; font: 600 13px/1 "Fira Sans", system-ui, sans-serif;
+}
+.sitebar::-webkit-scrollbar { display: none; }
+.sitebar .sb-name { margin-right: auto; padding-right: 16px; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #9cc0ba; white-space: nowrap; }
+.sitebar a { padding: 12px 12px 10px; color: #dbe9e5; text-decoration: none; letter-spacing: .04em; white-space: nowrap; border-bottom: 2px solid transparent; }
+.sitebar a:hover { color: #fff; border-bottom-color: #4f7d84; }
+.sitebar a:focus-visible { outline: 2px solid #c9a227; outline-offset: -2px; }
+.sitebar a[aria-current] { color: #ecd68e; border-bottom-color: #c9a227; }
+  .sitebar { margin: -20px calc(-1 * max(16px, env(safe-area-inset-right, 0px))) 22px calc(-1 * max(16px, env(safe-area-inset-left, 0px))); }  /* full width above the padded page */
+@media (max-width: 560px) { .sitebar { justify-content: space-between; } .sitebar .sb-name { display: none; } .sitebar a { padding-inline: 8px; } }
+</style>
+
+<nav class="sitebar" aria-label="World of Dissonance pages"><span class="sb-name">World of Dissonance</span><a href="https://world-of-dissonance.github.io/wiki/">Wiki</a><a href="https://world-of-dissonance.github.io/wod-character-maker/">Character Maker</a><a href="https://world-of-dissonance.github.io/wod-character-maker/workshop.html" aria-current="page">DM Workshop</a></nav>
+<header class="top">
+  <div><div class="wordmark">World of Dissonance · <a href="./" style="color:inherit">Character Maker</a></div><h1>DM Workshop</h1></div>
+  <p class="lede" style="max-width:38rem;margin:0">Make monsters, random tables, handouts and items here, then bring them all into the game with one code: copy it, then in the DM camera click <b>Import from web</b>.</p>
+</header>
+<nav class="tabs" role="tablist" id="tabs"></nav>
+<main class="bench" id="bench"></main>
+
+<script id="skills" type="application/json">
+{
+ "_doc": "Build the Arcana skill catalog for combat from the worldbuilding doc's skill tables.",
+ "skills": [
+  {
+   "id": "connectivemind",
+   "name": "Connective Mind",
+   "tree": "T1 Telepathy",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "Until next Long Rest",
+   "lasts_rounds": 1,
+   "range_text": "60 Foot Radius Self",
+   "range": 12,
+   "target": "none",
+   "cooldown": 0,
+   "text": "Accessing the mind of a sentient being who is not [Will Locked] the user of this Arcana may use telepathy to speak into their mind. The voice spoken with is chosen by the caster, but the words are always translated into the language the receiver is most proficient with regardless of the caster’s own capability of speaking such. This effect remains until their next long rest and may be willingly activated at any time during its total effectiveness time. Targets chosen by the caster for this skill are unable to respond unless [Connective Net] is additionally active upon use of this skill.",
+   "area": {
+    "shape": "self",
+    "radius": 12
+   }
+  },
+  {
+   "id": "connectivenet",
+   "name": "Connective Net",
+   "tree": "T1 Telepathy",
+   "ep": 2,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "Until out of Range",
+   "lasts_rounds": 1,
+   "range_text": "30 Foot Radius Centered on the Caster.",
+   "range": 6,
+   "target": "none",
+   "cooldown": 1,
+   "text": "This skill may be additionally activated by a caster using the [Connective Mind] ability. Allowing them to choose four active targets maximum besides themself when using this skill. These targets and the caster become a part of a telepathic web within a thirty foot radius allowing them to freely converse between singular, multiple, or all targets affected by [Connective Net]. The caster may recast this skill to choose new targets to replace others already in their net. All words are individually translated similar to [Connective Mind] into the languages the receiver is most proficient with allowing free speaking.",
+   "area": {
+    "shape": "self",
+    "radius": 6
+   }
+  },
+  {
+   "id": "practicalhit",
+   "name": "Practical Hit!",
+   "tree": "T1 Enhance",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Depends",
+   "range": -1,
+   "target": "one",
+   "cooldown": 0,
+   "text": "Focusing yourself you go in for a strike! Using a Shell Roll vs your target’s AP, you may use any form of physical or ranged weaponry you have equipped in place of the damage or effects.",
+   "auto": {
+    "attack": "shell",
+    "dmg": "weapon"
+   }
+  },
+  {
+   "id": "assuredstrike",
+   "name": "Assured Strike!",
+   "tree": "T1 Enhance",
+   "ep": 3,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Self",
+   "range": 0,
+   "target": "self",
+   "cooldown": 2,
+   "text": "You don’t take it lightly when someone damages you, upon successfully being hit with a skill that does damage. You may use your reaction to gain a +2 to your next physical or ranged attack against them. This is only effective for the following round. If not used, cooldown still remains until usable again."
+  },
+  {
+   "id": "parry",
+   "name": "Parry!",
+   "tree": "T1 Enhance",
+   "ep": 5,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "2 Rounds",
+   "lasts_rounds": 2,
+   "range_text": "Self",
+   "range": 0,
+   "target": "self",
+   "cooldown": 2,
+   "text": "Letting your guard down can cost you your life, you get ready to defend any incoming physical or ranged attacks. Granting you a +2 to your AP until the end of this skill’s effectiveness.",
+   "auto": {
+    "ap": 2
+   }
+  },
+  {
+   "id": "unyieldingforce",
+   "name": "Unyielding Force!",
+   "tree": "T1 Enhance",
+   "ep": 3,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "2 Rounds",
+   "lasts_rounds": 2,
+   "range_text": "Self",
+   "range": 0,
+   "target": "self",
+   "cooldown": 2,
+   "text": "It takes a lot more than normal to knock you down. Life force and strength easily flows through your veins even if temporary. When used this ability grants an immediate 10 Temp Health. That lasts until the end of the spell’s duration.",
+   "auto": {
+    "temp": "10"
+   }
+  },
+  {
+   "id": "recklessattack",
+   "name": "Reckless Attack!",
+   "tree": "T1 Enhance",
+   "ep": 8,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "1 round",
+   "lasts_rounds": 1,
+   "range_text": "Depends",
+   "range": -1,
+   "target": "one",
+   "cooldown": 5,
+   "text": "Using all of your might you charge forth with a reckless physical or ranged attack. You concentrate it into your weapon to gain a 2 bonus damage dice of the weapon’s type.Target foe needs to do a Shell vs Shell roll against you to avoid taking full damage, taking half on a success, and none on a crit success."
+  },
+  {
+   "id": "logicandorder",
+   "name": "Logic and Order",
+   "tree": "T1 Order",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "30 Feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 0,
+   "text": "Assert order on the field, mitigate chaos by turning it against itself doing 1d6 damage on a successful essence roll vs the target’s AP.",
+   "auto": {
+    "attack": "essence",
+    "dmg": "1d6"
+   }
+  },
+  {
+   "id": "balancingact",
+   "name": "Balancing Act",
+   "tree": "T1 Order",
+   "ep": 3,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "30 Feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 1,
+   "text": "The flow of energy surrounding the user is capable of quickly applying stabilization to a target. Granting +3 AP until the end of their next turn.",
+   "auto": {
+    "ap": 3,
+    "rounds": 1
+   }
+  },
+  {
+   "id": "objection",
+   "name": "Objection!",
+   "tree": "T1 Order",
+   "ep": 5,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "60 Feet",
+   "range": 12,
+   "target": "one",
+   "cooldown": 2,
+   "text": "Lies do not easily pass you, as a reaction when a target attempts to deceive you; both you and the target do an essence roll against each other. Upon a success, you become aware of the fact they are lying, even if you continue to lack the knowledge about the specifics."
+  },
+  {
+   "id": "mediate",
+   "name": "Mediate",
+   "tree": "T1 Order",
+   "ep": 2,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "3 Rounds",
+   "lasts_rounds": 3,
+   "range_text": "Touch",
+   "range": 1,
+   "target": "one",
+   "cooldown": 2,
+   "text": "Chaos is dismissed at your whim, applying a target with your persuasion of Order. You relieve them of harmful effects. For the next three rounds one negative effect chosen by them; such as [Bleeding] or [Burning] has its length reduced by 1 round."
+  },
+  {
+   "id": "thejudge",
+   "name": "The Judge",
+   "tree": "T1 Order",
+   "ep": 8,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "100 Feet",
+   "range": 20,
+   "target": "one",
+   "cooldown": 5,
+   "text": "You decide the final verdict, when you or an ally within range are successfully hit by an Essence based attack, you can use your reaction to counter it with a successful essence roll vs the target."
+  },
+  {
+   "id": "variableviolence",
+   "name": "Variable Violence",
+   "tree": "T2 Chaos",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "30 Feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 0,
+   "text": "Overwhelming power comes with many unknowns, despite this you take your chances. Wielding this metaphysical chaos against your enemies. After rolling a successful Essence roll against your opponent’s AP roll a 1d6 to decide the effect of the attack. [1-2 = 1d6 Damage] [3-4 = -2 EP] [5-6=1d8 Damage]",
+   "auto": {
+    "attack": "essence",
+    "roll": "1d6"
+   }
+  },
+  {
+   "id": "tamperingtricks",
+   "name": "Tampering Tricks",
+   "tree": "T2 Chaos",
+   "ep": 4,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "2 Rounds",
+   "lasts_rounds": 2,
+   "range_text": "100 Feet",
+   "range": 20,
+   "target": "one",
+   "cooldown": 3,
+   "text": "Inflicting your chaos upon a chosen target, you attempt to change their luck until the end of this spell’s effectiveness. Roll a 1d10 for the effect. This effect is automatic upon being casted. [1-2 -2 AP] [3-4 -4 AP] [5-6 -2 EP] [7-8 -4 EP] [9-10 1d10 Dmg]"
+  },
+  {
+   "id": "alwaysachance",
+   "name": "Always a Chance",
+   "tree": "T2 Chaos",
+   "ep": 5,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "60 Feet",
+   "range": 12,
+   "target": "one",
+   "cooldown": 3,
+   "text": "Things don’t always go to plan when chaos ensues, upon being hit or seeing an ally hit successfully with an attack within range immediately use your reaction to impose a -4 to the attacker’s total attack roll to attempt to cancel it entirely if the new roll is lower than the protected person’s total AP score."
+  },
+  {
+   "id": "expandthenonsense",
+   "name": "Expand the Nonsense",
+   "tree": "T2 Chaos",
+   "ep": 5,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "3 Rounds",
+   "lasts_rounds": 3,
+   "range_text": "Self 30 Feet",
+   "range": 6,
+   "target": "none",
+   "cooldown": 4,
+   "text": "Order? Respecting reality? These rules do not apply when you’re around. Upon activation afflicts every foe within a 30 foot radius centered on the self with one of these random effects individually decided by a 1d6 roll each. [1-2 -10 MP] [3-4 2d8 DMG] [5-6 Knocked Prone] [7-8 Knocked backwards 10 Feet] [9-10 Dazed]. These effects last for as long as the spell is active.",
+   "area": {
+    "shape": "self",
+    "radius": 6
+   }
+  },
+  {
+   "id": "theexecutioner",
+   "name": "The Executioner",
+   "tree": "T2 Chaos",
+   "ep": 10,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "30 Feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 6,
+   "text": "It is easy to take advantage of suffering and misfortune you sow with extreme ease. When any enemy within range falls below half of their total non-temp HP. You can strike out to kick them while they’re down. Upon a successful Essence strike against the target, you deal 2d12 damage directly to their health. (Bypassing Temp HP)",
+   "auto": {
+    "attack": "essence",
+    "dmg": "2d12",
+    "bypass_temp": true
+   }
+  },
+  {
+   "id": "betweentheworlds",
+   "name": "Between the Worlds",
+   "tree": "T3 Median",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "5 Rounds",
+   "lasts_rounds": 5,
+   "range_text": "Self 100 Feet",
+   "range": 20,
+   "target": "none",
+   "cooldown": 0,
+   "text": "With balance, all things become clear. With an understanding comes true sight. Upon activation gain the ability to see [Invisible] [Incorporeal] or creatures within a 100 foot radius centered on the caster. You peak past the physical veil to see the realms of energy and soul, while anchoring yourself in your realm.",
+   "area": {
+    "shape": "self",
+    "radius": 20
+   }
+  },
+  {
+   "id": "neutralityinallthings",
+   "name": "Neutrality in all Things",
+   "tree": "T3 Median",
+   "ep": 6,
+   "cast": "rounds",
+   "rounds": 2,
+   "lasts": "3 Rounds",
+   "lasts_rounds": 3,
+   "range_text": "30 Feet Radius",
+   "range": 6,
+   "target": "none",
+   "cooldown": 3,
+   "text": "Chaos and Order are far too simple of concepts; to bend reality under truly neutrality is far superior. Enforcing true neutrality by binding an environment centered on a point within sight of the caster. Three chosen targets make a D15 Essence roll or become [Restrained] and [Dazed] until the end of this spell’s effectiveness.",
+   "area": {
+    "shape": "point",
+    "radius": 6
+   }
+  },
+  {
+   "id": "universaltongues",
+   "name": "Universal Tongues",
+   "tree": "T3 Median",
+   "ep": 4,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "5 Rounds",
+   "lasts_rounds": 5,
+   "range_text": "Self",
+   "range": 0,
+   "target": "self",
+   "cooldown": 5,
+   "text": "The bridge between relations is often hindered by a lack of understanding. To elevate this struggle you have attuned your Median energy to act as a universal translator. Allowing you to speak to sentient entities that you can perceive and that choose to perceive you back. Their spoken words sound like any language your character is most proficient in, and the same in verse for anything you speak to them. (This does not work for written text, as the audible spoken words are required. This does not give you the ability to innately know a language you don’t; it only translates whatever is heard into one that you do.)"
+  },
+  {
+   "id": "tangiblebalance",
+   "name": "Tangible Balance",
+   "tree": "T3 Median",
+   "ep": 8,
+   "cast": "rounds",
+   "rounds": 3,
+   "lasts": "1 Round.",
+   "lasts_rounds": 1,
+   "range_text": "Self 100 Feet",
+   "range": 20,
+   "target": "none",
+   "cooldown": 8,
+   "text": "Light and Dark are only as prevalent as the one who perceives their change. You decide the Balance in any conflict. Aiming at two targets you choose to [Balance] or [Tip the Scale]. You may target yourself as one of the people on the scale. [Balance:] Equalize the primary health of both targets, any extra health is forfeit. [Tip the Scale:] Deduct one third of chosen target health, and give it to the other person being weighed on the scale.",
+   "area": {
+    "shape": "self",
+    "radius": 20
+   }
+  },
+  {
+   "id": "thejury",
+   "name": "The Jury",
+   "tree": "T3 Median",
+   "ep": 8,
+   "cast": "rounds",
+   "rounds": 2,
+   "lasts": "4 Rounds",
+   "lasts_rounds": 4,
+   "range_text": "60 Feet",
+   "range": 12,
+   "target": "one",
+   "cooldown": 4,
+   "text": "You decide the final outcome when a person’s life is on trial. Choose one target within range. Deem them as [Guilty] or [Not Guilty] to determine the effects. This lasts for as long as the spell’s effectiveness remains. You may target yourself as well. [Guilty:] -2 AP +2 Damage per Damage Dice against target. [Not Guilty:] +10 Temp Health, +2 AP, +4 EP"
+  },
+  {
+   "id": "helpisontheway",
+   "name": "Help is on the way!",
+   "tree": "Pure",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Touch",
+   "range": 1,
+   "target": "one",
+   "cooldown": 1,
+   "text": "Pure essence flows through you with ease, being shaped by your will it is capable of mending injuries. By touching a chosen target you may choose to either heal 1d6 HP, or 1d4 EP directly into their system. [You may target yourself["
+  },
+  {
+   "id": "stabilizehealth",
+   "name": "Stabilize Health",
+   "tree": "Pure",
+   "ep": 5,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "60 feet",
+   "range": 12,
+   "target": "one",
+   "cooldown": 3,
+   "text": "The dying do not meet death unless you say so, when an ally within range is inflicted with the [Dying] condition you can use your reaction to roll a D10 essence roll to stabilize them to be [Unconscious] instead sparing their lives."
+  },
+  {
+   "id": "boostershot",
+   "name": "Booster Shot!",
+   "tree": "Pure",
+   "ep": 3,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "4 Rounds",
+   "lasts_rounds": 4,
+   "range_text": "30 Feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 2,
+   "text": "There is seemingly nothing restorative energy can’t mend or in this case prevent. Assuring that your chosen target within range can survive the fight you give them 1d10 Temp Health that disperses after the spell is finished.",
+   "auto": {
+    "temp": "1d10"
+   }
+  },
+  {
+   "id": "fieldmedic",
+   "name": "Field Medic",
+   "tree": "Pure",
+   "ep": 6,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "1 round",
+   "lasts_rounds": 1,
+   "range_text": "30 feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 3,
+   "text": "Always prepared when times get rough, you rely on an extra store of Pure Energy in which you draw from when needed. When activated you draw upon a total pool of 20 HP points in which you can divide as you choose among any targets within range including yourself."
+  },
+  {
+   "id": "emergency",
+   "name": "Emergency!",
+   "tree": "Pure",
+   "ep": 8,
+   "cast": "rounds",
+   "rounds": 2,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Touch",
+   "range": 1,
+   "target": "one",
+   "cooldown": 5,
+   "text": "When all seems lost, you know that just isn’t the case. Alert as ever you call upon a massive well of Pure energy to attempt saving a recently killed person’s life. If they have died within the last 10 rounds you may attempt a D15 Essence check to revivify them and stop death in its tracks entirely. This still leaves them [Unconscious]."
+  },
+  {
+   "id": "freedomflows",
+   "name": "Freedom Flows",
+   "tree": "Pure",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Self Touch",
+   "range": 1,
+   "target": "one",
+   "cooldown": 1,
+   "text": "Just like emotions, the freedom of movement and life should be shared! Focusing on yourself, or a target you can touch. You grant them true freedom for a short time while also mending their wounds. The target receives a flat 15 HP back, alongside a +10 MP bonus that lasts until the end of their next turn. If the target is suffering from the [Grappled] or [Restrained] conditions they are immediately removed once the spell takes effect.",
+   "auto": {
+    "heal": "15"
+   }
+  },
+  {
+   "id": "defibrillatordynamo",
+   "name": "Defibrillator Dynamo",
+   "tree": "Pure",
+   "ep": 6,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Touch 30 Feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 3,
+   "text": "Rapidly begin charging up restorative energy while preparing to dose it into a single ally within range you can touch. Dashing forward to them within a limit of 30 feet. Every 5 feet covered before touching them adds an additional 1d4 at a base of 1d10."
+  },
+  {
+   "id": "dancewithdeath",
+   "name": "Dance with Death",
+   "tree": "Pure",
+   "ep": 10,
+   "cast": "rounds",
+   "rounds": 2,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Self",
+   "range": 0,
+   "target": "self",
+   "cooldown": 6,
+   "text": "Life and Death have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Pure] and [Null] energy allowing you the ability to cast 1 skill from the [Null \\ | Block] branch free of charge/slots as an [Instant]. This requires either another consenting player with the opposite paired skill [Dance with Life] to activate together or a caster who has both [Dance with Death] and [Dance with Life] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills."
+  },
+  {
+   "id": "harnessharmony",
+   "name": "Harness Harmony",
+   "tree": "Pure",
+   "ep": 4,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "2 rounds",
+   "lasts_rounds": 2,
+   "range_text": "Self 30 Foot Radius",
+   "range": 6,
+   "target": "none",
+   "cooldown": 2,
+   "text": "[Harmony] is a tool that can mend just as it can destroy to keep its balance. Choose two targets to give a stack of [Harmony] which lasts until the end of this spell’s effectiveness. You can target yourself as one of these people. You must choose if it is [Positive] or [Negative] upon deciding the targets for this spell. [Positive]: Target receives either +3 Temp AP or 1d10 HP per-round. [Negative]: Target takes either -3 EP or 1d8+2 damage per round.",
+   "area": {
+    "shape": "self",
+    "radius": 6
+   }
+  },
+  {
+   "id": "tapintothetrueflow",
+   "name": "Tap into the True Flow",
+   "tree": "Pure",
+   "ep": 8,
+   "cast": "rounds",
+   "rounds": 3,
+   "lasts": "5 Rounds",
+   "lasts_rounds": 5,
+   "range_text": "Self 60 Foot Radius",
+   "range": 12,
+   "target": "none",
+   "cooldown": 5,
+   "text": "A surge of extremely overclocked [Pure] energy immediately connects to 4 targets within a sixty foot radius centered on the caster. For the duration of the spell’s effectiveness these chosen targets receive 2d8 per round.",
+   "area": {
+    "shape": "self",
+    "radius": 12
+   }
+  },
+  {
+   "id": "positivethinking",
+   "name": "Positive Thinking!",
+   "tree": "Pure",
+   "ep": 0,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "1 round",
+   "lasts_rounds": 1,
+   "range_text": "30 feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 1,
+   "text": "This cruel world never seems to get you down, that joy is easy to share with your companions! Directly your positivity towards an ally you lessen a condition such as [Confused, Frightened, Panicked, or Sorrowful] by one round."
+  },
+  {
+   "id": "dancewithlife",
+   "name": "Dance with Life",
+   "tree": "T2 Block",
+   "ep": 10,
+   "cast": "rounds",
+   "rounds": 2,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Self",
+   "range": 0,
+   "target": "self",
+   "cooldown": 6,
+   "text": "Death and Life have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Null] and [Pure] energy allowing you the ability to cast 1 skill from the [Pure \\ | Flow] branch free of charge/slots as an [Instant]. This requires either another consenting player with the opposite paired skill [Dance with Death] to activate together or a caster who has both [Dance with Life] and [Dance with Death] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills."
+  },
+  {
+   "id": "elmentalmissile",
+   "name": "Elmental Missile",
+   "tree": "T1 Temper",
+   "ep": 0,
+   "cast": "instant",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "30 feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 0,
+   "text": "Collecting a mass of your [Primary Element], you hurl it forward towards a foe attempting an Essence roll against their AP. Upon a normal success do 1d6 damage. Crit successes add +1 [Elemental Effect] to the afflicted person being targeted.",
+   "auto": {
+    "attack": "essence",
+    "dmg": "1d6"
+   },
+   "aliases": [
+    "elementalmissile"
+   ]
+  },
+  {
+   "id": "superlob",
+   "name": "Super Lob",
+   "tree": "T1 Temper",
+   "ep": 4,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "60 Feet",
+   "range": 12,
+   "target": "one",
+   "cooldown": 3,
+   "text": "Summoning forth a large amount of your [Primary Element] you hurl it to a location within range. Everything within a 15 foot range of the center must do a successful d15 Shell roll to avoid taking damage. Failures result in them taking 1d10 damage and +1 [Elemental Effect]. Crits add an addition +1 [Elemental Effect]"
+  },
+  {
+   "id": "focusedassault",
+   "name": "Focused Assault",
+   "tree": "T1 Temper",
+   "ep": 5,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "60 Feet",
+   "range": 12,
+   "target": "one",
+   "cooldown": 2,
+   "text": "When a specific foe has caught your ire, you know just how to handle them. You form a precise amount of your [Primary Element] before directly at one chosen target within range. Upon a successful Essence roll against their AP you deal 2d8 Damage and apply +2 [Elemental Effect]",
+   "auto": {
+    "attack": "essence",
+    "dmg": "2d8"
+   }
+  },
+  {
+   "id": "primaryabsorption",
+   "name": "Primary Absorption",
+   "tree": "T1 Temper",
+   "ep": 3,
+   "cast": "reaction",
+   "rounds": 0,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "Self",
+   "range": 0,
+   "target": "self",
+   "cooldown": 2,
+   "text": "When a foe attempts to attack you with an element matching an element unlocked within your roster; you may choose to simply absorb a portion of the element itself, cutting the damage in half and lowering an [Elemental Effects] by one round."
+  },
+  {
+   "id": "roaringrelease",
+   "name": "Roaring Release",
+   "tree": "T1 Temper",
+   "ep": 8,
+   "cast": "rounds",
+   "rounds": 1,
+   "lasts": "1 Round",
+   "lasts_rounds": 1,
+   "range_text": "30 Feet",
+   "range": 6,
+   "target": "one",
+   "cooldown": 4,
+   "text": "Considering your options carefully you bring forth Three charges of your [Primary Element]. These charges can be divided as you choose among 1-3 targets. Upon a successful Essence roll against the chosen target’s AP do 1d6 Damage and apply +1 [Elemental Effects]. Criticals do double damage and add an additional +1 [Elemental Effect] against them as well."
+  }
+ ]
+}
+</script>
+<script id="conditions" type="application/json">
+{
+ "_doc": "Build the conditions catalog for combat from the worldbuilding doc's conditions section.",
+ "conditions": [
+  {
+   "id": "burning",
+   "name": "Burning",
+   "group": "Elemental",
+   "short": "BUR",
+   "text": "Target takes 1d4+1 damage at the start of their turn per-stack of Burning. The stack then reduces by one.",
+   "start_dmg": "1d4+1",
+   "decay": "start1",
+   "particle": "flame",
+   "color": 16747056
+  },
+  {
+   "id": "freezing",
+   "name": "Freezing",
+   "group": "Elemental",
+   "short": "FRZ",
+   "text": "Target receives a -5 MP debuff per-stack of Freezing. The stack reduces by one at the end of the target’s turn.",
+   "mp_ft": -5,
+   "decay": "end1",
+   "particle": "snowflake",
+   "color": 10148095
+  },
+  {
+   "id": "crushed",
+   "name": "Crushed",
+   "group": "Elemental",
+   "short": "CRU",
+   "text": "Target receives a -1 AP penalty per-stack of Crushed. The stack reduces by one at the end of the target’s turn.",
+   "ap": -1,
+   "decay": "end1",
+   "particle": "crit",
+   "color": 11569760
+  },
+  {
+   "id": "winded",
+   "name": "Winded",
+   "group": "Elemental",
+   "short": "WND",
+   "text": "Target receives a -1 EP  debuff per-stack of Winded. This triggers at the start of the target’s turn and reduces the stack by one every round.",
+   "start_ep": -1,
+   "decay": "start1",
+   "particle": "cloud",
+   "color": 14215400
+  },
+  {
+   "id": "withered",
+   "name": "Withered",
+   "group": "Elemental",
+   "short": "WTH",
+   "text": "Target receives a -1 Max HP debuff per-stack of Withered. The stack reduces by one at the end of the Target’s turn.",
+   "max_hp": -1,
+   "decay": "end1",
+   "particle": "ash",
+   "color": 9075290
+  },
+  {
+   "id": "blooming",
+   "name": "Blooming",
+   "group": "Elemental",
+   "short": "BLM",
+   "text": "Target receives a +1 Max HP buff per-stack of Blooming. The stack reduces by one at the end of the Target’s turn.",
+   "max_hp": 1,
+   "decay": "end1",
+   "particle": "happy_villager",
+   "color": 7393376
+  },
+  {
+   "id": "melting",
+   "name": "Melting",
+   "group": "Elemental",
+   "short": "MEL",
+   "text": "Target takes  2 Damage and -2 AP per-stack of Melting at the start of their turn. The stack reduces by one at the end of their turn.",
+   "start_dmg": "2",
+   "ap": -2,
+   "decay": "end1",
+   "particle": "dripping_lava",
+   "color": 16736320
+  },
+  {
+   "id": "shocked",
+   "name": "Shocked",
+   "group": "Elemental",
+   "short": "SHK",
+   "text": "Target receives a -5 MP and -1 EP per stack of Shocked at the start of their turn. The stack reduces by one at the end of their turn.",
+   "mp_ft": -5,
+   "start_ep": -1,
+   "decay": "end1",
+   "particle": "electric_spark",
+   "color": 16773232
+  },
+  {
+   "id": "confused",
+   "name": "Confused",
+   "group": "Mental",
+   "short": "CON",
+   "text": "Target fumbles to use their next actions, attempting to attack results in a DC 20 Core Check, otherwise they will hit themselves with the damage instead. They may still choose to move or use defense on their turn, but all other actions are prohibited. Stacks of Confusion diminish by one at the end of their turn.",
+   "blocks": [
+    "skills",
+    "dash"
+   ],
+   "attack_check": {
+    "aspect": "core",
+    "dc": 20
+   },
+   "decay": "end1",
+   "particle": "effect",
+   "color": 12624127
+  },
+  {
+   "id": "frightened",
+   "name": "Frightened",
+   "group": "Mental",
+   "short": "FRT",
+   "text": "The target becomes absolutely terrified of the Source or Caster of this effect. For every round Frightened is active they must either make a successful DC 20 Core Check or use their full movement to get away from the source. At the end of their turn one stack of Frightened is removed.",
+   "start_check": {
+    "aspect": "core",
+    "dc": 20,
+    "fail": "must use their full movement to get away from the source"
+   },
+   "decay": "end1",
+   "particle": "smoke",
+   "color": 9474208
+  },
+  {
+   "id": "dazed",
+   "name": "Dazed",
+   "group": "Mental",
+   "short": "DAZ",
+   "text": "A target afflicted with stacks of Dazed finds themselves unable to Defend or Attack. All attacks against others are at disadvantage, and all attacks on the target are at advantage. Stacks of Daze diminish by one at the end of Target’s turn.",
+   "blocks": [
+    "attack",
+    "defend",
+    "damage"
+   ],
+   "adv_against": true,
+   "disadv_attacks": true,
+   "decay": "end1",
+   "particle": "crit",
+   "color": 15786112
+  },
+  {
+   "id": "charmed",
+   "name": "Charmed",
+   "group": "Mental",
+   "short": "CHR",
+   "text": "By having the line blurred between enemy and foe, a Target afflicted with stacks of Charmed will no longer be immediately aggressive to the Source or Caster and their accompanying Allies. This gives the Caster or Source alone advantage as Essence based checks with the afflicted target.",
+   "hit_decay": 2,
+   "decay": "end1",
+   "particle": "heart",
+   "color": 16744640
+  },
+  {
+   "id": "panicked",
+   "name": "Panicked",
+   "group": "Mental",
+   "short": "PAN",
+   "text": "Unable to focus on what’s going on, panic sets into the afflicted Target. Every stack of Panicked gives a -1 EP and -1 AP at the start of their turn. Alongside the inability to use Skills or Attacks outside of movement. These stacks diminish by one at the end of their turn.",
+   "start_ep": -1,
+   "ap": -1,
+   "blocks": [
+    "attack",
+    "skills"
+   ],
+   "decay": "end1",
+   "particle": "splash",
+   "color": 10535167
+  },
+  {
+   "id": "hallucinating",
+   "name": "Hallucinating",
+   "group": "Mental",
+   "short": "HAL",
+   "text": "Reality is not as it seems to be. A Target suffering from Hallucinating is unable to determine friend, foe, and the dangers around them. They take Essence and Core rolls at Disadvantage, and must choose to either [Defend] or [Strike] at the start of their turn. If they choose to attack, it must be the closest possible creature or person to them regardless of relations. If they succeed a DC15 Core roll they may choose to simply [Move] instead.",
+   "disadv_aspects": [
+    "essence",
+    "core"
+   ],
+   "start_check": {
+    "aspect": "core",
+    "dc": 15,
+    "fail": "must Defend or Strike the closest creature, friend or foe",
+    "pass": "may simply Move instead"
+   },
+   "decay": "end1",
+   "particle": "witch",
+   "color": 13660415
+  },
+  {
+   "id": "nightmare",
+   "name": "Nightmare",
+   "group": "Mental",
+   "short": "NIG",
+   "text": "The world is terrifying, enough to make you lose your mind.Target receives one Stack of [Hallucinating] and [Panicked] per-stack of [Nightmare] at the start of their turn, They have a -2 AP Debuff per-stack of Nightmare. Movement speed is halved. All stacks of Nightmare vanish at the end of their turn, but its afflicted condition effects remain.",
+   "start_add": {
+    "hallucinating": 1,
+    "panicked": 1
+   },
+   "ap": -2,
+   "mp_half": true,
+   "decay": "endall",
+   "particle": "squid_ink",
+   "color": 6308000
+  },
+  {
+   "id": "dreaming",
+   "name": "Dreaming",
+   "group": "Mental",
+   "short": "DRE",
+   "text": "The world is a blissful place, enough to calm violence. Targets who have stacks of Dreaming receive +1 EP and +1d4 healing per-stack of [Dreaming] alongside one stack of [Charmed] per stack of [Dreaming] at the start of their turn. They become unable to use attacks or damage based skills until all stacks of [Dreaming] are gone. [Dreaming] drops by two stacks at the end of their turn.",
+   "start_ep": 1,
+   "start_heal": "1d4",
+   "start_add": {
+    "charmed": 1
+   },
+   "blocks": [
+    "attack",
+    "damage"
+   ],
+   "decay": "end2",
+   "particle": "end_rod",
+   "color": 12644607
+  },
+  {
+   "id": "unconscious",
+   "name": "Unconscious",
+   "group": "Physical",
+   "short": "UNC",
+   "text": "Down at 0 HP but stable: out of the fight until healed. Being hurt makes you Dying again.",
+   "decay": "none",
+   "color": 7368832
+  },
+  {
+   "id": "paralyze",
+   "name": "Paralyze",
+   "group": "Physical",
+   "short": "PAR",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "bleeding",
+   "name": "Bleeding",
+   "group": "Physical",
+   "short": "BLE",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "drowning",
+   "name": "Drowning",
+   "group": "Physical",
+   "short": "DRO",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "broken",
+   "name": "Broken",
+   "group": "Physical",
+   "short": "BRO",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "deafened",
+   "name": "Deafened",
+   "group": "Physical",
+   "short": "DEA",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "blinded",
+   "name": "Blinded",
+   "group": "Physical",
+   "short": "BLI",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "restrained",
+   "name": "Restrained",
+   "group": "Physical",
+   "short": "RES",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "grappled",
+   "name": "Grappled",
+   "group": "Physical",
+   "short": "GRA",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "nauseated",
+   "name": "Nauseated",
+   "group": "Physical",
+   "short": "NAU",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "poisoned",
+   "name": "Poisoned",
+   "group": "Physical",
+   "short": "POI",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "sick",
+   "name": "Sick",
+   "group": "Physical",
+   "short": "SIC",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "blasted",
+   "name": "Blasted",
+   "group": "Physical",
+   "short": "BLA",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "blungeoned",
+   "name": "Blungeoned",
+   "group": "Physical",
+   "short": "BLG",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "piercing",
+   "name": "Piercing",
+   "group": "Physical",
+   "short": "PIE",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "slashing",
+   "name": "Slashing",
+   "group": "Physical",
+   "short": "SLA",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "hexed",
+   "name": "Hexed",
+   "group": "Magical",
+   "short": "HEX",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "allured",
+   "name": "Allured",
+   "group": "Magical",
+   "short": "ALL",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "invisible",
+   "name": "Invisible",
+   "group": "Magical",
+   "short": "INV",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "infused",
+   "name": "Infused",
+   "group": "Magical",
+   "short": "INF",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "sorrowful",
+   "name": "Sorrowful",
+   "group": "Magical",
+   "short": "SOR",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "joyous",
+   "name": "Joyous",
+   "group": "Magical",
+   "short": "JOY",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "enraged",
+   "name": "Enraged",
+   "group": "Magical",
+   "short": "ENR",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "calmed",
+   "name": "Calmed",
+   "group": "Magical",
+   "short": "CAL",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "positiveharmony",
+   "name": "Positive Harmony",
+   "group": "Magical",
+   "short": "+HR",
+   "text": "Target receives either +3 Temp AP or 1d10 HP per-round. Stacks diminish based on Skill.",
+   "decay": "none"
+  },
+  {
+   "id": "negativeharmony",
+   "name": "Negative Harmony",
+   "group": "Magical",
+   "short": "-HR",
+   "text": "Target takes either -3 EP or 1d8+2 damage per round. Stacks diminish based on Skill.",
+   "decay": "none"
+  },
+  {
+   "id": "infested",
+   "name": "Infested",
+   "group": "Soul",
+   "short": "IFS",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "dying",
+   "name": "Dying",
+   "group": "Soul",
+   "short": "DYI",
+   "text": "At 0 HP. On each of your turns roll a d20: 10 or more is a success, three successes and you stabilize (Unconscious), three failures and you die. A 20 brings you back with 1 HP; a 1 counts as two failures; being hurt counts as one. Any healing brings you back up. An ally next to you can Help (Primary) to stabilize you. (The doc names Dying but leaves its rules open; this is the mod's choice.)",
+   "decay": "none",
+   "color": 10493984
+  },
+  {
+   "id": "epdrain",
+   "name": "EP Drain",
+   "group": "Soul",
+   "short": "EP-",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "apdrain",
+   "name": "AP Drain",
+   "group": "Soul",
+   "short": "AP-",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "mpdrain",
+   "name": "MP Drain",
+   "group": "Soul",
+   "short": "MP-",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "hpdrain",
+   "name": "HP Drain",
+   "group": "Soul",
+   "short": "HP-",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "shelldrain",
+   "name": "Shell Drain",
+   "group": "Soul",
+   "short": "SH-",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "coredrain",
+   "name": "Core Drain",
+   "group": "Soul",
+   "short": "CO-",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "essencedrain",
+   "name": "Essence Drain",
+   "group": "Soul",
+   "short": "ES-",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "epboost",
+   "name": "EP Boost",
+   "group": "Soul",
+   "short": "EP+",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "apboost",
+   "name": "AP Boost",
+   "group": "Soul",
+   "short": "AP+",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "mpboost",
+   "name": "MP Boost",
+   "group": "Soul",
+   "short": "MP+",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "hpboost",
+   "name": "HP Boost",
+   "group": "Soul",
+   "short": "HP+",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "shellboost",
+   "name": "Shell Boost",
+   "group": "Soul",
+   "short": "SH+",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "coreboost",
+   "name": "Core Boost",
+   "group": "Soul",
+   "short": "CO+",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "essenceboost",
+   "name": "Essence Boost",
+   "group": "Soul",
+   "short": "ES+",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "purified",
+   "name": "Purified",
+   "group": "Soul",
+   "short": "PUR",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "nullified",
+   "name": "Nullified",
+   "group": "Soul",
+   "short": "NUL",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "incorporeal",
+   "name": "Incorporeal",
+   "group": "Spirit",
+   "short": "INC",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "between",
+   "name": "Between",
+   "group": "Spirit",
+   "short": "BET",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "blighted",
+   "name": "Blighted",
+   "group": "Spirit",
+   "short": "BLT",
+   "text": "",
+   "decay": "none"
+  },
+  {
+   "id": "hallowed",
+   "name": "Hallowed",
+   "group": "Spirit",
+   "short": "HLW",
+   "text": "",
+   "decay": "none"
+  }
+ ]
+}
+</script>
+<script>
+const json = id => { try { return JSON.parse(document.getElementById(id).textContent); } catch (e) { return null; } };
+const SKILLS = (json('skills')?.skills || []).map(s => s.name).filter(Boolean);
+const CONDITIONS = (json('conditions')?.conditions || []).map(c => c.name).filter(Boolean);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+
+// ---------- the bestiary's rules (the same numbers as Bestiary.java) ----------
+const LEVEL_POINTS = [3, 1, 1, 1, 0, 2, 1, 0, 1, 0, 2, 1, 1, 1, 0, 2, 1, 1, 0, 0, 2, 0, 1, 1, 0, 2, 1, 0, 2, 0, 5];
+const MAX_THREAT = LEVEL_POINTS.length - 1, INNATE = 3;
+const FOCUSES = ['balanced', 'core', 'shell', 'essence'], ROLES = ['minion', 'standard', 'elite', 'boss'];
+const BEHAVIORS = { brute: 'Brute: charges in and hits', skirmisher: 'Skirmisher: hits, then backs away', caster: 'Caster: keeps its distance, uses skills',
+  guardian: 'Guardian: holds near where the fight began', coward: 'Coward: runs and defends when hurt' };
+const TARGETS = { nearest: 'The nearest foe', weakest: 'The weakest foe', caster: 'The foe with the most skills', revenge: 'Whoever last hit it' };
+const ROLE = { minion: [1, 0, 0], standard: [2, 0, 0], elite: [4, 1, 1], boss: [8, 2, 2] };
+const num = (v, d) => { const n = parseInt(String(v ?? '').replace('+', ''), 10); return Number.isFinite(n) ? n : d; };
+const points = t => LEVEL_POINTS.slice(0, Math.max(0, Math.min(MAX_THREAT, t)) + 1).reduce((a, b) => a + b, 0);
+function scores(threat, focus, tweak) {
+  const pool = INNATE + points(threat), s = [1, 1, 1], f = FOCUSES.indexOf(focus) - 1;
+  if (f < 0) for (let i = 0; i < pool; i++) s[i % 3]++;
+  else { const lead = Math.ceil(pool * 0.6); s[f] += lead; for (let i = 0; i < pool - lead; i++) s[(f + 1 + i % 2) % 3]++; }
+  return s.map((v, i) => Math.max(1, v + (tweak[i] || 0)));
+}
+function stats(m) {
+  const s = scores(num(m.threat, 0), m.focus, [num(m.tweak_core, 0), num(m.tweak_shell, 0), num(m.tweak_essence, 0)]), r = ROLE[m.role] || ROLE.standard;
+  const hp = 6 + 4 * (s[2] - 1), ap = 10 + (s[1] >> 1), mp = 7 + (s[1] >> 2), init = s[0] >> 1;
+  return { s, hp: num(m.hp, Math.max(1, hp * r[0] >> 1)), ap: num(m.ap, ap + r[1]), mp: num(m.mp, mp), init: num(m.init, init),
+    mods: [(s[0] >> 1) + r[2], (s[1] >> 1) + r[2], (s[2] >> 1) + r[2]] };
+}
+const power = m => ({ minion: 0.5, elite: 2, boss: 4 }[m.role] || 1) * (num(m.threat, 0) + 1);
+const DIFFICULTY = ['Trivial', 'Easy', 'Medium', 'Hard', 'Deadly'], DIFFICULTY_AT = [0, 0.4, 0.75, 1.1, 1.5];
+const difficulty = (weight, size, level) => { const r = weight / Math.max(1, size * (level + 1)); let d = 0; DIFFICULTY_AT.forEach((t, i) => { if (r >= t) d = i; }); return d; };
+const validDice = d => /^\d{0,2}d\d{1,3}([+-]\d{1,3})?$|^\d{1,3}$/.test(String(d).replace(/\s/g, ''));
+const signed = n => (n >= 0 ? '+' : '') + n;
+const atk = (name, aspect, dmg, range) => ({ name, aspect, dmg, range });
+const TEMPLATES = {
+  blank: { threat: 0, focus: 'balanced', behavior: 'brute', attacks: [atk('Strike', 'shell', '1d4', 1)] },
+  grunt: { threat: 1, focus: 'shell', behavior: 'brute', attacks: [atk('Club', 'shell', '1d6', 1)] },
+  archer: { threat: 2, focus: 'shell', behavior: 'skirmisher', target: 'weakest', attacks: [atk('Shortbow', 'shell', '1d6', 8), atk('Knife', 'shell', '1d4', 1)] },
+  hexer: { threat: 3, focus: 'essence', behavior: 'caster', target: 'caster', skills: 'Logic and Order, Variable Violence', attacks: [atk('Staff', 'shell', '1d4', 1)] },
+  sentinel: { threat: 3, focus: 'shell', behavior: 'guardian', attacks: [atk('Halberd', 'shell', '1d8', 2)] },
+  swarmling: { threat: 0, focus: 'core', behavior: 'brute', role: 'minion', attacks: [atk('Bite', 'shell', '1d4', 1)] },
+  boss: { threat: 5, focus: 'balanced', behavior: 'brute', target: 'revenge', role: 'boss', attacks: [atk('Cleave', 'shell', '2d6', 1), atk('Hurl', 'essence', '1d10', 6)] },
+};
+const monster = (kind = 'blank', name) => Object.assign({ name: name || (kind === 'blank' ? 'New monster' : kind[0].toUpperCase() + kind.slice(1)), threat: 0, focus: 'balanced',
+  role: 'standard', tweak_core: 0, tweak_shell: 0, tweak_essence: 0, hp: '', ap: '', mp: '', init: '', skills: '', immune: '', behavior: 'brute',
+  target: 'nearest', flee: 25, traits: '', loot: '' }, JSON.parse(JSON.stringify(TEMPLATES[kind])));
+
+// ---------- state, saved in this browser ----------
+const DRAFT = 'wod-workshop';
+const blank = () => ({ monsters: [], tables: [], handouts: [], quests: [], items: [], party: { size: 4, level: 1 } });
+let W = (() => { try { const d = JSON.parse(localStorage.getItem(DRAFT)); if (d && d.monsters) return Object.assign(blank(), d); } catch (e) {} return blank(); })();
+let tab = 'monsters', pick = { monsters: 0, tables: 0, handouts: 0, quests: 0, items: 0 }, codeText = '', note = '';
+const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify(W)); } catch (e) {} };
+
+// ---------- the code: "WOD1-" + base64url(deflate-raw(JSON)), the same format the game reads ----------
+const pipe = async (bytes, stream) => new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer());
+const b64url = b => { let s = ''; for (const x of b) s += String.fromCharCode(x); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const unb64url = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+async function encode(obj) { return 'WOD1-' + b64url(await pipe(new TextEncoder().encode(JSON.stringify(obj)), new CompressionStream('deflate-raw'))); }
+async function decode(code) {
+  code = code.replace(/\s+/g, '');
+  if (!code.startsWith('WOD1-')) throw new Error('Codes start with WOD1-.');
+  return JSON.parse(new TextDecoder().decode(await pipe(unb64url(code.slice(5)), new DecompressionStream('deflate-raw'))));
+}
+/** What goes to the game: only filled-in pieces, in the shapes the game checks. */
+function payload() {
+  return {
+    kind: 'workshop', v: 1,
+    monsters: W.monsters.filter(m => m.name.trim()).map(m => ({ ...m, attacks: m.attacks.filter(a => a.name.trim()) })),
+    tables: W.tables.filter(t => t.name.trim() && t.entries.trim()),
+    handouts: W.handouts.filter(h => h.title.trim()),
+    quests: W.quests.filter(q => q.title.trim()),
+    items: W.items.filter(i => i.name.trim() && i.id.trim()).map(i => {
+      const o = { id: i.id, name: i.name, type: i.type, text: i.text };
+      if (i.type === 'weapon') Object.assign(o, { dmg: i.dmg, range: num(i.range, 1) });
+      if (i.type === 'armor') o.ap = num(i.ap, 1);
+      return o;
+    }),
+  };
+}
+
+// ---------- drawing ----------
+const TABS = [['monsters', 'Monsters'], ['tables', 'Random tables'], ['handouts', 'Handouts'], ['quests', 'Quests'], ['items', 'Items'], ['export', 'Bring into the game']];
+function render() {
+  document.getElementById('tabs').innerHTML = TABS.map(([id, label]) => `<button type="button" role="tab" data-tab="${id}" aria-selected="${tab === id}">${label}${W[id] ? `<span class="count">${W[id].length}</span>` : ''}</button>`).join('');
+  const bench = document.getElementById('bench');
+  if (tab === 'export') { bench.innerHTML = `<div class="panel" style="grid-column:1/-1">${exportView()}</div>`; return; }
+  const list = W[tab], i = Math.min(pick[tab], list.length - 1);
+  const label = { monsters: m => [m.name, `Threat ${m.threat} · ${m.role}`], tables: t => [t.name || 'Untitled', `${t.entries.split('\n').filter(x => x.trim()).length} entries`],
+    handouts: h => [h.title || 'Untitled', `${h.text.length} characters`],
+    quests: q => [q.title || 'Untitled', `${q.status} · ${q.objectives.split('\n').filter(x => x.trim()).length} objectives`], items: it => [it.name || 'Unnamed', it.type] }[tab];
+  const add = { monsters: Object.keys(TEMPLATES).map(k => `<button type="button" class="btn" data-new="${k}">${k === 'blank' ? 'Blank' : k[0].toUpperCase() + k.slice(1)}</button>`).join(''),
+    tables: `<button type="button" class="btn" data-new="table">New table</button>`, quests: `<button type="button" class="btn" data-new="quest">New quest</button>`, handouts: `<button type="button" class="btn" data-new="handout">New handout</button>`,
+    items: `<button type="button" class="btn" data-new="item">New item</button>` }[tab];
+  bench.innerHTML = `<div class="panel"><h3 style="margin-top:0">${tab === 'monsters' ? 'Start from' : 'Add'}</h3><div class="row">${add}</div>
+      <h3>${esc(TABS.find(t => t[0] === tab)[1])}</h3><div class="list">${list.map((x, j) => { const [a, b] = label(x); return `<button type="button" class="entry" data-pick="${j}" aria-current="${j === i}">${esc(a)}<small>${esc(b)}</small></button>`; }).join('') || '<p class="note">Nothing yet.</p>'}</div></div>
+    <div class="panel">${i < 0 ? '<p class="lede">Add one on the left.</p>' : { monsters: monsterView, tables: tableView, handouts: handoutView, quests: questView, items: itemView }[tab](list[i], i)}</div>`;
+}
+const field = (path, label, value, opts = {}) => {
+  const attrs = `data-path="${path}"${opts.max ? ` maxlength="${opts.max}"` : ''}${opts.list ? ` list="${opts.list}"` : ''}${opts.ph ? ` placeholder="${esc(opts.ph)}"` : ''}`;
+  const input = opts.area ? `<textarea ${attrs} rows="${opts.rows || 4}">${esc(value)}</textarea>`
+    : opts.options ? `<select ${attrs}>${Object.entries(opts.options).map(([v, t]) => `<option value="${v}"${String(value) === v ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select>`
+    : `<input ${attrs} type="${opts.type || 'text'}" value="${esc(value)}"${opts.min != null ? ` min="${opts.min}" max="${opts.max2}"` : ''}>`;
+  return `<label class="${opts.wide ? 'wide' : ''}">${esc(label)}${opts.hint ? `<small>${esc(opts.hint)}</small>` : ''}${input}</label>`;
+};
+const opts = arr => Object.fromEntries(arr.map(x => [x, x[0].toUpperCase() + x.slice(1)]));
+function monsterView(m, i) {
+  const d = stats(m);
+  const bad = m.attacks.filter(a => a.name.trim() && !validDice(a.dmg)).map(a => a.name);
+  return `<div class="split"><div>
+    <h2>${esc(m.name || 'Monster')}</h2>
+    <div class="fields">
+      ${field('name', 'Name', m.name, { wide: true, max: 40 })}
+      ${field('threat', `Threat ${m.threat}`, m.threat, { type: 'range', min: 0, max2: MAX_THREAT, hint: 'A Standard of Threat X is an even fight for one level-X character.' })}
+      ${field('role', 'Role', m.role, { options: { minion: 'Minion (½ HP)', standard: 'Standard', elite: 'Elite (×2 HP, +1 AP, +1 to hit)', boss: 'Boss (×4 HP, +2 AP, +2 to hit)' } })}
+      ${field('focus', 'Focus', m.focus, { options: opts(FOCUSES), hint: 'Where its points go.' })}
+      ${field('tweak_core', 'Core ±', m.tweak_core, { type: 'number' })}${field('tweak_shell', 'Shell ±', m.tweak_shell, { type: 'number' })}${field('tweak_essence', 'Essence ±', m.tweak_essence, { type: 'number' })}
+      ${['hp', 'ap', 'mp', 'init'].map(k => field(k, `${k.toUpperCase()} (by hand)`, m[k], { ph: 'auto' })).join('')}
+    </div>
+    <h3>Attacks (up to 6)</h3>
+    ${m.attacks.map((a, j) => `<div class="attack">
+      <input data-path="attacks.${j}.name" value="${esc(a.name)}" placeholder="Name" maxlength="30" aria-label="Attack ${j + 1} name">
+      <select data-path="attacks.${j}.aspect" aria-label="Attack ${j + 1} aspect">${['shell', 'core', 'essence'].map(x => `<option${a.aspect === x ? ' selected' : ''}>${x}</option>`).join('')}</select>
+      <input data-path="attacks.${j}.dmg" value="${esc(a.dmg)}" placeholder="1d6" aria-label="Attack ${j + 1} damage">
+      <input data-path="attacks.${j}.range" type="number" min="1" max="30" value="${esc(a.range)}" aria-label="Attack ${j + 1} range in squares">
+      <button type="button" class="btn danger" data-del-attack="${j}" aria-label="Remove attack ${j + 1}">&times;</button></div>`).join('')}
+    <button type="button" class="btn" data-add-attack ${m.attacks.length >= 6 ? 'disabled' : ''}>Add attack</button>
+    ${bad.length ? `<p class="note warn">Damage must be dice like 1d6+1: ${esc(bad.join(', '))}</p>` : ''}
+    <div class="fields" style="margin-top:12px">
+      ${field('skills', 'Skills', m.skills, { wide: true, hint: 'Names from the doc, comma separated.', list: 'skill-names' })}
+      ${field('immune', 'Immune to', m.immune, { wide: true, hint: 'Conditions it can\'t be given, comma separated.', list: 'condition-names' })}
+      ${field('behavior', 'Behavior on auto turns', m.behavior, { options: BEHAVIORS })}
+      ${field('target', 'Goes after', m.target, { options: TARGETS })}
+      ${m.behavior === 'coward' ? field('flee', 'Flees below (% HP)', m.flee, { type: 'number' }) : ''}
+      ${field('traits', 'Traits', m.traits, { wide: true, area: true, rows: 3 })}
+      ${field('loot', 'Loot', m.loot, { wide: true, area: true, rows: 2 })}
+    </div>
+    <div class="row" style="margin-top:12px"><button type="button" class="btn" data-dup>Duplicate</button><button type="button" class="btn danger" data-del>Delete</button></div>
+  </div><div>
+    <div class="block"><h4>${esc(m.name || 'Monster')}</h4>
+      <div class="sub">${esc(m.role[0].toUpperCase() + m.role.slice(1))} · Threat ${m.threat} · ${esc(m.behavior)}</div><hr>
+      <dl><dt>Armor Points</dt><dd>${d.ap}</dd><dt>Health</dt><dd>${d.hp}</dd><dt>Movement</dt><dd>${d.mp} squares (${d.mp * 5} ft)</dd><dt>Initiative</dt><dd>${signed(d.init)}</dd></dl><hr>
+      <div class="aspects">${['Core', 'Shell', 'Essence'].map((n, k) => `<div><b>${n.toUpperCase()}</b>${d.s[k]} (${signed(d.mods[k])})</div>`).join('')}</div><hr>
+      ${m.attacks.filter(a => a.name.trim()).map(a => { const k = ['core', 'shell', 'essence'].indexOf(a.aspect); return `<p style="margin:0 0 4px"><b>${esc(a.name)}.</b> ${signed(d.mods[k])} to hit (${esc(a.aspect)}), ${num(a.range, 1) <= 1 ? 'melee' : num(a.range, 1) + ' squares'}. ${esc(a.dmg)} damage.</p>`; }).join('')}
+      ${m.skills ? `<p style="margin:4px 0 0"><b>Skills.</b> ${esc(m.skills)}</p>` : ''}${m.immune ? `<p style="margin:4px 0 0"><b>Immune.</b> ${esc(m.immune)}</p>` : ''}
+      ${m.traits ? `<p style="margin:4px 0 0">${esc(m.traits)}</p>` : ''}</div>
+    <h3>Encounter check</h3>
+    <div class="fields">${field('party.size', 'Party size', W.party.size, { type: 'number' })}${field('party.level', 'Party level', W.party.level, { type: 'number' })}</div>
+    <p class="diff">This one alone: <b>${DIFFICULTY[difficulty(power(m), num(W.party.size, 4), num(W.party.level, 1))]}</b><br>
+    All ${W.monsters.length} monsters together: <b>${DIFFICULTY[difficulty(W.monsters.reduce((a, x) => a + power(x), 0), num(W.party.size, 4), num(W.party.level, 1))]}</b></p>
+  </div></div>`;
+}
+function tableView(t) {
+  return `<h2>${esc(t.name || 'Random table')}</h2><p class="lede">One entry per line. A number and a colon weights it: <code>3: Wolves</code> comes up three times as often as an unweighted line.</p>
+    <div class="fields">${field('name', 'Name', t.name, { wide: true, max: 40 })}${field('entries', 'Entries', t.entries, { wide: true, area: true, rows: 10 })}</div>
+    <div class="row" style="margin-top:10px"><button type="button" class="btn" data-test-roll>Test roll</button><span class="roll" id="rolled"></span></div>
+    <div class="row" style="margin-top:12px"><button type="button" class="btn danger" data-del>Delete</button></div>`;
+}
+function handoutView(h) {
+  return `<h2>${esc(h.title || 'Handout')}</h2><p class="lede">Arrives in the game as a draft: the DM reads it on the Campaign screen and sends it when the moment comes. Players read it in their Journal (H).</p>
+    <div class="fields">${field('title', 'Title', h.title, { wide: true, max: 60 })}${field('text', 'Text', h.text, { wide: true, area: true, rows: 12 })}</div>
+    <div class="row" style="margin-top:12px"><button type="button" class="btn danger" data-del>Delete</button></div>`;
+}
+function questView(q) {
+  return `<h2>${esc(q.title || 'Quest')}</h2><p class="lede">Arrives in the game kept to the DM; on the Campaign screen's Quests tab, set it to Shared when the party learns of it. Players read shared quests in their Journal (H).</p>
+    <div class="fields">${field('title', 'Title', q.title, { wide: true, max: 60 })}
+      ${field('status', 'Status', q.status, { options: { active: 'Active', completed: 'Completed', failed: 'Failed' } })}
+      ${field('text', 'What it\'s about', q.text, { wide: true, area: true, rows: 6 })}
+      ${field('objectives', 'Objectives', q.objectives, { wide: true, area: true, rows: 6, hint: 'One per line. Start a line with [x] when it\'s done.' })}</div>
+    <div class="row" style="margin-top:12px"><button type="button" class="btn danger" data-del>Delete</button></div>`;
+}
+function itemView(it) {
+  return `<h2>${esc(it.name || 'Item')}</h2><p class="lede">Joins the item catalogue: give it with <code>/item give &lt;player&gt; ${esc(it.id || 'id')}</code>.</p>
+    <div class="fields">${field('name', 'Name', it.name, { max: 60 })}${field('id', 'Id', it.id, { hint: 'Lowercase letters, digits, _', max: 32 })}
+      ${field('type', 'Type', it.type, { options: { weapon: 'Weapon', armor: 'Armor', item: 'Other item' } })}
+      ${it.type === 'weapon' ? field('dmg', 'Damage', it.dmg, { ph: '1d8' }) + field('range', 'Range (squares)', it.range, { type: 'number' }) : ''}
+      ${it.type === 'armor' ? field('ap', 'AP bonus', it.ap, { type: 'number' }) : ''}
+      ${field('text', 'Description', it.text, { wide: true, area: true, rows: 4 })}</div>
+    ${it.type === 'weapon' && !validDice(it.dmg) ? '<p class="note warn">Damage must be dice like 1d8.</p>' : ''}
+    <div class="row" style="margin-top:12px"><button type="button" class="btn danger" data-del>Delete</button></div>`;
+}
+function exportView() {
+  const p = payload();
+  return `<h2>Bring into the game</h2>
+    <p class="lede">Everything here (${p.monsters.length} monsters, ${p.tables.length} tables, ${p.handouts.length} handouts, ${p.quests.length} quests, ${p.items.length} items) in one code. Copy it, then in the game open the DM camera (G) and click <b>Import from web</b>. Monsters land in the bestiary; tables, handout drafts and quests on the Campaign screen; items in the catalogue.</p>
+    <div class="row"><button type="button" class="btn primary" data-copy>Copy code</button><span class="note ${note.startsWith('Copied') ? 'ok' : ''}" id="note">${esc(note)}</span></div>
+    <textarea class="code" readonly aria-label="Import code" style="margin-top:10px">${esc(codeText)}</textarea>
+    <h3>Edit from a code</h3>
+    <p class="note">Paste a code made here to load it back (it replaces what's on this page).</p>
+    <textarea class="code" id="loadcode" placeholder="WOD1-…" aria-label="Code to load"></textarea>
+    <div class="row" style="margin-top:8px"><button type="button" class="btn" data-load>Load code</button><button type="button" class="btn danger" data-clear>Start over</button></div>`;
+}
+
+// ---------- input ----------
+function setPath(obj, path, value) {
+  const keys = path.split('.'), last = keys.pop();
+  let o = obj;
+  for (const k of keys) o = o[k];
+  o[last] = value;
+}
+const current = () => W[tab][Math.min(pick[tab], W[tab].length - 1)];
+document.addEventListener('input', e => {
+  const t = e.target, path = t.dataset.path;
+  if (!path) return;
+  const v = t.type === 'number' || t.type === 'range' ? num(t.value, 0) : t.value;
+  if (path.startsWith('party.')) setPath(W, path, v); else setPath(current(), path, v);
+  save();
+  if (t.type === 'range' || t.tagName === 'SELECT' || /^(attacks\.\d+\.(dmg|aspect|range)|tweak_|hp|ap|mp|init|party\.)/.test(path)) {
+    const sel = `[data-path="${path}"]`; render(); const again = document.querySelector(sel); if (again && t.type !== 'range') { again.focus(); }
+  }
+});
+document.addEventListener('change', e => { if (e.target.dataset.path) render(); });
+document.addEventListener('click', async e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.tab) { tab = b.dataset.tab; if (tab === 'export') codeText = await encode(payload()); note = ''; render(); return; }
+  if (b.dataset.pick) { pick[tab] = +b.dataset.pick; render(); return; }
+  if (b.dataset.new) {
+    const fresh = { table: () => ({ name: 'New table', entries: '' }), quest: () => ({ title: 'New quest', text: '', objectives: '', status: 'active' }), handout: () => ({ title: 'New handout', text: '' }),
+      item: () => ({ id: 'item_' + (W.items.length + 1), name: 'New item', type: 'weapon', dmg: '1d6', range: 1, ap: 1, text: '' }) }[b.dataset.new];
+    W[tab].push(fresh ? fresh() : monster(b.dataset.new));
+    pick[tab] = W[tab].length - 1;
+  } else if (b.hasAttribute('data-del')) { W[tab].splice(pick[tab], 1); pick[tab] = Math.max(0, pick[tab] - 1); }
+  else if (b.hasAttribute('data-dup')) { W.monsters.splice(pick.monsters + 1, 0, JSON.parse(JSON.stringify({ ...current(), name: current().name + ' (copy)' }))); pick.monsters++; }
+  else if (b.hasAttribute('data-add-attack')) current().attacks.push(atk('', 'shell', '1d6', 1));
+  else if (b.dataset.delAttack) current().attacks.splice(+b.dataset.delAttack, 1);
+  else if (b.hasAttribute('data-test-roll')) { document.getElementById('rolled').textContent = rollTable(current().entries) || 'No entries yet.'; return; }
+  else if (b.hasAttribute('data-copy')) {
+    try { await navigator.clipboard.writeText(codeText); note = 'Copied. In the DM camera, click Import from web.'; }
+    catch (err) { note = 'Couldn\'t reach the clipboard: select the code below and copy it.'; }
+  } else if (b.hasAttribute('data-load')) {
+    try {
+      const o = await decode(document.getElementById('loadcode').value);
+      if (o.kind !== 'workshop') throw new Error('That\'s a character code; load it in the character maker.');
+      W = Object.assign(blank(), { monsters: (o.monsters || []).map(m => Object.assign(monster(), m)), tables: o.tables || [], handouts: o.handouts || [], quests: o.quests || [],
+        items: (o.items || []).map(i => Object.assign({ dmg: '1d6', range: 1, ap: 1, text: '' }, i)) });
+      codeText = await encode(payload()); note = 'Loaded.';
+    } catch (err) { note = err.message || 'That code is damaged.'; }
+  } else if (b.hasAttribute('data-clear')) { W = blank(); codeText = await encode(payload()); note = ''; }
+  else return;
+  save(); render();
+});
+/** A roll on a table the way the game rolls it (Campaign.rollTable): "3: Wolves" weighs 3. */
+function rollTable(text) {
+  const rows = text.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const m = /^(\d{1,3})\s*:\s*(.+)$/.exec(l); return m ? [Math.max(1, +m[1]), m[2]] : [1, l]; });
+  const total = rows.reduce((a, r) => a + r[0], 0);
+  if (!total) return null;
+  let n = Math.floor(Math.random() * total);
+  for (const [w, t] of rows) { if (n < w) return t; n -= w; }
+  return null;
+}
+document.body.insertAdjacentHTML('beforeend', `<datalist id="skill-names">${SKILLS.map(s => `<option value="${esc(s)}">`).join('')}</datalist>
+  <datalist id="condition-names">${CONDITIONS.map(s => `<option value="${esc(s)}">`).join('')}</datalist>`);
+if (!W.monsters.length && !W.tables.length) { W.monsters.push(monster('grunt', 'Lychgate Thug')); W.tables.push({ name: 'Wandering monsters', entries: '3: Wolves\n2: Bandits\nA lost merchant' }); }
+render();
+</script>
+
+</html>

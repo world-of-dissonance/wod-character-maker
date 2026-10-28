@@ -95,6 +95,23 @@
   textarea { min-height: 88px; resize: vertical; }
   input::placeholder, textarea::placeholder { color: #6E7A93; }
 
+  .lookgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 640px) { .lookgrid { grid-template-columns: 1fr; } }
+  .model3d { aspect-ratio: 3 / 4; background: radial-gradient(ellipse at 50% 85%, #3A2A18 0%, #121826 70%); border: 1px solid var(--line); cursor: grab; touch-action: none; }
+  .model3d canvas { display: block; width: 100% !important; height: 100% !important; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+  .swatch { width: 30px; height: 30px; border: 2px solid var(--line); background: var(--c); cursor: pointer; padding: 0; }
+  .swatch[aria-checked="true"] { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .card.slim { padding: 8px 12px; }
+  .pickbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin: 24px 0 6px; }
+  .pickbar h2 { margin: 0; }
+  .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 8px; margin-bottom: 6px; }
+  .card.pick { gap: 4px; padding: 10px 12px 12px; }
+  .card.pick .top { display: flex; width: 100%; justify-content: space-between; align-items: baseline; gap: 8px; text-align: left; }
+  .card.pick .name { font-size: 15px; }
+  .card.pick .meta { font-size: 12.5px; color: var(--teal); }
+  .card.pick .about { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .step h3 { font: 600 12px/1.4 var(--ui); letter-spacing: .08em; text-transform: uppercase; color: var(--muted, #8A96B0); margin: 14px 0 6px; }
   .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 10px; }
   .card {
     text-align: left; font: inherit; color: inherit; cursor: pointer; display: grid; gap: 6px; align-content: start;
@@ -198,11 +215,27 @@
   }
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* shared navigation across the World of Dissonance pages (same block in the wiki, maker and workshop) */
+.sitebar {
+  display: flex; align-items: center; gap: 2px; min-height: 38px; overflow-x: auto; scrollbar-width: none;
+  padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+  background: #0d1f24; border-bottom: 1px solid #24464d; font: 600 13px/1 "Fira Sans", system-ui, sans-serif;
+}
+.sitebar::-webkit-scrollbar { display: none; }
+.sitebar .sb-name { margin-right: auto; padding-right: 16px; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #9cc0ba; white-space: nowrap; }
+.sitebar a { padding: 12px 12px 10px; color: #dbe9e5; text-decoration: none; letter-spacing: .04em; white-space: nowrap; border-bottom: 2px solid transparent; }
+.sitebar a:hover { color: #fff; border-bottom-color: #4f7d84; }
+.sitebar a:focus-visible { outline: 2px solid #c9a227; outline-offset: -2px; }
+.sitebar a[aria-current] { color: #ecd68e; border-bottom-color: #c9a227; }
+  .sitebar { margin: -20px calc(-1 * max(16px, env(safe-area-inset-right, 0px))) 22px calc(-1 * max(16px, env(safe-area-inset-left, 0px))); }  /* full width above the padded page */
+@media (max-width: 560px) { .sitebar { justify-content: space-between; } .sitebar .sb-name { display: none; } .sitebar a { padding-inline: 8px; } }
 </style>
 
+<nav class="sitebar" aria-label="World of Dissonance pages"><span class="sb-name">World of Dissonance</span><a href="https://world-of-dissonance.github.io/wiki/">Wiki</a><a href="https://world-of-dissonance.github.io/wod-character-maker/" aria-current="page">Character Maker</a><a href="https://world-of-dissonance.github.io/wod-character-maker/workshop.html">DM Workshop</a></nav>
 <header class="top">
   <div>
-    <div class="wordmark">World of Dissonance</div>
+    <div class="wordmark">World of Dissonance · <a href="workshop.html" style="color:inherit">DM Workshop</a></div>
     <h1>Character Maker</h1>
   </div>
   <div class="row">
@@ -1467,6 +1500,7 @@
   "unlocked": "BALANCE:\nOrder → Pure → Vital"
 }
 </script>
+<script id="wikiskills" type="application/json">[{"name":"Connective Mind","tree":"mind","path":"Main Path","tier":1,"ep":0,"effect":"Accessing the mind of a sentient being who is not [Will Locked] the user of this Arcana may use telepathy to speak into their mind. The voice spoken with is chosen by the caster, but the words are always translated into the language the receiver is most proficient with regardless of the caster’s own capability of speaking such. This effect remains until their next long rest and may be willingly activated at any time during its total effectiveness time. Targets chosen by the caster for this skill are unable to respond unless [Connective Net] is additionally active upon use of this skill.","cast":"Instant","lasts":"Until next Long Rest","range":"60 Foot Radius Self","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-connective-mind"},{"name":"Connective Net","tree":"mind","path":"Main Path","tier":1,"ep":2,"effect":"This skill may be additionally activated by a caster using the [Connective Mind] ability. Allowing them to choose four active targets maximum besides themself when using this skill. These targets and the caster become a part of a telepathic web within a thirty foot radius allowing them to freely converse between singular, multiple, or all targets affected by [Connective Net] . The caster may recast this skill to choose new targets to replace others already in their net. All words are individually translated similar to [Connective Mind] into the languages the receiver is most proficient with allowing free speaking.","cast":"Reaction","lasts":"Until out of Range","range":"30 Foot Radius Centered on the Caster.","cooldown":"1 Round","url":"skills-skills-and-more-skills.html#skill-connective-net"},{"name":"Practical Hit!","tree":"trait","path":"Main Path","tier":1,"ep":0,"effect":"Focusing yourself you go in for a strike! Using a Shell Roll vs your target’s AP, you may use any form of physical or ranged weaponry you have equipped in place of the damage or effects.","cast":"Instant","lasts":"1 Round","range":"Depends","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-enhance"},{"name":"Assured Strike!","tree":"trait","path":"Main Path","tier":1,"ep":3,"effect":"You don’t take it lightly when someone damages you, upon successfully being hit with a skill that does damage. You may use your reaction to gain a +2 to your next physical or ranged attack against them. This is only effective for the following round. If not used, cooldown still remains until usable again.","cast":"Reaction","lasts":"1 Round","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-assured-strike"},{"name":"Parry!","tree":"trait","path":"Main Path","tier":1,"ep":5,"effect":"Letting your guard down can cost you your life, you get ready to defend any incoming physical or ranged attacks. Granting you a +2 to your AP until the end of this skill’s effectiveness.","cast":"1 Round","lasts":"2 Rounds","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-parry"},{"name":"Unyielding Force!","tree":"trait","path":"Main Path","tier":1,"ep":3,"effect":"It takes a lot more than normal to knock you down. Life force and strength easily flows through your veins even if temporary. When used this ability grants an immediate 10 Temp Health. That lasts until the end of the spell’s duration.","cast":"1 round","lasts":"2 Rounds","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-unyielding-force"},{"name":"Reckless Attack!","tree":"trait","path":"Main Path","tier":1,"ep":8,"effect":"Using all of your might you charge forth with a reckless physical or ranged attack. You concentrate it into your weapon to gain a 2 bonus damage dice of the weapon’s type.Target foe needs to do a Shell vs Shell roll against you to avoid taking full damage, taking half on a success, and none on a crit success.","cast":"1 round","lasts":"1 round","range":"Depends","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-reckless-attack"},{"name":"Logic and Order","tree":"balance","path":"Main Path","tier":1,"ep":0,"effect":"Assert order on the field, mitigate chaos by turning it against itself doing 1d6 damage on a successful essence roll vs the target’s AP.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-order"},{"name":"Balancing Act","tree":"balance","path":"Main Path","tier":1,"ep":3,"effect":"The flow of energy surrounding the user is capable of quickly applying stabilization to a target. Granting +3 AP until the end of their next turn.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"1 Round","url":"skills-skills-and-more-skills.html#skill-balancing-act"},{"name":"Objection!","tree":"balance","path":"Main Path","tier":1,"ep":5,"effect":"Lies do not easily pass you, as a reaction when a target attempts to deceive you; both you and the target do an essence roll against each other. Upon a success, you become aware of the fact they are lying, even if you continue to lack the knowledge about the specifics.","cast":"Reaction","lasts":"1 Round","range":"60 Feet","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-objection"},{"name":"Mediate","tree":"balance","path":"Main Path","tier":1,"ep":2,"effect":"Chaos is dismissed at your whim, applying a target with your persuasion of Order. You relieve them of harmful effects. For the next three rounds one negative effect chosen by them; such as [Bleeding] or [Burning] has its length reduced by 1 round.","cast":"1 Round","lasts":"3 Rounds","range":"Touch","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-mediate"},{"name":"The Judge","tree":"balance","path":"Main Path","tier":1,"ep":8,"effect":"You decide the final verdict, when you or an ally within range are successfully hit by an Essence based attack, you can use your reaction to counter it with a successful essence roll vs the target.","cast":"Reaction","lasts":"1 Round","range":"100 Feet","cooldown":"5 rounds","url":"skills-skills-and-more-skills.html#skill-the-judge"},{"name":"Variable Violence","tree":"balance","path":"Main Path","tier":2,"ep":0,"effect":"Overwhelming power comes with many unknowns, despite this you take your chances. Wielding this metaphysical chaos against your enemies. After rolling a successful Essence roll against your opponent’s AP roll a 1d6 to decide the effect of the attack. [1-2 \\= 1d6 Damage] [3-4 \\= -2 EP] [5-6=1d8 Damage]","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-variable-violence"},{"name":"Tampering Tricks","tree":"balance","path":"Main Path","tier":2,"ep":4,"effect":"Inflicting your chaos upon a chosen target, you attempt to change their luck until the end of this spell’s effectiveness. Roll a 1d10 for the effect. This effect is automatic upon being casted. [1-2 -2 AP] [3-4 -4 AP] [5-6 -2 EP] [7-8 -4 EP] [9-10 1d10 Dmg]","cast":"1 round","lasts":"2 Rounds","range":"100 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-tampering-tricks"},{"name":"Always a Chance","tree":"balance","path":"Main Path","tier":2,"ep":5,"effect":"Things don’t always go to plan when chaos ensues, upon being hit or seeing an ally hit successfully with an attack within range immediately use your reaction to impose a -4 to the attacker’s total attack roll to attempt to cancel it entirely if the new roll is lower than the protected person’s total AP score.","cast":"Reaction","lasts":"1 Round","range":"60 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-always-a-chance"},{"name":"Expand the Nonsense","tree":"balance","path":"Main Path","tier":2,"ep":5,"effect":"Order? Respecting reality? These rules do not apply when you’re around. Upon activation afflicts every foe within a 30 foot radius centered on the self with one of these random effects individually decided by a 1d6 roll each. [1-2 -10 MP] [3-4 2d8 DMG] [5-6 Knocked Prone] [7-8 Knocked backwards 10 Feet] [9-10 Dazed]. These effects last for as long as the spell is active.","cast":"1 Rounds","lasts":"3 Rounds","range":"Self 30 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-expand-the-nonsense"},{"name":"The Executioner","tree":"balance","path":"Main Path","tier":2,"ep":10,"effect":"It is easy to take advantage of suffering and misfortune you sow with extreme ease. When any enemy within range falls below half of their total non-temp HP. You can strike out to kick them while they’re down. Upon a successful Essence strike against the target, you deal 2d12 damage directly to their health. (Bypassing Temp HP)","cast":"Reaction","lasts":"1 Round","range":"30 Feet","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-the-executioner"},{"name":"Between the Worlds","tree":"balance","path":"Main Path","tier":3,"ep":0,"effect":"With balance, all things become clear. With an understanding comes true sight. Upon activation gain the ability to see [Invisible] [Incorporeal] or creatures within a 100 foot radius centered on the caster. You peak past the physical veil to see the realms of energy and soul, while anchoring yourself in your realm.","cast":"Instant","lasts":"5 Rounds","range":"Self 100 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#skill-between-the-worlds"},{"name":"Neutrality in all Things","tree":"balance","path":"Main Path","tier":3,"ep":6,"effect":"Chaos and Order are far too simple of concepts; to bend reality under truly neutrality is far superior. Enforcing true neutrality by binding an environment centered on a point within sight of the caster. Three chosen targets make a D15 Essence roll or become [Restrained] and [Dazed] until the end of this spell’s effectiveness.","cast":"2 Round","lasts":"3 Rounds","range":"30 Feet Radius","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-neutrality-in-all-things"},{"name":"Universal Tongues","tree":"balance","path":"Main Path","tier":3,"ep":4,"effect":"The bridge between relations is often hindered by a lack of understanding. To elevate this struggle you have attuned your Median energy to act as a universal translator. Allowing you to speak to sentient entities that you can perceive and that choose to perceive you back. Their spoken words sound like any language your character is most proficient in, and the same in verse for anything you speak to them. (This does not work for written text, as the audible spoken words are required. This does not give you the ability to innately know a language you don’t; it only translates whatever is heard into one that you do.)","cast":"1 Round","lasts":"5 Rounds","range":"Self","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-universal-tongues"},{"name":"Tangible Balance","tree":"balance","path":"Main Path","tier":3,"ep":8,"effect":"Light and Dark are only as prevalent as the one who perceives their change. You decide the Balance in any conflict. Aiming at two targets you choose to [Balance] or [Tip the Scale]. You may target yourself as one of the people on the scale. [Balance:] Equalize the primary health of both targets, any extra health is forfeit. [Tip the Scale:] Deduct one third of chosen target health, and give it to the other person being weighed on the scale.","cast":"3 Rounds","lasts":"1 Round.","range":"Self 100 Feet","cooldown":"8 Rounds","url":"skills-skills-and-more-skills.html#skill-tangible-balance"},{"name":"The Jury","tree":"balance","path":"Main Path","tier":3,"ep":8,"effect":"You decide the final outcome when a person’s life is on trial. Choose one target within range. Deem them as [Guilty] or [Not Guilty] to determine the effects. This lasts for as long as the spell’s effectiveness remains. You may target yourself as well. [Guilty:] -2 AP +2 Damage per Damage Dice against target. [Not Guilty:] +10 Temp Health, +2 AP, +4 EP","cast":"2 Rounds","lasts":"4 Rounds","range":"60 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-the-jury"},{"name":"Help is on the way!","tree":"balance","path":"Pure","tier":1,"ep":0,"effect":"Pure essence flows through you with ease, being shaped by your will it is capable of mending injuries. By touching a chosen target you may choose to either heal 1d6 HP, or 1d4 EP directly into their system. [You may target yourself[","cast":"Instant","lasts":"1 Round","range":"Touch","cooldown":"1 Rounds","url":"skills-skills-and-more-skills.html#skill-help-is-on-the-way"},{"name":"Stabilize Health","tree":"balance","path":"Pure","tier":1,"ep":5,"effect":"The dying do not meet death unless you say so, when an ally within range is inflicted with the [Dying] condition you can use your reaction to roll a D10 essence roll to stabilize them to be [Unconscious] instead sparing their lives.","cast":"Reaction.","lasts":"1 Round","range":"60 feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-stabilize-health"},{"name":"Booster Shot!","tree":"balance","path":"Pure","tier":1,"ep":3,"effect":"There is seemingly nothing restorative energy can’t mend or in this case prevent. Assuring that your chosen target within range can survive the fight you give them 1d10 Temp Health that disperses after the spell is finished.","cast":"1 Round","lasts":"4 Rounds","range":"30 Feet","cooldown":"2 Round","url":"skills-skills-and-more-skills.html#skill-booster-shot"},{"name":"Field Medic","tree":"balance","path":"Pure","tier":1,"ep":6,"effect":"Always prepared when times get rough, you rely on an extra store of Pure Energy in which you draw from when needed. When activated you draw upon a total pool of 20 HP points in which you can divide as you choose among any targets within range including yourself.","cast":"1 Round","lasts":"1 round","range":"30 feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-field-medic"},{"name":"Emergency!","tree":"balance","path":"Pure","tier":1,"ep":8,"effect":"When all seems lost, you know that just isn’t the case. Alert as ever you call upon a massive well of Pure energy to attempt saving a recently killed person’s life. If they have died within the last 10 rounds you may attempt a D15 Essence check to revivify them and stop death in its tracks entirely. This still leaves them [Unconscious] .","cast":"2 Round","lasts":"1 Round","range":"Touch","cooldown":"5 Rounds","url":"skills-skills-and-more-skills.html#skill-emergency"},{"name":"Freedom Flows","tree":"balance","path":"Pure","tier":2,"ep":0,"effect":"Just like emotions, the freedom of movement and life should be shared! Focusing on yourself, or a target you can touch. You grant them true freedom for a short time while also mending their wounds. The target receives a flat 15 HP back, alongside a +10 MP bonus that lasts until the end of their next turn. If the target is suffering from the [Grappled] or [Restrained] conditions they are immediately removed once the spell takes effect.","cast":"Instant","lasts":"1 Round","range":"Self Touch","cooldown":"1 Rounds","url":"skills-skills-and-more-skills.html#t2-flow"},{"name":"Defibrillator Dynamo","tree":"balance","path":"Pure","tier":2,"ep":6,"effect":"Rapidly begin charging up restorative energy while preparing to dose it into a single ally within range you can touch. Dashing forward to them within a limit of 30 feet. Every 5 feet covered before touching them adds an additional 1d4 at a base of 1d10.","cast":"1 Round","lasts":"1 Round","range":"Touch 30 Feet","cooldown":"3 Rounds","url":"skills-skills-and-more-skills.html#skill-defibrillator-dynamo"},{"name":"Dance with Death","tree":"balance","path":"Pure","tier":2,"ep":10,"effect":"Life and Death have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Pure] and [Null] energy allowing you the ability to cast 1 skill from the [Null | Block] branch free of charge/slots as an [Instant] . This requires either another consenting player with the opposite paired skill [Dance with Life] to activate together or a caster who has both [Dance with Death] and [Dance with Life] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills.","cast":"2 Rounds","lasts":"1 Round","range":"Self","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-dance-with-death"},{"name":"Harness Harmony","tree":"balance","path":"Pure","tier":2,"ep":4,"effect":"[Harmony] is a tool that can mend just as it can destroy to keep its balance. Choose two targets to give a stack of [Harmony] which lasts until the end of this spell’s effectiveness. You can target yourself as one of these people. You must choose if it is [Positive] or [Negative] upon deciding the targets for this spell. [Positive]: Target receives either +3 Temp AP or 1d10 HP per-round. [Negative]: Target takes either -3 EP or 1d8+2 damage per round.","cast":"1 round","lasts":"2 rounds","range":"Self 30 Foot Radius","cooldown":"2 rounds","url":"skills-skills-and-more-skills.html#skill-harness-harmony"},{"name":"Tap into the True Flow","tree":"balance","path":"Pure","tier":2,"ep":8,"effect":"A surge of extremely overclocked [Pure] energy immediately connects to 4 targets within a sixty foot radius centered on the caster. For the duration of the spell’s effectiveness these chosen targets receive 2d8 per round.","cast":"3 rounds","lasts":"5 Rounds","range":"Self 60 Foot Radius","cooldown":"5 rounds","url":"skills-skills-and-more-skills.html#skill-tap-into-the-true-flow"},{"name":"Positive Thinking!","tree":"balance","path":"Pure","tier":3,"ep":0,"effect":"This cruel world never seems to get you down, that joy is easy to share with your companions! Directly your positivity towards an ally you lessen a condition such as [Confused, Frightened, Panicked, or Sorrowful] by one round.","cast":"1 round.","lasts":"1 round","range":"30 feet","cooldown":"1 round.","url":"skills-skills-and-more-skills.html#t3-rejoice"},{"name":"Dance with Life","tree":"balance","path":"Null","tier":2,"ep":10,"effect":"Death and Life have always been in a perpetual rhythm; neither can exist without eventually acknowledging the other. In tune with a counter part you temporarily swap massive amount of [Null] and [Pure] energy allowing you the ability to cast 1 skill from the [Pure | Flow] branch free of charge/slots as an [Instant] . This requires either another consenting player with the opposite paired skill [Dance with Death] to activate together or a caster who has both [Dance with Life] and [Dance with Death] unlocked. Requiring both parties or the caster to pay the 10 EP price of their respective skills.","cast":"2 Rounds","lasts":"1 Round","range":"Self","cooldown":"6 Rounds","url":"skills-skills-and-more-skills.html#skill-dance-with-life"},{"name":"Elmental Missile","tree":"element","path":"Main Path","tier":1,"ep":0,"effect":"Collecting a mass of your [Primary Element], you hurl it forward towards a foe attempting an Essence roll against their AP. Upon a normal success do 1d6 damage. Crit successes add +1 [Elemental Effect] to the afflicted person being targeted.","cast":"Instant","lasts":"1 Round","range":"30 feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-temper"},{"name":"Super Lob","tree":"element","path":"Main Path","tier":1,"ep":4,"effect":"Summoning forth a large amount of your [Primary Element] you hurl it to a location within range. Everything within a 15 foot range of the center must do a successful d15 Shell roll to avoid taking damage. Failures result in them taking 1d10 damage and +1 [Elemental Effect]. Crits add an addition +1 [Elemental Effect]","cast":"1 Round","lasts":"1 Round","range":"60 Feet","cooldown":"3 rounds","url":"skills-skills-and-more-skills.html#skill-super-lob"},{"name":"Focused Assault","tree":"element","path":"Main Path","tier":1,"ep":5,"effect":"When a specific foe has caught your ire, you know just how to handle them. You form a precise amount of your [Primary Element] before directly at one chosen target within range. Upon a successful Essence roll against their AP you deal 2d8 Damage and apply +2 [Elemental Effect]","cast":"1 Round","lasts":"1 Round","range":"60 Feet","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-focused-assault"},{"name":"Primary Absorption","tree":"element","path":"Main Path","tier":1,"ep":3,"effect":"When a foe attempts to attack you with an element matching an element unlocked within your roster; you may choose to simply absorb a portion of the element itself, cutting the damage in half and lowering an [Elemental Effects] by one round.","cast":"Reaction","lasts":"1 Round","range":"Self","cooldown":"2 Rounds","url":"skills-skills-and-more-skills.html#skill-primary-absorption"},{"name":"Roaring Release","tree":"element","path":"Main Path","tier":1,"ep":8,"effect":"Considering your options carefully you bring forth Three charges of your [Primary Element]. These charges can be divided as you choose among 1-3 targets. Upon a successful Essence roll against the chosen target’s AP do 1d6 Damage and apply +1 [Elemental Effects]. Criticals do double damage and add an additional +1 [Elemental Effect] against them as well.","cast":"1 Round","lasts":"1 Round","range":"30 Feet","cooldown":"4 Rounds","url":"skills-skills-and-more-skills.html#skill-roaring-release"},{"name":"Logic and Order","tree":"infuse","path":"Main Path","tier":1,"ep":0,"effect":"Assert order on the field, mitigate chaos by turning it against itself doing 1d4 damage on a successful essence roll vs the target’s AP.","cast":"Instant","lasts":"1 Round","range":"30 Feet","cooldown":"N/A","url":"skills-skills-and-more-skills.html#t1-order_1"}]</script>
 <script id="rules" type="application/json">
 {
   "_doc": "Character creation rules, condensed from the World of Dissonance worldbuilding doc. Shared by web/creator.html (character maker) and the mod (race/variant tooltips). 'bonus' is the racial +3 spread; 'any' points go wherever the player picks. Formulas live in creator.html (stats()) and match the doc: HP 6 +4/Essence after the first, EP 4 +2/Essence after the first, AP 10 +1 per 2 Shell, MP 30 ft +5 per 4 Shell, Initiative +1 per 2 Core.",
@@ -1557,6 +1591,507 @@
   ]
 }
 </script>
+<script id="looks" type="application/json">
+{
+  "_doc": "How characters look: per race (or race/variant) skin and accent palettes, three feature styles of box parts, outfits, weapons and cloth dyes. Shared by the mod (LookClient) and the web character maker. A part is [bone, pivot x,y,z, box x,y,z, size w,h,d, rotation x,y,z degrees, colour role]; model pixels, y down, the face towards -z. Bones: head, body, rightArm, leftArm, rightLeg, leftLeg.",
+  "dyes": ["#8A2B22", "#2E4A7A", "#3A5A30", "#5A3A6A", "#7A5A2A", "#2A2A2A", "#D8D0C0", "#3A6A6A"],
+  "outfits": [
+    {
+      "id": "wraps",
+      "name": "Wanderer's wraps",
+      "ap": 0,
+      "text": "Cloth wraps and a sash. Light and quiet.",
+      "parts": []
+    },
+    {
+      "id": "travel",
+      "name": "Traveler's garb",
+      "ap": 0,
+      "text": "Tunic, trousers, boots and a long cloak.",
+      "parts": [
+        ["body", 0, 0, 0, -4.5, 0, 2.1, 9, 14, 0.8, 0, 0, 0, "dye"]
+      ]
+    },
+    {
+      "id": "robes",
+      "name": "Arcanist's robes",
+      "ap": 0,
+      "text": "Long robes for those who work with Essence.",
+      "parts": [
+        ["body", 0, 0, 0, -4.4, 9, -2.4, 8.8, 8, 4.8, 0, 0, 0, "dye"]
+      ]
+    },
+    {
+      "id": "leather",
+      "name": "Leather armor",
+      "ap": 1,
+      "text": "[Armor] +1 AP. Boiled leather over a padded tunic.",
+      "parts": [
+        ["rightArm", 0, 0, 0, -3.4, -2.4, -2.4, 4.8, 2.5, 4.8, 0, 0, 0, "leather"],
+        ["leftArm", 0, 0, 0, -1.4, -2.4, -2.4, 4.8, 2.5, 4.8, 0, 0, 0, "leather"]
+      ]
+    },
+    {
+      "id": "chain",
+      "name": "Chain coat",
+      "ap": 2,
+      "text": "[Armor] +2 AP. A soldier's mail over a gambeson.",
+      "parts": [
+        ["rightArm", 0, 0, 0, -3.5, -2.5, -2.5, 5, 2.2, 5, 0, 0, 0, "metal"],
+        ["leftArm", 0, 0, 0, -1.5, -2.5, -2.5, 5, 2.2, 5, 0, 0, 0, "metal"]
+      ]
+    },
+    {
+      "id": "plate",
+      "name": "Plate harness",
+      "ap": 3,
+      "text": "[Armor] +3 AP. Heavy plate; loud on the stairs.",
+      "parts": [
+        ["rightArm", 0, 0, 0, -3.9, -2.9, -2.9, 5.8, 3.4, 5.8, 0, 0, 0, "metal"],
+        ["leftArm", 0, 0, 0, -1.9, -2.9, -2.9, 5.8, 3.4, 5.8, 0, 0, 0, "metal"],
+        ["body", 0, 0, 0, -4.5, -0.5, -2.5, 9, 2, 5, 0, 0, 0, "metal"]
+      ]
+    }
+  ],
+  "weapons": [
+    {
+      "id": "none",
+      "name": "Unarmed",
+      "item": null,
+      "dmg": "1d4",
+      "feet": 5
+    },
+    {
+      "id": "dagger",
+      "name": "Dagger",
+      "item": "minecraft:iron_sword",
+      "dmg": "1d4",
+      "feet": 5
+    },
+    {
+      "id": "longsword",
+      "name": "Longsword",
+      "item": "minecraft:iron_sword",
+      "dmg": "1d8",
+      "feet": 5
+    },
+    {
+      "id": "greataxe",
+      "name": "Greataxe",
+      "item": "minecraft:iron_axe",
+      "dmg": "1d12",
+      "feet": 5
+    },
+    {
+      "id": "spear",
+      "name": "Spear",
+      "item": "minecraft:trident",
+      "dmg": "1d6",
+      "feet": 10
+    },
+    {
+      "id": "staff",
+      "name": "Staff",
+      "item": "minecraft:stick",
+      "dmg": "1d6",
+      "feet": 5
+    },
+    {
+      "id": "shortbow",
+      "name": "Shortbow",
+      "item": "minecraft:bow",
+      "dmg": "1d6",
+      "feet": 60
+    },
+    {
+      "id": "crossbow",
+      "name": "Crossbow",
+      "item": "minecraft:crossbow",
+      "dmg": "1d8",
+      "feet": 80
+    }
+  ],
+  "races": {
+    "zera_yara/yael": {
+      "skins": ["#5E8A3A", "#7A9A44", "#4A6B3A", "#8C9A5A", "#6B7F4A"],
+      "accents": ["#E07AA0", "#F2C14E", "#E8E4D0", "#B05AD0", "#E8703A", "#7AC0E0"],
+      "accentName": "Bloom",
+      "styles": ["Bloom crown", "Branch antlers", "Vine mane"],
+      "common": [
+        ["body", 0, 11, 2, -1.5, -1.5, 0, 3, 3, 6, -40, 0, 0, "skin"],
+        ["body", 0, 11, 2, -1, -1, 5.5, 2, 2, 4, -40, 0, 0, "dark"],
+        ["rightArm", 0, 0, 0, -3.4, -2.6, -2.4, 4.8, 1.2, 4.8, 0, 0, 0, "dark"],
+        ["leftArm", 0, 0, 0, -1.4, -2.6, -2.4, 4.8, 1.2, 4.8, 0, 0, 0, "dark"]
+      ],
+      "parts": [
+        [
+          ["head", 0, -8, -3, -2, -0.5, -3, 4, 1, 3, -35, 0, 0, "accent"],
+          ["head", 0, -8, 3, -2, -0.5, 0, 4, 1, 3, 35, 0, 0, "accent"],
+          ["head", -3, -8, 0, -3, -0.5, -2, 3, 1, 4, 0, 0, 35, "accent"],
+          ["head", 3, -8, 0, 0, -0.5, -2, 3, 1, 4, 0, 0, -35, "accent"],
+          ["head", 0, 0, 0, -1, -9.5, -1, 2, 1.5, 2, 0, 0, 0, "glow"]
+        ],
+        [
+          ["head", -2.5, -8, 0, -0.5, -6, -0.5, 1, 6, 1, 0, 0, -20, "wood"],
+          ["head", 2.5, -8, 0, -0.5, -6, -0.5, 1, 6, 1, 0, 0, 20, "wood"],
+          ["head", -2.5, -8, 0, -0.5, -4, -0.5, 1, 4, 1, -35, 0, -50, "wood"],
+          ["head", 2.5, -8, 0, -0.5, -4, -0.5, 1, 4, 1, -35, 0, 50, "wood"],
+          ["head", -2.5, -8, 0, -1, -7, -1, 2, 1.5, 2, 0, 0, -20, "accent"],
+          ["head", 2.5, -8, 0, -1, -7, -1, 2, 1.5, 2, 0, 0, 20, "accent"]
+        ],
+        [
+          ["head", 0, 0, 0, -4.4, -8.4, -1, 8.8, 1, 5.4, 0, 0, 0, "dark"],
+          ["head", 0, 0, 0, -3.5, -8, 4.1, 7, 9, 1, 0, 0, 0, "dark"],
+          ["body", 0, 0, 2.1, -2, 0, 0, 4, 9, 1, 8, 0, 0, "dark"],
+          ["head", 0, 0, 0, 2.5, -9.2, 1, 1.5, 1.5, 1.5, 0, 0, 0, "accent"],
+          ["head", 0, 0, 0, -3.5, -9.2, -1, 1.5, 1.5, 1.5, 0, 0, 0, "accent"]
+        ]
+      ],
+      "flags": []
+    },
+    "zera_yara/mara": {
+      "skins": ["#3F6E6A", "#4B5E7A", "#5E4A6E", "#2F5A55", "#6E7A5A"],
+      "accents": ["#C9A05A", "#D96A4A", "#E8E0C8", "#9AD06A", "#B04A6A", "#6AB0D0"],
+      "accentName": "Fungus",
+      "styles": ["Mushroom cap", "Coral horns", "Dorsal fin"],
+      "common": [
+        ["head", -4, -4, 1, -0.5, -2, 0, 1, 4, 3, 0, -30, 0, "dark"],
+        ["head", 4, -4, 1, -0.5, -2, 0, 1, 4, 3, 0, 30, 0, "dark"]
+      ],
+      "parts": [
+        [
+          ["head", 0, 0, 0, -5.5, -10, -5.5, 11, 2.5, 11, 0, 0, 0, "accent"],
+          ["head", 0, 0, 0, -3, -10.3, -3, 2, 0.4, 2, 0, 0, 0, "bone"],
+          ["head", 0, 0, 0, 1.5, -10.3, 0.5, 2, 0.4, 2, 0, 0, 0, "bone"],
+          ["head", 0, 0, 0, -1, -10.3, 2.5, 1.5, 0.4, 1.5, 0, 0, 0, "bone"]
+        ],
+        [
+          ["head", -2.5, -8, -1, -0.5, -5, -0.5, 1, 5, 1, -10, 0, -15, "accent"],
+          ["head", 2.5, -8, -1, -0.5, -5, -0.5, 1, 5, 1, -10, 0, 15, "accent"],
+          ["head", -2.5, -10, -1, -0.5, -3, -0.5, 1, 3, 1, -10, 0, -55, "accent"],
+          ["head", 2.5, -10, -1, -0.5, -3, -0.5, 1, 3, 1, -10, 0, 55, "accent"]
+        ],
+        [
+          ["head", 0, 0, 0, -0.5, -11, -2, 1, 3, 7, 0, 0, 0, "accent"],
+          ["body", 0, 0, 0, -0.5, 0, 2, 1, 10, 2.5, 0, 0, 0, "accent"]
+        ]
+      ],
+      "flags": []
+    },
+    "zera_yara/aek": {
+      "skins": ["#9AB7A8", "#B8B0C8", "#A8C0B8", "#8A9AA8", "#C8C0B0"],
+      "accents": ["#6FF0E0", "#F0D06F", "#E06FF0", "#6FA0F0", "#F07A6F", "#A0F06F"],
+      "accentName": "Essence glow",
+      "styles": ["Prism crown", "Shoulder shards", "Heart core"],
+      "common": [
+        ["body", 0, 2, 2, -1, -3, -0.5, 2, 3, 2, -35, 0, 0, "glow"],
+        ["body", 0, 5, 2, -1, -3, -0.5, 2, 3, 2, -35, 0, 0, "glow"],
+        ["body", 0, 8, 2, -1, -3, -0.5, 2, 3, 2, -35, 0, 0, "glow"]
+      ],
+      "parts": [
+        [
+          ["head", 0, -8, 0, -1, -4, -1, 2, 4, 2, 0, 45, 0, "glow"],
+          ["head", -2.5, -8, -1.5, -0.5, -2.5, -0.5, 1, 2.5, 1, 0, 0, -25, "glow"],
+          ["head", 2.5, -8, -1.5, -0.5, -2.5, -0.5, 1, 2.5, 1, 0, 0, 25, "glow"]
+        ],
+        [
+          ["rightArm", -1, -2, 0, -1, -4, -1, 2, 4, 2, 0, 0, -25, "glow"],
+          ["leftArm", 1, -2, 0, -1, -4, -1, 2, 4, 2, 0, 0, 25, "glow"],
+          ["rightArm", -2, -2, 1.5, -0.5, -3, -0.5, 1, 3, 1, 20, 0, -45, "glow"],
+          ["leftArm", 2, -2, 1.5, -0.5, -3, -0.5, 1, 3, 1, 20, 0, 45, "glow"]
+        ],
+        [
+          ["body", 0, 0, 0, -2, 2.5, -2.4, 4, 4, 0.5, 0, 0, 0, "metal"],
+          ["body", 0, 0, 0, -1.5, 3, -2.7, 3, 3, 0.5, 0, 0, 0, "glow"]
+        ]
+      ],
+      "flags": ["glow"]
+    },
+    "askerahn": {
+      "skins": ["#3C3550", "#2E4A3A", "#5A4630", "#4A2E3A", "#30404E"],
+      "accents": ["#8FD16A", "#E0B040", "#6AC0E0", "#D0604A", "#C080E0", "#E0E0D0"],
+      "accentName": "Chitin sheen",
+      "styles": ["Mandibles", "Gossamer wings", "Carapace"],
+      "common": [
+        ["head", -1.5, -8, -3, -0.5, -6, -0.5, 1, 6, 1, -25, 0, -15, "dark"],
+        ["head", 1.5, -8, -3, -0.5, -6, -0.5, 1, 6, 1, -25, 0, 15, "dark"]
+      ],
+      "parts": [
+        [
+          ["head", -2, -1, -4, -0.5, -0.5, -3, 1, 1, 3, 0, 25, 0, "bone"],
+          ["head", 2, -1, -4, -0.5, -0.5, -3, 1, 1, 3, 0, -25, 0, "bone"]
+        ],
+        [
+          ["body", -1, 1, 2, -8, 0, 0, 8, 11, 0.3, 0, -25, 0, "ghost"],
+          ["body", 1, 1, 2, 0, 0, 0, 8, 11, 0.3, 0, 25, 0, "ghost"]
+        ],
+        [
+          ["rightArm", 0, 0, 0, -3.6, -2.8, -2.6, 5.2, 3.2, 5.2, 0, 0, 0, "accent"],
+          ["leftArm", 0, 0, 0, -1.6, -2.8, -2.6, 5.2, 3.2, 5.2, 0, 0, 0, "accent"],
+          ["body", 0, 0, 0, -4.4, 0, 1.9, 8.8, 9, 1.4, 0, 0, 0, "accent"]
+        ]
+      ],
+      "flags": []
+    },
+    "daemon/terranica": {
+      "skins": ["#7D7A70", "#8A7A62", "#5E6266", "#9A8E7A", "#6A5E52"],
+      "accents": ["#6A9A3A", "#8AB050", "#C0A060", "#5A8A6A", "#A0C070", "#D0D0C0"],
+      "accentName": "Moss",
+      "styles": ["Gargoyle", "Boulder", "Overgrown"],
+      "common": [
+        ["rightArm", 0, 0, 0, -3.3, -2.5, -2.3, 4.6, 1.2, 4.6, 0, 0, 0, "accent"],
+        ["leftArm", 0, 0, 0, -1.2999999999999998, -2.5, -2.3, 4.6, 1.2, 4.6, 0, 0, 0, "accent"]
+      ],
+      "parts": [
+        [
+          ["head", -3, -7, -1, -0.75, -4, -0.75, 1.5, 4, 1.5, -30, 0, -20, "dark"],
+          ["head", 3, -7, -1, -0.75, -4, -0.75, 1.5, 4, 1.5, -30, 0, 20, "dark"],
+          ["body", -1, 1, 2, -7, 0, 0, 7, 7, 0.8, 0, -30, 0, "dark"],
+          ["body", 1, 1, 2, 0, 0, 0, 7, 7, 0.8, 0, 30, 0, "dark"]
+        ],
+        [
+          ["rightArm", 0, 0, 0, -4, -4, -3, 6, 4, 6, 0, 0, 0, "dark"],
+          ["leftArm", 0, 0, 0, -2, -4, -3, 6, 4, 6, 0, 0, 0, "dark"],
+          ["head", 0, 0, 0, -4.5, -9, -4.5, 9, 1.5, 9, 0, 0, 0, "dark"]
+        ],
+        [
+          ["head", 0, 0, 0, -2.5, -9, -2, 2, 1, 2, 0, 0, 0, "accent"],
+          ["head", 0, 0, 0, 1, -9, 0, 1.5, 1, 1.5, 0, 0, 0, "accent"],
+          ["body", 0, 0, 0, -4.3, 6, -2.3, 8.6, 1, 4.6, 0, 0, 0, "accent"],
+          ["leftArm", 0, 0, 0, -1.3, 3, -2.3, 4.6, 1, 4.6, 0, 0, 0, "accent"]
+        ]
+      ],
+      "flags": []
+    },
+    "daemon/mechanica": {
+      "skins": ["#8C8F96", "#A07A4A", "#6A6E78", "#B0A890", "#5A4A3A"],
+      "accents": ["#6FD0F0", "#F0A040", "#F06060", "#80F080", "#F0F0A0", "#C080F0"],
+      "accentName": "Core light",
+      "styles": ["Antenna", "Boiler", "Gearworks"],
+      "common": [
+        ["head", 0, 0, 0, -3.5, -5.5, -4.3, 7, 1.5, 0.5, 0, 0, 0, "glow"]
+      ],
+      "parts": [
+        [
+          ["head", 2, -8, 1, -0.5, -5, -0.5, 1, 5, 1, 0, 0, 10, "metal"],
+          ["head", 2, -8, 1, -1, -6.5, -1, 2, 1.5, 2, 0, 0, 10, "glow"]
+        ],
+        [
+          ["body", 0, 0, 0, -3, 1, 2, 6, 8, 2.5, 0, 0, 0, "dark"],
+          ["body", 0, 0, 0, -2, 2.5, 4.4, 4, 0.8, 0.3, 0, 0, 0, "glow"],
+          ["body", 0, 0, 0, -2, 4.5, 4.4, 4, 0.8, 0.3, 0, 0, 0, "glow"],
+          ["body", 0, 0, 0, -2, 6.5, 4.4, 4, 0.8, 0.3, 0, 0, 0, "glow"],
+          ["body", 0, 0, 0, 1.5, -3, 3, 1, 4, 1, 0, 0, 0, "metal"]
+        ],
+        [
+          ["rightArm", -3.2, 1, 0, -0.4, -2.5, -2.5, 0.8, 5, 5, 45, 0, 0, "accent"],
+          ["leftArm", 3.2, 1, 0, -0.4, -2.5, -2.5, 0.8, 5, 5, 45, 0, 0, "accent"]
+        ]
+      ],
+      "flags": ["glow"]
+    },
+    "daemon/organinca": {
+      "skins": ["#B98C82", "#9AA08A", "#C8B0A0", "#8A7A80", "#A08070"],
+      "accents": ["#9E2B2B", "#6A8A4A", "#D0C0A0", "#4A6AA0", "#7A4A8A", "#E0A060"],
+      "accentName": "Ichor",
+      "styles": ["Stitched", "Augmented arm", "Hunched"],
+      "common": [
+        ["head", 0, 0, 0, -5, -2, -0.5, 1.5, 1, 1, 0, 0, 0, "metal"],
+        ["head", 0, 0, 0, 3.5, -2, -0.5, 1.5, 1, 1, 0, 0, 0, "metal"]
+      ],
+      "parts": [
+        [],
+        [
+          ["rightArm", 0, 0, 0, -3.5, 0, -2.5, 5, 6, 5, 0, 0, 0, "metal"],
+          ["rightArm", 0, 0, 0, -3.5, 7, -2.5, 5, 1, 5, 0, 0, 0, "metal"],
+          ["rightArm", 0, 0, 0, -3.6, 2, -1, 0.4, 2, 2, 0, 0, 0, "glow"]
+        ],
+        [
+          ["body", 0, 0, 0, -3, 0, 2, 6, 5, 2.5, 0, 0, 0, "skin"],
+          ["body", 0, 0, 0, -2, 0.5, 4.4, 4, 3, 0.5, 0, 0, 0, "dark"]
+        ]
+      ],
+      "flags": ["stitch"]
+    },
+    "daemon/ichorinca": {
+      "skins": ["#6B5FA8", "#4A8AA0", "#8A6AB0", "#5A9A8A", "#A06A8A"],
+      "accents": ["#B8A0FF", "#80F0E0", "#FFD080", "#FF90C0", "#A0FFA0", "#F0F0FF"],
+      "accentName": "Spirit light",
+      "styles": ["Halo", "Wisp tail", "Bone mask"],
+      "common": [
+        ["head", 0, 0, 0, -4, -10.5, -4, 8, 0.5, 1, 0, 0, 0, "glow"],
+        ["head", 0, 0, 0, -4, -10.5, 3, 8, 0.5, 1, 0, 0, 0, "glow"],
+        ["head", 0, 0, 0, -4, -10.5, -3, 1, 0.5, 6, 0, 0, 0, "glow"],
+        ["head", 0, 0, 0, 3, -10.5, -3, 1, 0.5, 6, 0, 0, 0, "glow"]
+      ],
+      "parts": [
+        [],
+        [
+          ["body", 0, 10, 1.5, -1.5, 0, 0, 3, 7, 3, 30, 0, 0, "ghost"],
+          ["body", 0, 10, 1.5, -1, 6, 0.5, 2, 5, 2, 30, 0, 0, "ghost"]
+        ],
+        [
+          ["head", 0, 0, 0, -4.2, -7.5, -4.6, 8.4, 6.5, 0.5, 0, 0, 0, "bone"],
+          ["head", 0, 0, 0, -3, -5, -4.8, 2, 1, 0.3, 0, 0, 0, "glow"],
+          ["head", 0, 0, 0, 1, -5, -4.8, 2, 1, 0.3, 0, 0, 0, "glow"]
+        ]
+      ],
+      "flags": ["ghost", "glow"]
+    },
+    "fraeyling": {
+      "skins": ["#A8784C", "#6E5A48", "#C8A878", "#4A403A", "#D8D0C0", "#9A5A3A"],
+      "accents": ["#E8A0A0", "#2A2420", "#F0E8D8", "#C88A4A", "#8A9A6A", "#D06A4A"],
+      "accentName": "Markings",
+      "styles": ["Feline", "Lupine", "Cervine"],
+      "common": [],
+      "parts": [
+        [
+          ["head", -3, -8, -1, -1, -3, -0.5, 3, 3, 1, 0, 0, -10, "skin"],
+          ["head", 3, -8, -1, -2, -3, -0.5, 3, 3, 1, 0, 0, 10, "skin"],
+          ["body", 0, 11, 2, -1, -1, 0, 2, 2, 9, -50, 0, 0, "skin"],
+          ["body", 0, 11, 2, -1.1, -1.1, 7, 2.2, 2.2, 2.2, -50, 0, 0, "accent"]
+        ],
+        [
+          ["head", -2.5, -8, -0.5, -1.5, -4, -0.5, 3, 4, 1, 0, 0, -10, "skin"],
+          ["head", 2.5, -8, -0.5, -1.5, -4, -0.5, 3, 4, 1, 0, 0, 10, "skin"],
+          ["head", 0, 0, 0, -2, -4, -6, 4, 3, 2, 0, 0, 0, "skin"],
+          ["head", 0, 0, 0, -1, -4.3, -6.3, 2, 1, 0.5, 0, 0, 0, "dark"],
+          ["body", 0, 10.5, 2, -1.5, -1.5, 0, 3, 3, 8, -40, 0, 0, "skin"]
+        ],
+        [
+          ["head", -4, -6, 0, -4, -1, -0.5, 4, 2, 1, 0, 0, 20, "skin"],
+          ["head", 4, -6, 0, 0, -1, -0.5, 4, 2, 1, 0, 0, -20, "skin"],
+          ["head", -2, -8, 0, -0.5, -4, -0.5, 1, 4, 1, 0, 0, -20, "bone"],
+          ["head", 2, -8, 0, -0.5, -4, -0.5, 1, 4, 1, 0, 0, 20, "bone"],
+          ["body", 0, 0, 0, -1, 10, 2, 2, 2, 1.5, 0, 0, 0, "accent"]
+        ]
+      ],
+      "flags": []
+    },
+    "peraxian": {
+      "skins": ["#8A6F5A", "#6A6A72", "#B0A090", "#4A4A52", "#9A7A4A"],
+      "accents": ["#4F7FB8", "#C04A3A", "#E0C050", "#3A8A6A", "#E8E0D0", "#8A4AA0"],
+      "accentName": "Plumage",
+      "styles": ["Feather crest", "Folded wings", "Tinker goggles"],
+      "common": [
+        ["head", 0, 0, 0, -1, -5, -6, 2, 2, 2, 0, 0, 0, "bone"],
+        ["head", 0, 0, 0, -0.5, -3.5, -5.5, 1, 1, 1.5, 0, 0, 0, "bone"]
+      ],
+      "parts": [
+        [
+          ["head", 0, -8, -1, -0.5, -5, 0, 1, 5, 3, -25, 0, 0, "accent"],
+          ["head", 0, -8, 1, -0.5, -4, 0, 1, 4, 3, -45, 0, 0, "accent"]
+        ],
+        [
+          ["body", -3.5, 0.5, 2.2, -1.25, 0, 0, 2.5, 12, 1.5, 12, 0, -8, "accent"],
+          ["body", 3.5, 0.5, 2.2, -1.25, 0, 0, 2.5, 12, 1.5, 12, 0, 8, "accent"]
+        ],
+        [
+          ["head", 0, 0, 0, -4.3, -6.2, -4.3, 8.6, 1, 8.6, 0, 0, 0, "leather"],
+          ["head", 0, 0, 0, -3.3, -6.7, -4.7, 2.6, 2, 0.5, 0, 0, 0, "metal"],
+          ["head", 0, 0, 0, 0.7, -6.7, -4.7, 2.6, 2, 0.5, 0, 0, 0, "metal"],
+          ["head", 0, 0, 0, -2.8, -6.2, -4.9, 1.6, 1, 0.3, 0, 0, 0, "glow"],
+          ["head", 0, 0, 0, 1.2, -6.2, -4.9, 1.6, 1, 0.3, 0, 0, 0, "glow"]
+        ]
+      ],
+      "flags": []
+    },
+    "sikure": {
+      "skins": ["#4E7A55", "#8A3A2E", "#2E2E38", "#6A8A3A", "#A08A4A", "#3A5A7A"],
+      "accents": ["#D9B64A", "#E0E0D0", "#C04A3A", "#6AC0A0", "#9A6AD0", "#E07A30"],
+      "accentName": "Frill & belly",
+      "styles": ["Frills", "Horns", "Dragon wings"],
+      "common": [
+        ["body", 0, 11, 2, -2, -2, 0, 4, 4, 6, -40, 0, 0, "skin"],
+        ["body", 0, 11, 2, -1.25, -1.25, 5.5, 2.5, 2.5, 6, -40, 0, 0, "dark"]
+      ],
+      "parts": [
+        [
+          ["head", -4, -5, 1, -0.5, -3, 0, 1, 6, 4, 0, -30, 0, "accent"],
+          ["head", 4, -5, 1, -0.5, -3, 0, 1, 6, 4, 0, 30, 0, "accent"]
+        ],
+        [
+          ["head", -2.5, -7.5, 1, -0.75, -0.75, 0, 1.5, 1.5, 5, 30, 0, 0, "bone"],
+          ["head", 2.5, -7.5, 1, -0.75, -0.75, 0, 1.5, 1.5, 5, 30, 0, 0, "bone"]
+        ],
+        [
+          ["body", -1, 1, 2, -10, -2, 0, 10, 10, 0.5, 0, -25, 0, "dark"],
+          ["body", 1, 1, 2, 0, -2, 0, 10, 10, 0.5, 0, 25, 0, "dark"],
+          ["body", -1, 1, 2, -10, -2.5, -0.3, 10, 1, 1.1, 0, -25, 0, "accent"],
+          ["body", 1, 1, 2, 0, -2.5, -0.3, 10, 1, 1.1, 0, 25, 0, "accent"]
+        ]
+      ],
+      "flags": []
+    },
+    "mudsung": {
+      "skins": ["#F0C8A8", "#D8A884", "#B07A58", "#8A5A3C", "#5A3A28", "#E0B898"],
+      "accents": ["#2A2018", "#5A3A20", "#A06A30", "#D8B068", "#8A2A1A", "#C8C8C0"],
+      "accentName": "Hair",
+      "styles": ["Short hair", "Long hair", "Shaved"],
+      "common": [],
+      "parts": [
+        [],
+        [
+          ["head", 0, 0, 0, -4.2, -8.2, 2.2, 8.4, 11, 2.2, 0, 0, 0, "accent"]
+        ],
+        []
+      ],
+      "flags": ["hair"]
+    },
+    "amalgam": {
+      "skins": ["#B8E0FF", "#FFD8A0", "#D0B0FF", "#A0FFD8", "#FFFFFF"],
+      "accents": ["#6FF0E0", "#F0D06F", "#E06FF0", "#6FA0F0", "#FFFFFF", "#F07A6F"],
+      "accentName": "Energy",
+      "styles": ["Motes", "Borrowed face", "Fault lines"],
+      "common": [],
+      "parts": [
+        [
+          ["body", 0, 0, 0, -8, 0, -1, 1.5, 1.5, 1.5, 0, 0, 0, "glow"],
+          ["body", 0, 0, 0, 6.5, 3, 1, 1.5, 1.5, 1.5, 0, 0, 0, "glow"],
+          ["head", 0, 0, 0, -0.75, -12, -0.75, 1.5, 1.5, 1.5, 0, 0, 0, "glow"],
+          ["body", 0, 0, 0, -7, 8, 2, 1, 1, 1, 0, 0, 0, "glow"]
+        ],
+        [
+          ["head", 0, 0, 0, -4.2, -7.5, -4.6, 8.4, 7, 0.5, 0, 0, 0, "bone"]
+        ],
+        [
+          ["body", 0, 0, 0, -0.5, 1, -2.3, 1, 10, 0.3, 0, 0, 0, "glow"],
+          ["body", 0, 0, 0, -3, 5, -2.3, 6, 0.6, 0.3, 0, 0, 0, "glow"],
+          ["head", 0, 0, 0, -0.5, -7, -4.3, 1, 5, 0.3, 0, 0, 0, "glow"]
+        ]
+      ],
+      "flags": ["ghost", "glow"]
+    },
+    "dredge": {
+      "skins": ["#5D6B4A", "#6A5A5A", "#4A5A5A", "#7A7A5A", "#3A4A3A"],
+      "accents": ["#9E2B2B", "#D0C040", "#6AD0A0", "#E0E0C0", "#4A2A2A", "#C06AD0"],
+      "accentName": "Eyes & blood",
+      "styles": ["Bulging eyes", "Tendrils", "Husk"],
+      "common": [],
+      "parts": [
+        [
+          ["head", 0, 0, 0, -4, -9, -3, 3, 2, 3, 0, 0, 0, "skin"],
+          ["head", 0, 0, 0, 1, -9, -3, 3, 2, 3, 0, 0, 0, "skin"],
+          ["head", 0, 0, 0, -3, -8.6, -3.2, 1, 1, 0.3, 0, 0, 0, "accent"],
+          ["head", 0, 0, 0, 2, -8.6, -3.2, 1, 1, 0.3, 0, 0, 0, "accent"]
+        ],
+        [
+          ["head", -2, 0, -3, -0.5, 0, -0.5, 1, 5, 1, 10, 0, 10, "dark"],
+          ["head", 0, 0, -3.5, -0.5, 0, -0.5, 1, 6, 1, 15, 0, 0, "dark"],
+          ["head", 2, 0, -3, -0.5, 0, -0.5, 1, 5, 1, 10, 0, -10, "dark"]
+        ],
+        [
+          ["body", 0, 0, 0, -3, 2, -2.3, 6, 0.8, 0.4, 0, 0, 0, "bone"],
+          ["body", 0, 0, 0, -3, 4, -2.3, 6, 0.8, 0.4, 0, 0, 0, "bone"],
+          ["body", 0, 0, 0, -3, 6, -2.3, 6, 0.8, 0.4, 0, 0, 0, "bone"],
+          ["body", 0, 0, 0, -0.5, 1, -2.4, 1, 7, 0.4, 0, 0, 0, "bone"]
+        ]
+      ],
+      "flags": []
+    }
+  }
+}
+</script>
 <script id="glossary" type="application/json">
 {
   "_doc": "Hover-tooltip text, keyed by lowercase term. Condensed from the World of Dissonance worldbuilding doc unless marked (placeholder). layout.json 'tip' lists which keys a panel or text shows; {keys} are filled from character.json first, so a value like the species can look itself up.",
@@ -1611,9 +2146,10 @@
 </script>
 <script src="vendor/pdf-lib-1.17.1.min.js"></script>
 <script src="vendor/fontkit-1.1.1.umd.min.js"></script>
+<script src="vendor/three-r128.min.js"></script>
 <script>
 const json = id => JSON.parse(document.getElementById(id).textContent);
-const L = json('layout'), EXAMPLE = json('character'), R = json('rules'), G = json('glossary'), IMAGES = json('images'), FONTS = json('fonts');
+const L = json('layout'), EXAMPLE = json('character'), R = json('rules'), G = json('glossary'), IMAGES = json('images'), FONTS = json('fonts'), LOOKS = json('looks');
 const ASPECTS = ['core', 'shell', 'essence'];
 const ASPECT_NAME = { core: 'Core', shell: 'Shell', essence: 'Essence' };
 document.documentElement.style.setProperty('--swirls', `url(${IMAGES[L.background]})`);
@@ -1626,6 +2162,7 @@ const blank = () => ({
   sigTitle: '', ability: '', animus: '', affix: '', afflatus: '',
   trees: [], skills: ['', '', '', '', ''],
   items: [], clothes: '', armor: '', gear: '', bonuses: '', backstory: '',
+  look: { skin: '', accent: '', style: 0, outfit: 'wraps', dye: '', weapon: 'none' },
 });
 /** Tooltip key the game uses for an inventory line (SheetLayout.tipKey): lowercase, single spaces. */
 const itemKey = name => name.trim().replace(/\s+/g, ' ').toLowerCase();
@@ -1641,6 +2178,7 @@ const example = () => Object.assign(blank(), {
 const upgrade = s => {
   const out = Object.assign(blank(), s);
   if (!Array.isArray(out.items)) out.items = [];
+  out.look = Object.assign(blank().look, s.look || {});
   if (typeof s.inventory === 'string' && !out.items.length) out.items = s.inventory.split('\n').map(x => x.trim()).filter(Boolean).map(name => ({ name, desc: '' }));
   delete out.inventory;
   return out;
@@ -1652,6 +2190,29 @@ const MAX_ITEMS = 30;
 const DRAFT = 'wod-creator-draft';
 let S = (() => { try { const d = JSON.parse(localStorage.getItem(DRAFT)); if (d && d.v === 1) return upgrade(d.s); } catch (e) {} return example(); })();
 let stepIndex = 0, sheetPage = 0;
+// written Arcana skills from the wiki: a snapshot filled in at publish time, refreshed from the live wiki when hosted beside it
+let WSKILLS = (() => { try { return JSON.parse(document.getElementById('wikiskills').textContent) || []; } catch { return []; } })();
+let allSkills = false;
+if (/github\.io$/.test(location.hostname)) fetch('/wiki/skills.json').then(r => (r.ok ? r.json() : null)).then(d => {
+  if (Array.isArray(d) && d.length) { WSKILLS = d; if (STEPS[stepIndex]?.id === 'arcana') renderStep(); }
+}).catch(() => {});
+const sameSkill = (a, b) => a.trim().toLowerCase() === b.trim().toLowerCase();
+function skillPicker() {
+  if (!WSKILLS.length) return '';
+  const trees = S.trees.map(id => R.trees.find(t => t.id === id)).filter(Boolean);
+  const head = `<div class="pickbar"><h2>Pick skills</h2><button type="button" class="card slim" id="allskills" aria-pressed="${allSkills}">${allSkills ? 'Show first tier only' : 'Show every written skill'}</button></div>`;
+  if (!trees.length) return head + '<p class="pool">Choose your trees above to see their skills here.</p>';
+  const lede = allSkills ? 'Every written skill in your trees. Check with your DM before taking one past the first tier.'
+    : 'The written skills on the first tier of your trees\' main paths. Click one to put it in the next empty slot; click it again to take it out.';
+  return head + `<p class="lede">${lede}</p><p class="pool" id="picknote" role="status"></p>` + trees.map(t => {
+    const list = WSKILLS.filter(k => k.tree === t.id && (allSkills || (k.tier === 1 && /^main path$/i.test(k.path))));
+    if (!list.length) return `<h3>${esc(t.name)}</h3><p class="pool">No ${allSkills ? '' : 'first-tier '}skills written for ${esc(t.name)} yet. If your DM gives you one, type it into a slot.</p>`;
+    return `<h3>${esc(t.name)}</h3><div class="picks" role="group" aria-label="${esc(t.name)} skills">${list.map(k => `<button type="button" class="card pick" role="checkbox" data-pick="${esc(k.name)}" aria-checked="${S.skills.some(x => sameSkill(x, k.name))}">
+      <span class="top"><span class="name">${esc(k.name)}</span>${k.ep != null ? `<span class="chip">EP ${k.ep}</span>` : ''}</span>
+      <span class="meta">${esc([allSkills ? `T${k.tier} ${k.path}` : '', k.cast, k.range].filter(Boolean).join(' · '))}</span>
+      <span class="about">${esc(k.effect)}</span></button>`).join('')}</div>`;
+  }).join('');
+}
 const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify({ v: 1, s: S })); } catch (e) {} };
 
 // ---------- rules ----------
@@ -1706,6 +2267,26 @@ function character() {
     c[a + '_mod'] = signed(st.mod(a));
     c[a + '_xp'] = '0';
   }
+  if (r) { // the look, and the kit it gives
+    const lk = look(), o = LOOKS.outfits.find(x => x.id === lk.outfit), w = LOOKS.weapons.find(x => x.id === lk.weapon);
+    Object.assign(c, { look_skin: lk.skin, look_accent: lk.accent, look_style: String(lk.style), look_outfit: lk.outfit, look_dye: lk.dye, look_weapon: lk.weapon });
+    const add = (name, body) => {
+      if (S.items.some(i => itemKey(i.name) === itemKey(name))) return;
+      c.inventory = (c.inventory ? c.inventory + '\n' : '') + '- ' + name;
+      c.item_details[itemKey(name)] = { title: name, body };
+    };
+    if (w && w.id !== 'none') { // the kit weapon is the one the game attacks with: named first in Gear, first among the items
+      add(w.name, `[Weapon] ${w.dmg}. Range ${w.feet} ft. (placeholder kit)`);
+      if (!c.gear.toLowerCase().includes(w.name.toLowerCase())) c.gear = c.gear ? `${w.name}, ${c.gear}` : w.name;
+      const k = itemKey(w.name), d = c.item_details[k];
+      if (d) { delete c.item_details[k]; c.item_details = { [k]: d, ...c.item_details }; }
+    }
+    if (o && o.ap > 0) { // worn armor counts toward AP when the Armor field names it
+      add(o.name, `${o.text} (placeholder kit)`);
+      if (!c.armor.toLowerCase().includes(o.name.toLowerCase())) c.armor = c.armor ? `${o.name}, ${c.armor}` : o.name;
+    }
+    if (o && o.ap === 0 && !c.clothes) c.clothes = o.name;
+  }
   c._creator = { ...S, isExample: undefined }; // lets the code be loaded back here for editing; the game ignores it
   return c;
 }
@@ -1724,6 +2305,136 @@ const field = (id, label, opts = {}) => {
 };
 const radioCards = (label, items) => `<div class="cards" role="radiogroup" aria-label="${esc(label)}">${items}</div>`;
 const def = k => G[k]?.body || '';
+
+// ---------- look (sheet/looks.json, shared with the mod's LookClient) ----------
+function lookRace() {
+  const r = race(), v = variant();
+  if (!r) return null;
+  return LOOKS.races[r.id + '/' + (v ? v.id : '')] || LOOKS.races[r.id]
+    || LOOKS.races[r.id === 'zera_yara' ? 'zera_yara/yael' : r.id === 'daemon' ? 'daemon/terranica' : 'mudsung'];
+}
+/** The look as chosen, with anything that doesn't fit this race reset to its first choice. */
+function look() {
+  const lr = lookRace(), l = S.look || {};
+  return {
+    skin: lr.skins.includes(l.skin) ? l.skin : lr.skins[0], accent: lr.accents.includes(l.accent) ? l.accent : lr.accents[0],
+    style: Math.max(0, Math.min(lr.styles.length - 1, +l.style || 0)),
+    outfit: LOOKS.outfits.some(o => o.id === l.outfit) ? l.outfit : LOOKS.outfits[0].id,
+    dye: LOOKS.dyes.includes(l.dye) ? l.dye : LOOKS.dyes[0],
+    weapon: LOOKS.weapons.some(w => w.id === l.weapon) ? l.weapon : 'none',
+  };
+}
+const hexN = h => parseInt(String(h).replace('#', ''), 16) & 0xFFFFFF;
+const shadeN = (rgb, f) => (Math.min(255, (rgb >> 16 & 255) * f | 0) << 16) | (Math.min(255, (rgb >> 8 & 255) * f | 0) << 8) | Math.min(255, (rgb & 255) * f | 0);
+const brightenN = (rgb, t) => [16, 8, 0].reduce((o, s) => o | (Math.round((rgb >> s & 255) + (255 - (rgb >> s & 255)) * t) << s), 0);
+const css = rgb => '#' + rgb.toString(16).padStart(6, '0');
+// the 64x64 skin's boxes: [net x, net y, width, depth, height]; the same painter as LookClient.paint
+const NETS = { head: [0, 0, 8, 8, 8], body: [16, 16, 8, 4, 12], rightArm: [40, 16, 4, 4, 12], leftArm: [32, 48, 4, 4, 12], rightLeg: [0, 16, 4, 4, 12], leftLeg: [16, 48, 4, 4, 12] };
+function paintSkin(lk, lr) {
+  const cv = document.createElement('canvas'); cv.width = cv.height = 64;
+  const g = cv.getContext('2d');
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const px = (x, y, rgb) => { g.fillStyle = css(rgb); g.fillRect(x, y, 1, 1); };
+  const band = (box, from, to, rgb) => {
+    const [x0, y0, w, d, h] = NETS[box];
+    for (let y = from; y < to && y < h; y++) for (let x = 0; x < 2 * (w + d); x++) px(x0 + x, y0 + d + y, shadeN(rgb, (0.92 + rnd() * 0.1) * (1 - 0.18 * y / h)));
+    if (from === 0) for (let y = 0; y < d; y++) for (let x = d; x < d + 2 * w; x++) px(x0 + x, y0 + y, shadeN(rgb, 0.95 + rnd() * 0.08));
+  };
+  const front = (box, x, y, rgb) => { const n = NETS[box]; px(n[0] + n[3] + x, n[1] + n[3] + y, rgb); };
+  const glow = lr.flags.includes('glow'), hair = lr.flags.includes('hair');
+  const skin = hexN(lk.skin), acc = hexN(lk.accent), dye = hexN(lk.dye), leather = 0x6A4426, metal = 0x9DA3AA, trim = 0xC9A45A, boot = 0x3A2A1E;
+  for (const b in NETS) band(b, 0, 12, skin);
+  const iris = glow ? brightenN(acc, 0.3) : hair ? 0x4A6A8A : shadeN(acc, 0.9), white = glow ? iris : 0xEFE9DD;
+  front('head', 1, 4, white); front('head', 2, 4, iris); front('head', 5, 4, iris); front('head', 6, 4, white);
+  for (const x of [1, 2, 5, 6]) front('head', x, 3, shadeN(skin, 0.75));
+  front('head', 3, 6, shadeN(skin, 0.6)); front('head', 4, 6, shadeN(skin, 0.6));
+  if (hair && lk.style !== 2) {
+    for (let y = 0; y < 8; y++) for (let x = 8; x < 16; x++) px(x, y, shadeN(acc, 0.9 + rnd() * 0.15));
+    for (let x = 0; x < 32; x++) { const rows = x >= 24 ? 7 : (x < 8 || (x >= 16 && x < 24)) ? 3 : 1; for (let y = 0; y < rows; y++) px(x, 8 + y, shadeN(acc, 0.85 + rnd() * 0.15)); }
+  }
+  if (lr.flags.includes('stitch')) for (let x = 0; x < 8; x += 2) front('body', x, 6, 0x3A2020);
+  const legs = ['rightLeg', 'leftLeg'], arms = ['rightArm', 'leftArm'];
+  switch (lk.outfit) {
+    case 'travel': band('body', 0, 12, dye); band('body', 8, 9, leather); legs.forEach(l => { band(l, 0, 9, 0x4A3A2A); band(l, 9, 12, boot); }); break;
+    case 'robes': band('body', 0, 12, dye); band('body', 0, 1, trim); band('body', 8, 9, trim); arms.forEach(a => { band(a, 0, 11, dye); band(a, 10, 11, trim); });
+      legs.forEach(l => { band(l, 0, 11, shadeN(dye, 0.85)); band(l, 11, 12, boot); }); break;
+    case 'leather': band('body', 0, 12, leather); band('body', 8, 9, 0x3A2416); arms.forEach(a => band(a, 6, 10, leather)); legs.forEach(l => { band(l, 0, 9, dye); band(l, 9, 12, boot); }); break;
+    case 'chain': band('body', 0, 12, metal); arms.forEach(a => band(a, 0, 6, metal)); band('body', 8, 9, dye); legs.forEach(l => { band(l, 0, 9, shadeN(dye, 0.7)); band(l, 9, 12, boot); });
+      for (let y = 20; y < 32; y++) for (let x = 16; x < 40; x++) if ((x + y) % 2 === 0) px(x, y, shadeN(metal, 0.75)); break;
+    case 'plate': band('body', 0, 12, brightenN(metal, 0.15)); band('body', 8, 9, dye); [...arms, ...legs].forEach(b => band(b, 0, 12, metal)); for (let x = 2; x < 6; x++) front('body', x, 2, dye); break;
+    default: band('body', 8, 12, dye); legs.forEach(l => band(l, 0, 4, dye)); arms.forEach(a => band(a, 8, 10, shadeN(dye, 0.8)));
+  }
+  return cv;
+}
+// where each bone hangs and its own box: [pivot x,y,z, box x,y,z, w,h,d] in model pixels (y down, face towards -z)
+const BONES = { head: [0, 0, 0, -4, -8, -4, 8, 8, 8], body: [0, 0, 0, -4, 0, -2, 8, 12, 4], rightArm: [-5, 2, 0, -3, -2, -2, 4, 12, 4],
+  leftArm: [5, 2, 0, -1, -2, -2, 4, 12, 4], rightLeg: [-1.9, 12, 0, -2, 0, -2, 4, 12, 4], leftLeg: [1.9, 12, 0, -2, 0, -2, 4, 12, 4] };
+let model3d = null; // { renderer, scene, camera, turn, root }
+function mountModel(host) {
+  if (!host || typeof THREE === 'undefined') { if (host) host.innerHTML = '<p class="lede" style="padding:12px">The 3D preview needs a connection to load. Your choices still save.</p>'; return; }
+  if (!model3d) {
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+    const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(28, 3 / 4, 1, 500);
+    camera.position.set(0, 2, -78); camera.lookAt(0, 0, 0);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.62));
+    const sun = new THREE.DirectionalLight(0xfff0d8, 0.7); sun.position.set(-30, 40, -60); scene.add(sun);
+    const turn = new THREE.Group(); scene.add(turn);
+    model3d = { renderer, scene, camera, turn, root: null, yaw: -0.35 };
+    let drag = null;
+    renderer.domElement.addEventListener('pointerdown', e => { drag = e.clientX; renderer.domElement.setPointerCapture(e.pointerId); });
+    renderer.domElement.addEventListener('pointermove', e => { if (drag !== null) { model3d.yaw += (e.clientX - drag) * 0.012; drag = e.clientX; draw3d(); } });
+    renderer.domElement.addEventListener('pointerup', () => { drag = null; });
+  }
+  host.appendChild(model3d.renderer.domElement);
+  const r = host.getBoundingClientRect();
+  model3d.renderer.setSize(Math.max(120, r.width), Math.max(160, r.width * 4 / 3), false);
+  buildModel();
+  draw3d();
+}
+function draw3d() {
+  model3d.turn.rotation.y = model3d.yaw;
+  model3d.renderer.render(model3d.scene, model3d.camera);
+}
+function buildModel() {
+  const lr = lookRace(), lk = look(), ghost = lr.flags.includes('ghost');
+  if (model3d.root) model3d.turn.remove(model3d.root);
+  const root = new THREE.Group();
+  root.scale.set(-1, -1, 1); // model space is y-down and mirrored, like Minecraft's
+  root.position.y = 4;
+  const skin = paintSkin(lk, lr);
+  const faceTex = (x, y, w, h) => {
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    c.getContext('2d').drawImage(skin, x, y, w, h, 0, 0, w, h);
+    const t = new THREE.CanvasTexture(c); t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.flipY = false;
+    return t;
+  };
+  const bones = {};
+  for (const [name, b] of Object.entries(BONES)) {
+    const g = new THREE.Group(); g.position.set(b[0], b[1], b[2]); root.add(g); bones[name] = g;
+    const [u, v, w, d, h] = NETS[name];
+    // BoxGeometry faces: +x, -x, +y, -y, +z, -z; in model space -y is the top and -z the front
+    const rects = [[u + d + w, v + d, d, h], [u, v + d, d, h], [u + d + w, v, w, d], [u + d, v, w, d], [u + 2 * d + w, v + d, w, h], [u + d, v + d, w, h]];
+    const mats = rects.map(rc => new THREE.MeshLambertMaterial({ map: faceTex(...rc), transparent: ghost, opacity: ghost ? 0.78 : 1, side: THREE.DoubleSide }));
+    const box = new THREE.Mesh(new THREE.BoxGeometry(b[6], b[7], b[8]), mats);
+    box.position.set(b[3] + b[6] / 2, b[4] + b[7] / 2, b[5] + b[8] / 2);
+    g.add(box);
+  }
+  const outfit = LOOKS.outfits.find(o => o.id === lk.outfit);
+  const parts = [...lr.common, ...lr.parts[lk.style], ...outfit.parts];
+  const roleColor = { skin: hexN(lk.skin), dark: shadeN(hexN(lk.skin), 0.68), accent: hexN(lk.accent), glow: hexN(lk.accent), ghost: hexN(lk.accent),
+    metal: 0x9DA3AA, wood: 0x6E4F2E, bone: 0xE6DCC2, leather: 0x6A4426, dye: hexN(lk.dye) };
+  const deg = Math.PI / 180;
+  for (const p of parts) {
+    const [bone, px, py, pz, x, y, z, w, h, d, rx, ry, rz, role] = p;
+    const pivot = new THREE.Group(); pivot.position.set(px, py, pz); pivot.rotation.set(rx * deg, ry * deg, rz * deg, 'ZYX');
+    const mat = role === 'glow' ? new THREE.MeshBasicMaterial({ color: brightenN(roleColor.glow, 0.25), side: THREE.DoubleSide })
+      : new THREE.MeshLambertMaterial({ color: roleColor[role], side: THREE.DoubleSide, transparent: role === 'ghost' || ghost, opacity: role === 'ghost' ? 0.5 : ghost ? 0.78 : 1 });
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x + w / 2, y + h / 2, z + d / 2);
+    pivot.add(m); bones[bone].add(pivot);
+  }
+  model3d.root = root; model3d.turn.add(root);
+}
 
 const STEPS = [
   { id: 'identity', label: 'Identity', done: () => !!S.name.trim(), render: () => `
@@ -1761,6 +2472,28 @@ const STEPS = [
       <p class="lede">${esc(r.name)} has one stat spread (${esc(spread(v).join(', '))}). Describe your lineage in your own words; it shows as the Variant on your sheet.</p>
       <div class="fields">${field('variantText', r.variantPrompt || 'Variant', { wide: true, ph: 'optional' })}</div>
       ${r.pending ? `<p class="pool">The rules doc doesn't list ${esc(r.name)} stats yet, so this uses a placeholder: <b>+3 to any aspect</b>.</p>` : ''}`;
+  } },
+  { id: 'look', label: 'Look', done: () => !!race(), render: () => {
+    if (!race()) return `<h2>Look</h2><p class="lede">Pick a race first.</p>`;
+    const lr = lookRace(), lk = look();
+    const sw = (key, colors) => `<div class="swatches" role="radiogroup" aria-label="${esc(key)}">${colors.map(c => `<button type="button" class="swatch" role="radio" data-look="${key}" data-v="${c}" aria-checked="${c === lk[key]}" aria-label="${c}" style="--c:${c}"></button>`).join('')}</div>`;
+    const cards = (key, items) => radioCards(key, items.map(([v, name, sub]) => `<button type="button" class="card slim" role="radio" data-look="${key}" data-v="${v}" aria-checked="${String(lk[key]) === String(v)}" tabindex="${String(lk[key]) === String(v) ? 0 : -1}">
+      <span class="name">${esc(name)}</span>${sub ? `<span class="chips"><span class="chip">${esc(sub)}</span></span>` : ''}</button>`).join(''));
+    return `
+    <h2>Look</h2>
+    <p class="lede">How they look in the world: a race body in your colours, a few features of the race, an outfit and a weapon. Placeholder models; everyone at the table sees them on you. Drag the model to turn it.</p>
+    <div class="lookgrid">
+      <div class="model3d" id="model3d" aria-label="3D preview of your character"></div>
+      <div class="lookopts">
+        <h3>Skin</h3>${sw('skin', lr.skins)}
+        <h3>${esc(lr.accentName)}</h3>${sw('accent', lr.accents)}
+        <h3>Features</h3>${cards('style', lr.styles.map((n, i) => [i, n]))}
+      </div>
+    </div>
+    <h3>Outfit</h3>${cards('outfit', LOOKS.outfits.map(o => [o.id, o.name, o.ap ? `+${o.ap} AP` : 'clothing']))}
+    <h3>Cloth colour</h3>${sw('dye', LOOKS.dyes)}
+    <h3>Weapon</h3>${cards('weapon', LOOKS.weapons.map(w => [w.id, w.name, w.id === 'none' ? '' : `${w.dmg} · ${w.feet} ft`]))}
+    <p class="pool">The outfit and weapon go on your sheet (Armor, Gear and inventory, with their dice) and show on you in game.</p>`;
   } },
   { id: 'aspects', label: 'Aspects', done: () => sum(S.free) === R.free && sum(S.any) === anyPoints(), render: () => {
     const v = variant(), st = stats(), anyLeft = anyPoints() - sum(S.any), freeLeft = R.free - sum(S.free);
@@ -1811,7 +2544,7 @@ const STEPS = [
       <span class="path">${t.path.map(esc).join(' &rarr; ')}</span><span class="about">${esc(t.branches)}</span></button>`).join('')}</div>
     <h2 style="margin-top: 22px">Skill slots</h2>
     <p class="lede">You start with ${R.skillSlots}. Leave a slot blank to show it as TBD.</p>
-    <div class="slots">${S.skills.map((s, i) => `<label for="f-skill-${i}">${i + 1}.<input type="text" id="f-skill-${i}" data-skill="${i}" value="${esc(s)}" maxlength="${LIMITS.skill}" placeholder="TBD" autocomplete="off"></label>`).join('')}</div>` },
+    <div class="slots">${S.skills.map((s, i) => `<label for="f-skill-${i}">${i + 1}.<input type="text" id="f-skill-${i}" data-skill="${i}" value="${esc(s)}" maxlength="${LIMITS.skill}" placeholder="TBD" autocomplete="off"></label>`).join('')}</div>${skillPicker()}` },
   { id: 'story', label: 'Kit & story', done: () => !!S.backstory.trim(), render: () => `
     <h2>Kit and story</h2>
     <p class="lede">What they carry and where they come from.</p>
@@ -1881,6 +2614,7 @@ function renderSteps() {
 function renderStep() {
   stepEl.innerHTML = `<div class="step">${STEPS[stepIndex].render()}</div>`;
   renderSteps();
+  if (STEPS[stepIndex].id === 'look' && race()) mountModel(document.getElementById('model3d'));
   if (STEPS[stepIndex].id === 'finish' && S.name.trim()) refreshCode();
 }
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1903,7 +2637,8 @@ function changed(rerender) {
 /** Re-render a step but keep keyboard focus on the same control (cards, steppers, item rows). */
 function rerenderKeepingFocus() {
   const a = document.activeElement, sel = a?.id ? '#' + CSS.escape(a.id) : a?.dataset.race ? `[data-race="${a.dataset.race}"]` : a?.dataset.variant ? `[data-variant="${a.dataset.variant}"]`
-    : a?.dataset.tree ? `[data-tree="${a.dataset.tree}"]` : a?.dataset.pool ? `[data-pool="${a.dataset.pool}"][data-a="${a.dataset.a}"][data-d="${a.dataset.d}"]` : null;
+    : a?.dataset.look ? `[data-look="${a.dataset.look}"][data-v="${a.dataset.v}"]`
+    : a?.dataset.tree ? `[data-tree="${a.dataset.tree}"]` : a?.dataset.pick ? `[data-pick="${CSS.escape(a.dataset.pick)}"]` : a?.dataset.pool ? `[data-pool="${a.dataset.pool}"][data-a="${a.dataset.a}"][data-d="${a.dataset.d}"]` : null;
   changed(true);
   const el = sel && stepEl.querySelector(sel);
   (el && !el.disabled ? el : stepEl.querySelector(sel?.replace(/\[data-d="[^"]*"\]/, '') || '#none'))?.focus({ preventScroll: true });
@@ -1925,7 +2660,10 @@ stepEl.addEventListener('input', e => {
     S[t.dataset.k] = t.value; changed(false);
     const c = document.getElementById('c-' + t.dataset.k); if (c) c.textContent = `${t.value.length} / ${LIMITS[t.dataset.k]}`;
   }
-  if (t.dataset.skill) { S.skills[+t.dataset.skill] = t.value; changed(false); }
+  if (t.dataset.skill) { // typed skills tick their card too
+    S.skills[+t.dataset.skill] = t.value; changed(false);
+    stepEl.querySelectorAll('[data-pick]').forEach(c => c.setAttribute('aria-checked', S.skills.some(x => sameSkill(x, c.dataset.pick))));
+  }
   if (t.dataset.item) { S.items[+t.dataset.item][t.dataset.f] = t.value; changed(false); }
 });
 stepEl.addEventListener('keydown', e => { // arrow keys move through a radio group, like native radios
@@ -1951,8 +2689,28 @@ stepEl.addEventListener('click', e => {
     (stepEl.querySelector(`[data-remove="${Math.min(+b.dataset.remove, S.items.length - 1)}"]`) || document.getElementById('additem'))?.focus();
     return;
   }
+  if (b.id === 'allskills') { allSkills = !allSkills; rerenderKeepingFocus(); return; }
+  if (b.dataset.pick) { // picking a skill fills the next empty slot; picking it again empties its slot
+    const name = b.dataset.pick, at = S.skills.findIndex(x => sameSkill(x, name));
+    if (at >= 0) S.skills[at] = '';
+    else {
+      const free = S.skills.findIndex(x => !x.trim());
+      if (free < 0) {
+        const note = document.getElementById('picknote');
+        note.innerHTML = `<b>All ${S.skills.length} slots are full.</b> Take a skill out before adding ${esc(name)}.`;
+        note.classList.add('warn');
+        return;
+      }
+      S.skills[free] = name.slice(0, LIMITS.skill);
+    }
+    rerenderKeepingFocus();
+    return;
+  }
   if (b.dataset.race) {
     if (S.race !== b.dataset.race) { S.race = b.dataset.race; S.variant = race().variants[0].id; S.any = { core: 0, shell: 0, essence: 0 }; }
+    rerenderKeepingFocus();
+  } else if (b.dataset.look) {
+    S.look = Object.assign(look(), { [b.dataset.look]: b.dataset.look === 'style' ? +b.dataset.v : b.dataset.v });
     rerenderKeepingFocus();
   } else if (b.dataset.variant) {
     S.variant = b.dataset.variant; S.any = { core: 0, shell: 0, essence: 0 }; rerenderKeepingFocus();
